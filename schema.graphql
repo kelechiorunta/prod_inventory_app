@@ -1,0 +1,35 @@
+type Query{
+  auth:User
+  test:String
+  users:[User]
+  products:[Product]
+}
+
+type Product {
+  id: ID!
+  title: String!
+  price: Int!
+  description: String
+  image: String
+}
+
+type User {
+  username: String,
+  email: String,
+    
+}
+
+type PaymentResponse {
+  authorization_url: String!
+  access_code: String!
+  reference: String!
+}
+
+type Mutation {
+  initiatePayment(email: String!, productId: ID!): PaymentResponse
+}
+
+type Subscription {
+    alertResponse:[PaymentResponse],
+    test:String
+}
