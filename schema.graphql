@@ -8,15 +8,22 @@ type Query{
 type Product {
   id: ID!
   title: String!
-  price: Int!
+  price: Float!
   description: String
   image: String
+  category: String
+  rating: Rating
 }
 
 type User {
   username: String,
   email: String,
     
+}
+
+type Rating {
+  rate: Float!
+  count: Float!
 }
 
 type PaymentResponse {

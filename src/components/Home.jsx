@@ -1,25 +1,24 @@
 import React from 'react'
 import '../App.css'
 import logo from '../logo.svg';
+import { useQuery } from '@apollo/client';
+import { FETCH_PRODUCTS } from '../constants';
+import ProductCard from './ProductCard.jsx';
+import MainHeader from './MainHeader.jsx';
 
 export default function Home() {
+   const { loading, error, data } = useQuery(FETCH_PRODUCTS);
+  if (error) return <h1>Something went wrong</h1>;
+  if (loading) return <h1>Loading...</h1>;
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-        <a href='/logout'>Logout</a>
-      </header>
+      <div className="App">
+          <MainHeader />
+          {/* <a href='/logout'>Logout</a> */}
+      
+          {data && data.products.map((product) => (
+              <ProductCard product={product} />
+          ))}
     </div>
   )
 }

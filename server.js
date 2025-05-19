@@ -17,7 +17,7 @@ const app = express();
 
 
 // Connect to Database
-connectDB();
+connectDB(process.env.MONGO_URI);
 
 // Create executable Schema for GraphQL server
 const typeDefs = fs.readFileSync('./schema.graphql', { encoding: 'utf-8' })
@@ -121,7 +121,7 @@ app.get('/*', (req, res) => {
   })
 })
 
-const PORT = 3001;
+const PORT = 3301;
 
 app.listen(PORT, () => {
     console.log(`Server is listening at PORT ${PORT}`)

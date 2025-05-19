@@ -7,6 +7,20 @@ const DUMMY_PRODUCTS = [
   { id: "2", title: "AirPods Pro", price: 120000 },
 ];
 
+const fetchProducts = async () => {
+  try {
+    const res = await fetch('https://fakestoreapi.com/products');
+    const data = await res.json();
+    console.log(data)
+    // The API returns the data directly as an array
+    return data; 
+  } catch (error) {
+    console.error('Failed to fetch products:', error);
+    return []; // return empty array on error
+  }
+};
+
+
 const resolvers = {
     // Query Resolvers
   auth: (args, context) => {
@@ -17,7 +31,7 @@ const resolvers = {
     },
   test: (args, context) => context?.user? 'Welcome Bro' : 'Test Success, GraphQL server is up & running !!',
   users: async () => await User.find(),//   userByName: async ({ username }) => await User.findOne({ username }),
-  products: () => DUMMY_PRODUCTS,
+  products: async (args, context) => context?.user && await fetchProducts(),//DUMMY_PRODUCTS,
    
 //Mutation Resolvers
   initiatePayment: async ({ email, productId } ) => {
