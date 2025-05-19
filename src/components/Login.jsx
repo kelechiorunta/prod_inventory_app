@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 
 
 
+
 const LoginSchema = Yup.object().shape({
   username: Yup.string().required('Username is required'),
   password: Yup.string().min(6, 'Password must be at least 6 characters').required('Password is required'),
@@ -50,7 +51,8 @@ export default function Login() {
   return (
     
       <Container xlg className='col-xlg-12 flex-wrap' style={{display: 'flex', gap: '20px', maxWidth: '90%', marginTop: '50px' }}>
-        <Row
+       
+          <Row
           style={{minWidth: '400px', minHeight: '400px'}}
           as={Col}
           xlg className="col-xlg-6 px-4 py-2 ">
