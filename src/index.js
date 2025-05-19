@@ -5,7 +5,9 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter } from 'react-router-dom';
 import { ApolloProvider, ApolloClient, InMemoryCache, HttpLink } from '@apollo/client';
+import MainHeader from './components/MainHeader';
 
+import { AUTH } from './constants';
 
 // const typePolicies = {
 //   Query: {
@@ -30,6 +32,7 @@ root.render(
   <React.StrictMode>
     <BrowserRouter>
       <ApolloProvider client={client}>
+        <MainHeader />
         <App />
       </ApolloProvider>
     </BrowserRouter>

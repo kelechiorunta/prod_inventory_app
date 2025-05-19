@@ -8,20 +8,7 @@ import { isAuthenticatedUser } from './controllers.js';
 
 const authRouter = express.Router();
 
-configurePassport(passport)
-
-// passport.use(passport.serializeUser((user, done) => {
-//     done(null, user.id); // or user._id depending on your DB
-//     }),
-
-// passport.deserializeUser(async (id, done) => {
-//     try {
-//         const user = await User.findById(id); // or your user model
-//         done(null, user);
-//     } catch (err) {
-//         done(err);
-//     }
-// }))
+configurePassport(passport);
 
 authRouter.get('/logout', function(req, res, next) {
   req.logout(function(err) {

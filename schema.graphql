@@ -6,7 +6,7 @@ type Query{
 }
 
 type Product {
-  id: ID!
+  id: ID
   title: String!
   price: Float!
   description: String
@@ -18,12 +18,7 @@ type Product {
 type User {
   username: String,
   email: String,
-    
-}
-
-type Rating {
-  rate: Float!
-  count: Float!
+  picture: String,
 }
 
 type PaymentResponse {
@@ -32,11 +27,32 @@ type PaymentResponse {
   reference: String!
 }
 
+type Rating {
+  rate: Float!
+  count: Int!
+}
+
+input RatingInput {
+  rate: Float!
+  count: Int!
+}
+
 type Mutation {
+  createNewProduct(input: CreateProductInput!): Product!
   initiatePayment(email: String!, productId: ID!): PaymentResponse
+}
+
+input CreateProductInput {
+  title: String!
+  price: Float!
+  description: String!
+  category: String!
+  image: String!
+  rating: RatingInput!
 }
 
 type Subscription {
     alertResponse:[PaymentResponse],
     test:String
 }
+

@@ -5,6 +5,7 @@ import { useQuery } from '@apollo/client';
 import { FETCH_PRODUCTS } from '../constants';
 import ProductCard from './ProductCard.jsx';
 import MainHeader from './MainHeader.jsx';
+import { Container } from 'react-bootstrap';
 
 export default function Home() {
    const { loading, error, data } = useQuery(FETCH_PRODUCTS);
@@ -13,12 +14,18 @@ export default function Home() {
 
   return (
       <div className="App">
-          <MainHeader />
-          {/* <a href='/logout'>Logout</a> */}
-      
-          {data && data.products.map((product) => (
-              <ProductCard product={product} />
-          ))}
-    </div>
+          <MainHeader auth={ data?.auth } />
+          
+          <Container style={{padding: '100px'}}>
+            <div className="row g-4">
+                {data && data.products.map((product, index) => (
+                <div key={index} className="col-12 col-md-12 col-lg-6 col-xl-4">
+                    <ProductCard product={product} />
+                </div>
+                ))}
+            </div>
+          </Container>
+                        
+      </div>
   )
 }
