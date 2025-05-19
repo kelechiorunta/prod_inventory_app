@@ -3,7 +3,7 @@ import React from 'react';
 
 export default function ProductCard({ product }) {
   return (
-    <div className="card h-100 shadow-sm">
+    <div className="card h-100 shadow-sm ">
       <img
         src={product.image}
         className="card-img-top p-3"

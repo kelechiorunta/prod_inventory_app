@@ -1,5 +1,6 @@
 import jwt from "jsonwebtoken";
 import User from "./models/User.js";
+import Product from "./models/Product.js";
 import axios from "axios";
 
 const DUMMY_PRODUCTS = [
@@ -7,18 +8,21 @@ const DUMMY_PRODUCTS = [
   { id: "2", title: "AirPods Pro", price: 120000 },
 ];
 
-const fetchProducts = async () => {
-  try {
-    const res = await fetch('https://fakestoreapi.com/products');
-    const data = await res.json();
-    console.log(data)
-    // The API returns the data directly as an array
-    return data; 
-  } catch (error) {
-    console.error('Failed to fetch products:', error);
-    return []; // return empty array on error
-  }
-};
+// No need to call this anymore as the products from the api are now in
+// the database
+// const fetchProducts = async () => {
+//   try {
+//     const res = await fetch('https://fakestoreapi.com/products');
+//     const data = await res.json();
+//     console.log(data)
+//     data && data.map(async (product) => await new Product(product).save())
+//     // The API returns the data directly as an array
+//     return data; 
+//   } catch (error) {
+//     console.error('Failed to fetch products:', error);
+//     return []; // return empty array on error
+//   }
+// };
 
 
 const resolvers = {
@@ -31,9 +35,24 @@ const resolvers = {
     },
   test: (args, context) => context?.user? 'Welcome Bro' : 'Test Success, GraphQL server is up & running !!',
   users: async () => await User.find(),//   userByName: async ({ username }) => await User.findOne({ username }),
-  products: async (args, context) => context?.user && await fetchProducts(),//DUMMY_PRODUCTS,
+  products: async (args, context) => context?.user && await Product.find(),//DUMMY_PRODUCTS,
+  // products: async (args, context) => context?.user && await fetchProducts(),//DUMMY_PRODUCTS,
    
-//Mutation Resolvers
+  //Mutation Resolvers
+
+  createNewProduct: async ({ input }, context) => {
+    if (context.user) {
+      console.log(input)
+      try {
+        const product = await new Product(input).save()
+        return product; // MUST return something
+    } catch (error) {
+        console.error("Create product error:", error);
+        return null; // This causes the GraphQL error because Product is non-nullable
+    }
+    }
+  },
+
   initiatePayment: async ({ email, productId } ) => {
       const product = DUMMY_PRODUCTS.find(p => p.id === productId);
       if (!product) throw new Error("Product not found");
