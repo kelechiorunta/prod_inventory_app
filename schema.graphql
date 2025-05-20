@@ -3,6 +3,7 @@ type Query{
   test:String
   users:[User]
   products:[Product]
+  getProduct(id: ID!):Product
 }
 
 type Product {
@@ -40,6 +41,16 @@ input RatingInput {
 type Mutation {
   createNewProduct(input: CreateProductInput!): Product!
   initiatePayment(email: String!, productId: ID!): PaymentResponse
+  updateProduct(id: ID!, input: UpdateProductInput!): Product!
+}
+
+input UpdateProductInput {
+  title: String
+  description: String
+  price: Float
+  category: String
+  image: String
+  rating: RatingInput
 }
 
 input CreateProductInput {

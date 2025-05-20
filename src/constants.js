@@ -22,6 +22,22 @@ export const FETCH_PRODUCTS = gql`
    
 `
 
+export const GET_PRODUCT = gql`
+    query GetProduct($id: ID!) {
+                getProduct(id: $id){
+                            title
+                            description
+                            price
+                            image
+                            category
+                            rating {
+                              rate
+                              count
+                            }
+                        }
+    }
+`
+
 export const AUTH = gql`
         query Query {
                 auth {
@@ -33,7 +49,7 @@ export const AUTH = gql`
 `
 
 export const CREATE_NEW_PRODUCT = gql`
-          mutation CreateProductInput(
+          mutation CreateNewProduct(
                     $title: String!
                     $price: Float!
                     $description: String!
@@ -58,4 +74,19 @@ export const CREATE_NEW_PRODUCT = gql`
 
 
 `
-  
+export const UPDATE_PRODUCT = gql`
+  mutation UpdateProduct($id: ID!, $input: UpdateProductInput!) {
+    updateProduct(id: $id, input: $input) {
+      id
+      title
+      description
+      price
+      category
+      image
+      rating {
+        rate
+        count
+      }
+    }
+  }
+`;  
