@@ -50,7 +50,7 @@ export default function Login() {
 
   return (
     
-      <Container xlg className='col-xlg-12 flex-wrap' style={{display: 'flex', gap: '20px', maxWidth: '90%', marginTop: '50px' }}>
+      <Container xlg className='col-xlg-12 flex-wrap' style={{display: 'flex', gap: '20px', maxWidth: '90%', marginTop: '100px' }}>
        
           <Row
           style={{minWidth: '400px', minHeight: '400px'}}

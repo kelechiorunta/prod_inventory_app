@@ -36,10 +36,9 @@ const resolvers = {
   test: (args, context) => context?.user? 'Welcome Bro' : 'Test Success, GraphQL server is up & running !!',
   users: async () => await User.find(),//   userByName: async ({ username }) => await User.findOne({ username }),
   products: async (args, context) => context?.user && await Product.find(),//DUMMY_PRODUCTS,
-  // products: async (args, context) => context?.user && await fetchProducts(),//DUMMY_PRODUCTS,
+  getProduct: async ({id}, context) => context?.user && await Product.findOne({id}),
    
   //Mutation Resolvers
-
   createNewProduct: async ({ input }, context) => {
     if (context.user) {
       console.log(input)
@@ -52,6 +51,27 @@ const resolvers = {
     }
     }
   },
+
+    updateProduct: async ({ id, input }, context) => {
+    if (!context.user) throw new Error("Not authorized");
+
+    try {
+      const updated = await Product.findOneAndUpdate({ id: id }, input, {
+        new: true, // return updated doc
+        // runValidators: true,
+      });
+
+      if (!updated) {
+        throw new Error("Failed to update product"); // <-- This is your error
+      }
+
+      return updated;
+    } catch (err) {
+      console.error("Update error:", err);
+      throw new Error("Failed to update product");
+    }
+  }
+,
 
   initiatePayment: async ({ email, productId } ) => {
       const product = DUMMY_PRODUCTS.find(p => p.id === productId);
