@@ -4,6 +4,7 @@ type Query{
   users:[User]
   products:[Product]
   getProduct(id: ID!):Product
+  verifyPayment(token: ID!): VerifiedPayment!
 }
 
 type Product {
@@ -20,6 +21,14 @@ type User {
   username: String,
   email: String,
   picture: String,
+}
+
+type VerifiedPayment {
+  reference: String!
+  amount: Int!
+  status: String!
+  customerEmail: String!
+  gatewayResponse: String!
 }
 
 type PaymentResponse {
@@ -45,7 +54,7 @@ type DeleteResponse {
 
 type Mutation {
   createNewProduct(input: CreateProductInput!): Product!
-  initiatePayment(email: String!, productId: ID!): PaymentResponse
+  initializePayment(email: String!, price: Float!): PaymentResponse
   updateProduct(id: ID!, input: UpdateProductInput!): Product!
   deleteProduct(id: ID!): DeleteResponse!
 }
