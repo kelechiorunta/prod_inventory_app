@@ -36,7 +36,37 @@ const resolvers = {
   test: (args, context) => context?.user? 'Welcome Bro' : 'Test Success, GraphQL server is up & running !!',
   users: async () => await User.find(),//   userByName: async ({ username }) => await User.findOne({ username }),
   products: async (args, context) => context?.user && await Product.find(),//DUMMY_PRODUCTS,
-  getProduct: async ({id}, context) => context?.user && await Product.findOne({id}),
+  getProduct: async ({ id }, context) => context?.user && await Product.findOne({ id }),
+  
+  verifyPayment: async ({ token }, context) => {
+    if (context.user) {
+        try {
+        const response = await fetch(`https://api.paystack.co/transaction/verify/${token}`, {
+          headers: {
+            Authorization: `Bearer ${process.env.PAYSTACK_SECRET}`, // use server env var
+            'Content-Type': 'application/json',
+          },
+        });
+
+        const data = await response.json();
+
+        if (!data.status) {
+          throw new Error(data.message || 'Verification failed');
+        }
+
+        return {
+          reference: data.data.reference,
+          amount: data.data.amount,
+          status: data.data.status,
+          customerEmail: data.data.customer.email,
+          gatewayResponse: data.data.gateway_response,
+        };
+      } catch (err) {
+        throw new Error('Payment verification failed');
+      }
+    }
+      
+  },
    
   //Mutation Resolvers
   createNewProduct: async ({ input }, context) => {
@@ -90,15 +120,13 @@ const resolvers = {
     }
   },
 
-  initiatePayment: async ({ email, productId } ) => {
-      const product = DUMMY_PRODUCTS.find(p => p.id === productId);
-      if (!product) throw new Error("Product not found");
-
+  initializePayment: async ({ email, price }) => {
+   
       const payload = {
         email,
-        amount: product.price * 100, // Paystack expects amount in Kobo
+        amount: price * 1000, // Paystack expects amount in Kobo
         currency: "NGN",
-        callback_url: "http://localhost:3001/payment/callback", // Optional
+        callback_url: "http://localhost:3301/payment/callback", // Optional
       };
 
       const response = await axios.post(

@@ -91,6 +91,7 @@ export const UPDATE_PRODUCT = gql`
   }
 `;  
 
+
 export const DELETE_PRODUCT = gql`
   mutation DeleteProduct($id: ID!) {
     deleteProduct(id: $id){
@@ -99,3 +100,26 @@ export const DELETE_PRODUCT = gql`
     }
   }
 `;  
+
+export const INITIALIZE_PAYMENT = gql`
+mutation InitializePayment($email: String!, $price: Float!) {
+  initializePayment(email: $email, price: $price) {
+    authorization_url
+    access_code
+    reference
+  }
+}
+
+`
+
+export const VERIFY_PAYMENT = gql`
+  query VerifyPayment($token: ID!) {
+    verifyPayment(token: $token) {
+      reference
+      amount
+      status
+      customerEmail
+      gatewayResponse
+    }
+  }
+`;

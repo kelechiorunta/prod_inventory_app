@@ -1,9 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { FaTrash } from 'react-icons/fa';
+import { FaMoneyBill, FaTrash } from 'react-icons/fa';
 import { DELETE_PRODUCT, FETCH_PRODUCTS } from '../constants';
 import { useMutation } from '@apollo/client';
 import { useNavigate } from 'react-router-dom';
+import { FaMoneyBill1 } from 'react-icons/fa6';
 
 export default function ProductCard({ product }) {
     const navigate = useNavigate();
@@ -62,13 +63,20 @@ export default function ProductCard({ product }) {
                         ⭐ {product.rating?.rate || 'N/A'} ({product.rating?.count || 0} reviews)
                     </p>
                 </div>
-               <FaTrash
-                onClick={() => handleDelete(product)}
-                size={20}
-                style={{ cursor: 'pointer' }}
-                className="d-block mx-auto mt-4 text-dark"
+              <div className="d-flex justify-content-between align-items-center mt-4">
+                    <FaMoneyBill1
+                    onClick={() => { navigate(`/payment/${product.id}`, {state: product}) }}
+                    size={20}
+                    style={{ cursor: 'pointer' }}
+                    className="text-dark"
                 />
-
+                <FaTrash
+                    onClick={() => handleDelete(product)}
+                    size={20}
+                    style={{ cursor: 'pointer' }}
+                    className="text-dark"
+                />
+              </div>
             </div>
           
         </div>
