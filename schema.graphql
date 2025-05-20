@@ -38,10 +38,16 @@ input RatingInput {
   count: Int!
 }
 
+type DeleteResponse {
+  acknowledged: Boolean!
+  deletedCount: Int!
+}
+
 type Mutation {
   createNewProduct(input: CreateProductInput!): Product!
   initiatePayment(email: String!, productId: ID!): PaymentResponse
   updateProduct(id: ID!, input: UpdateProductInput!): Product!
+  deleteProduct(id: ID!): DeleteResponse!
 }
 
 input UpdateProductInput {
