@@ -52,7 +52,7 @@ const resolvers = {
     }
   },
 
-    updateProduct: async ({ id, input }, context) => {
+  updateProduct: async ({ id, input }, context) => {
     if (!context.user) throw new Error("Not authorized");
 
     try {
@@ -71,7 +71,24 @@ const resolvers = {
       throw new Error("Failed to update product");
     }
   }
-,
+  ,
+  
+  deleteProduct: async ({ id }, context) => {
+    if (!context.user) throw new Error("Not authorized");
+
+    try {
+      const result = await Product.deleteOne({id});
+
+      if (!result) {
+        throw new Error("Failed to delete product"); // <-- This is your error
+      }
+
+      return result //returned Object { acknowledged, deletedCount };
+    } catch (err) {
+      console.error("Update error:", err);
+      throw new Error("Failed to delete product");
+    }
+  },
 
   initiatePayment: async ({ email, productId } ) => {
       const product = DUMMY_PRODUCTS.find(p => p.id === productId);

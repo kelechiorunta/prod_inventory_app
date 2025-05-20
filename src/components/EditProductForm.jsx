@@ -10,7 +10,7 @@ const EditProductForm = () => {
     const params = useParams();
     const { id } = params;
     const { data, loading, error } = useQuery(GET_PRODUCT, { variables: params });
-    const [updateProduct, { data: product, error: updateError }] = useMutation(UPDATE_PRODUCT);
+    const [updateProduct, { data: product, error: updateError, loading: updateLoading }] = useMutation(UPDATE_PRODUCT);
 
     const isEdit = !!data?.getProduct?.id;
 
@@ -212,8 +212,8 @@ const EditProductForm = () => {
                 </Col>
             </Row>
 
-            <Button variant="primary" type="submit" disabled={loading}>
-                {loading ? 'Submitting...' : 'Update Product'}
+            <Button variant="primary" type="submit" disabled={updateLoading}>
+                {updateLoading ? 'Updating...' : 'Update Product'}
             </Button>
             </Form>
         )}
