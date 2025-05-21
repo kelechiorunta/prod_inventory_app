@@ -50,7 +50,7 @@ export default function Login() {
 
   return (
     
-      <Container xlg className='col-xlg-12 flex-wrap' style={{display: 'flex', gap: '20px', maxWidth: '90%', marginTop: '100px' }}>
+      <Container xlg className='col-xlg-6 col-md-6 col-sm-12 flex-wrap' style={{display: 'flex', gap: '20px', maxWidth: '90%', marginTop: '100px' }}>
        
           <Row
           style={{minWidth: '400px', minHeight: '400px'}}
@@ -89,11 +89,11 @@ export default function Login() {
                     <Button type="submit" className='fs-5' disabled={isSubmitting} variant="primary">
                       {isSubmitting ? 'Logging in...' : 'Login'}
                     </Button>
-                  {/* <NavLink
-                    style={{fontFamily: 'Cinzel', borderRadius: '10px'}}
-                    href='/google' className='bg-primary fs-5 mt-2 p-1'>
+                    <NavLink
+                    style={{fontFamily: 'Cinzel', width: '100%', borderRadius: '10px', color: 'white'}}
+                    href='/google' className='bg-primary fs-5 mt-2 p-2 mx-auto text-center'>
                       Sign In with Google
-                    </NavLink> */}
+                    </NavLink>
                   </div>
                 </Form>
               )}

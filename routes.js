@@ -2,13 +2,15 @@ import express from 'express';
 import { signupController, loginController } from './controllers.js';
 import passport from 'passport';
 import User from './models/User.js';
-import { configurePassport } from './passport.js';
+import { configureGooglePassport, configureLocalPassport } from './passport.js';
 import { loginSession } from './middleware.js';
 import { isAuthenticatedUser } from './controllers.js';
 
 const authRouter = express.Router();
 
-configurePassport(passport);
+configureLocalPassport(passport);
+
+configureGooglePassport(passport)
 
 authRouter.get('/logout', function(req, res, next) {
   req.logout(function(err) {
@@ -16,6 +18,15 @@ authRouter.get('/logout', function(req, res, next) {
     res.redirect('/login');
   });
 });
+
+authRouter.get('/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
+authRouter.get('/oauth2/redirect/google', passport.authenticate('google'), (req, res, next) => {
+    try {
+        res.redirect('/');
+    } catch (err) {
+        res.redirect('/login')
+    }
+})
 
 authRouter.post('/signup', signupController);
 authRouter.post('/signin',  passport.authenticate('local'), (req, res, next) => {
