@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
-import { useLazyQuery } from '@apollo/client';
-import { SEARCH_PRODUCT } from '../constants';
+import React, { useEffect, useState } from 'react';
+import { useLazyQuery, useQuery } from '@apollo/client';
+import { SEARCH_PRODUCT, FETCH_PRODUCTS } from '../constants';
 import { Form, Button, Row, Col, Card, Container } from 'react-bootstrap';
 import ProductCard from './ProductCard';
+import DisplaySearch from './DisplaySearch';
 
 const SearchProduct = () => {
   const [filters, setFilters] = useState({
@@ -11,23 +12,40 @@ const SearchProduct = () => {
     sort: 'asc',
     limit: 10,
   });
+    
+  const { data: productsData, loading: productsLoading } = useQuery(FETCH_PRODUCTS);
 
   const [results, setResults] = useState([]);
 
-  const [searchProduct, { loading, error }] = useLazyQuery(SEARCH_PRODUCT, {
-    onCompleted: (data) => {
-      if (data && data.searchProduct) {
-        setResults(data.searchProduct);
-      }
-    },
-    onError: (err) => {
-      console.error('Search error:', err);
+    // Populate results when productsData first arrives
+  useEffect(() => {
+    if (productsData && productsData.products) {
+        setResults(productsData.products);
     }
+    }, [productsData]);
+
+  const [searchProduct, { loading, error }] = useLazyQuery(SEARCH_PRODUCT, {
+   onCompleted: (data) => {
+     if (data?.searchProduct?.length && filters.name !== "") {
+      setResults(data.searchProduct);
+     } else {
+      setResults(productsData?.products || []);
+     }
+    },
+   onError: (err) => {
+    console.error('Search error:', err);
+   }
   });
 
+    
+
   const handleSubmit = (e) => {
-    e.preventDefault();
-    searchProduct({ variables: filters });
+      e.preventDefault();
+      if (filters.name === '' && productsData) {
+          setResults(productsData.products);
+      } else {
+          searchProduct({ variables: filters });
+      }
   };
 
   return (
@@ -56,6 +74,7 @@ const SearchProduct = () => {
                   <option value="all">All</option>
                   <option value="Men">Men's clothing</option>
                   <option value="Women">Women's clothing</option>
+                  <option value="Jewelry">Jewelry</option>
                   <option value="Perfumes">Perfumes</option>
                   <option value="electronics">Electronics</option>
                 </Form.Select>
@@ -98,15 +117,7 @@ const SearchProduct = () => {
 
       {error && <p className="text-danger mt-3">{error.message}</p>}
 
-      {results.length > 0 && (
-              <Row className="g-4" style={{paddingTop: '2rem', paddingBottom: '2rem'}}>
-                {results.map((product, index) => (
-                    <Col key={index} xs={12} lg={4}>
-                    <ProductCard product={product} />
-                    </Col>
-                ))}
-              </Row>
-      )}
+      <DisplaySearch results={results } />
     </Container>
   );
 };
