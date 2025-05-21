@@ -4,9 +4,8 @@ import { FaMoneyBill, FaTrash } from 'react-icons/fa';
 import { DELETE_PRODUCT, FETCH_PRODUCTS } from '../constants';
 import { useMutation } from '@apollo/client';
 import { useNavigate } from 'react-router-dom';
-import { FaMoneyBill1 } from 'react-icons/fa6';
 
-export default function ProductCard({ product }) {
+export default function ProductCard({ product, auth }) {
     const navigate = useNavigate();
     const [deleteProduct, { data, error }] = useMutation(DELETE_PRODUCT)
     const handleDelete = async (product) => {
@@ -46,7 +45,9 @@ export default function ProductCard({ product }) {
     return (
      
         <div className="card h-100 shadow-sm ">
-           <Link to={`/newProduct/${product.id}`}>
+            <Link to={
+                auth && auth.username.startsWith('Kelechi') &&
+                `/product/${product.id}`}>
               <img
                 src={product.image}
                 className="card-img-top p-3"
@@ -64,18 +65,20 @@ export default function ProductCard({ product }) {
                     </p>
                 </div>
               <div className="d-flex justify-content-between align-items-center mt-4">
-                    <FaMoneyBill1
+                <FaMoneyBill
                     onClick={() => { navigate(`/payment/${product.id}`, {state: product}) }}
                     size={20}
                     style={{ cursor: 'pointer' }}
                     className="text-dark"
                 />
+                    {auth?.username.startsWith("Kelechi") && 
                 <FaTrash
                     onClick={() => handleDelete(product)}
                     size={20}
                     style={{ cursor: 'pointer' }}
                     className="text-dark"
-                />
+                    />
+                    }
               </div>
             </div>
           

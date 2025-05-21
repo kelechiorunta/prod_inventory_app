@@ -123,3 +123,17 @@ export const VERIFY_PAYMENT = gql`
     }
   }
 `;
+
+
+export const SEARCH_PRODUCT = gql`
+  query SearchProduct($name: String, $category: CategoryEnum, $sort: String, $limit: Int) {
+    searchProduct(name: $name, category: $category, sort: $sort, limit: $limit) {
+      id
+      title
+      description
+      price
+      category
+      image
+    }
+  }
+`;

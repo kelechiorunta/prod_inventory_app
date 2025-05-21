@@ -20,7 +20,7 @@ export default function Home() {
             <div className="row g-4">
                 {data && data.products.map((product, index) => (
                 <div key={index} className="col-12 col-md-12 col-lg-6 col-xl-4">
-                    <ProductCard product={product} />
+                        <ProductCard product={product} auth={ data?.auth } />
                 </div>
                 ))}
             </div>
