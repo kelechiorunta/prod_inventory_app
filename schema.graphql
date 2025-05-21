@@ -5,7 +5,17 @@ type Query{
   products:[Product]
   getProduct(id: ID!):Product
   verifyPayment(token: ID!): VerifiedPayment!
+  searchProduct(name: String, category: CategoryEnum, sort: String, limit: Int): [Product]
 }
+
+enum CategoryEnum {
+  all
+  Men
+  Women
+  Perfumes
+  electronics
+}
+
 
 type Product {
   id: ID

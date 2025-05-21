@@ -64,6 +64,28 @@ const resolvers = {
       } catch (err) {
         throw new Error('Payment verification failed');
       }
+    }     
+  },
+
+  searchProduct: async ({ name, category, sort = 'asc', limit = 10 }, context) => {
+      const query = {};
+
+    if (context.user) {
+        if (name) {
+        query.title = { $regex: name, $options: 'i' }; // Case-insensitive
+      }
+
+      if (category && category !== 'all') {
+        query.category = category;
+      }
+
+      const sortOption = sort === 'desc' ? -1 : 1;
+
+      const products = await Product.find(query)
+        .sort({ price: sortOption })//Limit sorting to the price field
+        .limit(limit);//Limit the search to 10 items
+
+      return products;
     }
       
   },

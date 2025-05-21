@@ -28,9 +28,17 @@ const VerifyPayment = () => {
 
   if (loading) {
     return (
-      <Container className="text-center mt-5">
-        <Spinner animation="border" />
-        <p>Verifying payment...</p>
+        <Container xlg style={{
+            position: 'fixed', display: 'flex',
+            width: '100%', inset: 0, top: 0, left: 0,
+            zIndex: 20,
+            // backgroundColor: 'rgba(0,0,0,0.5)',
+            justifyContent: 'center',
+            alignItems: 'center'
+        }}
+            className="text-center mt-5">
+            <Spinner animation="border" fill={'white' } />
+        {/* <p>Verifying payment...</p> */}
       </Container>
     );
   }
