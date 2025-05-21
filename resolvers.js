@@ -35,7 +35,7 @@ const resolvers = {
     },
   test: (args, context) => context?.user? 'Welcome Bro' : 'Test Success, GraphQL server is up & running !!',
   users: async () => await User.find(),//   userByName: async ({ username }) => await User.findOne({ username }),
-  products: async (args, context) => context?.user && await Product.find(),//DUMMY_PRODUCTS,
+  products: async (args, context) => context?.user && await Product.find(),//.limit(5),//DUMMY_PRODUCTS,
   getProduct: async ({ id }, context) => context?.user && await Product.findOne({ id }),
   
   verifyPayment: async ({ token }, context) => {

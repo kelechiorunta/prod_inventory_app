@@ -13,6 +13,7 @@ enum CategoryEnum {
   Men
   Women
   Perfumes
+  Jewelry
   electronics
 }
 
