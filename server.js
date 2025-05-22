@@ -5,9 +5,12 @@ import cors from 'cors';
 import bodyParser from 'body-parser';
 import session from 'express-session';
 import cookieParser from 'cookie-parser';
+import { graphqlHTTP } from 'express-graphql';
 import ConnectMongoDBSession from 'connect-mongodb-session'
 import { buildSchema } from 'graphql';
-import { graphqlHTTP } from 'express-graphql';
+// import { graphqlHTTP } from 'express-graphql';
+import { createYoga } from 'graphql-yoga';
+import { makeExecutableSchema } from '@graphql-tools/schema';
 import resolvers from './resolvers.js';
 import { connectDB } from './db.js';
 import authRouter from './routes.js';
@@ -22,6 +25,11 @@ connectDB(process.env.MONGO_URI);
 // Create executable Schema for GraphQL server
 const typeDefs = fs.readFileSync('./schema.graphql', { encoding: 'utf-8' })
 const schema = buildSchema(typeDefs);
+
+// const schema = makeExecutableSchema({
+//   typeDefs,
+//   resolvers, // Must be an object mapping types & fields
+// });
 
 // Implementing a MongoDB middleware session and store for session/login authentication
 const MongoDBStore = ConnectMongoDBSession(session)
@@ -63,6 +71,7 @@ const sessionOptions = {
 const buildPath = path.resolve(import.meta.dirname, './build')
 console.log(buildPath)
 
+// // const schema = makeExecutableSchema({ typeDefs, resolvers });
 // Middleware for cors
 app.use(express.static('build'))
 app.use(cors(corsSetup));
@@ -77,31 +86,95 @@ app.use(passport.session())
 
 // Mount home and authenticated routes on the authRouter
 app.use('/', authRouter);
-
-
 // configurePassport(passport)
 
 // Middleware to intercept authenticated user 
 app.use((req, res, next) => {
-    if (req.session.user) {
-        console.log(req.session.user)
-        // console.log(req.isAuthenticated())
-    // next();
+    // if (req.session.user) {
+    //     console.log(req.session.user)
+    //     // console.log(req.isAuthenticated())
+    // // next();
 
-    }
+    // }
     console.log("No authenticated user")
     next();
 })
 
-// Middleware to enable GraphQL Introspection and Client Queries
-app.use('/graphql',  graphqlHTTP((req) => ({
+// // // --- Yoga GraphQL Server ---
+// const yoga = createYoga({
+//   schema,
+//   context: ({ request, res }) => {
+  
+//     const req = request || request.raw;
+
+//     // Log session and auth state
+//     console.log('SESSION:', req.session);
+//     console.log('REQ USER:', req.user);
+//     console.log('REQ AUTH:', req.isAuthenticated());
+
+//     return {
+//       user: req.user ?? null,
+//       isAuthenticated: req.isAuthenticated() ?? false,
+//     };
+//   },
+//   cors: {
+//     origin: 'http://localhost:3301', // or whatever frontend origin
+//     credentials: true,
+//   },
+//   maskedErrors: false,
+// });
+
+// const yoga = createYoga({
+//   schema,
+//   context: async ({ request }) => {
+//     const req = request.raw;
+
+//     // Optional: run session and passport middleware manually (if not handled globally)
+//     await new Promise((resolve, reject) => {
+//       passport.session()(req, {}, err => (err ? reject(err) : resolve(null)));
+//     });
+
+//     console.log('SESSION:', req.session);          // Should now show session data
+//     console.log('REQ USER:', req.user);            // Should now show the user
+//     console.log('REQ AUTH:', req.isAuthenticated()); // Should be true if user is logged in
+
+//     return {
+//       user: req.user ?? null,
+//       isAuthenticated: req.isAuthenticated() ?? false,
+//     };
+//   },
+//   cors: {
+//     origin: 'http://localhost:3301',
+//     credentials: true,
+//   },
+//   maskedErrors: false,
+// });
+
+// const server = createServer(yoga);
+
+// app.use(
+//   '/graphql',
+//   // cors(),
+//   // bodyParser.json(),
+//   yoga
+// );
+
+// function getUser(req, res, next) {
+//   console.log('SESSION:', req.session);
+//   console.log('REQ USER:', req.user);
+//   console.log('REQ AUTH:', req.isAuthenticated());
+// }
+
+// // Middleware to enable GraphQL Introspection and Client Queries
+app.use('/graphql', graphqlHTTP((req) => ({
     schema,
     rootValue: resolvers,
     context: {
       isAuthenticated: req.isAuthenticated(),
       user: req.user  // this is set by Passport after login
     },
-    graphiql: true
+  graphiql: true,
+  
 }))
 )
 
@@ -122,6 +195,10 @@ app.get('/*', (req, res) => {
 })
 
 const PORT = 3301;
+
+// server.listen(PORT, () => {
+//   console.log('Server is running on http://localhost:3301/graphql');
+// });
 
 app.listen(PORT, () => {
     console.log(`Server is listening at PORT ${PORT}`)

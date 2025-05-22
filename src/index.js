@@ -6,26 +6,43 @@ import reportWebVitals from './reportWebVitals';
 import { BrowserRouter } from 'react-router-dom';
 import { ApolloProvider, ApolloClient, InMemoryCache, HttpLink } from '@apollo/client';
 import MainHeader from './components/MainHeader';
+import { GraphQLWsLink } from '@apollo/client/link/subscriptions';
+import { createClient } from 'graphql-ws';
+import { getMainDefinition } from '@apollo/client/utilities';
+import { split } from '@apollo/client';
 
-import { AUTH } from './constants';
 
-// const typePolicies = {
-//   Query: {
-//     fields: {
-//       product(_, { args, toReference }) {
-//         return toReference({
-//           __typename: 'Product',
-//           id: args.id
-//         })
-//       }
-//     }
-//   }
-// }
+// const wsLink = new GraphQLWsLink(createClient({
+//   url: 'ws://localhost:3301/subscriptions',
+// }));
+
+// const httpLink = new HttpLink({ uri: 'http://localhost:3301/graphql' })
+
+// const splitLink = split(
+//   ({ query }) => {
+//     const definition = getMainDefinition(query);
+//     return (
+//       definition.kind === 'OperationDefinition' &&
+//       definition.operation === 'subscription'
+//     );
+//   },
+//   wsLink,
+//   httpLink,
+// );
+
+// const client = new ApolloClient({
+//   link: splitLink,
+//   cache: new InMemoryCache()
+// })
 
 const client = new ApolloClient({
-  link: new HttpLink({uri: 'http://localhost:3301/graphql'}),
-  cache: new InMemoryCache()
-})
+  // link: new HttpLink({
+    uri: 'http://localhost:3301/graphql', // update if using env vars or reverse proxy
+    credentials: 'include',              // important for sessions and cookies!
+  // }),
+  cache: new InMemoryCache(),
+});
+
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(

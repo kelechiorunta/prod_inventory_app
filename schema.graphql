@@ -89,6 +89,7 @@ input CreateProductInput {
 }
 
 type Subscription {
+    auth:User
     alertResponse:[PaymentResponse],
     test:String
 }

@@ -6,15 +6,22 @@ import { FETCH_PRODUCTS } from '../constants';
 import ProductCard from './ProductCard.jsx';
 import MainHeader from './MainHeader.jsx';
 import { Container } from 'react-bootstrap';
+import Subscription from './Subscription.jsx';
 
 export default function Home() {
-   const { loading, error, data } = useQuery(FETCH_PRODUCTS);
+  const { loading, error, data } = useQuery(FETCH_PRODUCTS, {
+  fetchPolicy: 'cache-first',
+  nextFetchPolicy: 'cache-first',
+});
+
   if (error) return <h1>Something went wrong</h1>;
   if (loading) return <h1>Loading...</h1>;
 
   return (
       <div className="App">
-          <MainHeader auth={ data?.auth } />
+          <MainHeader auth={data?.auth} />
+          
+          <Subscription />
           
           <Container style={{padding: '100px'}}>
             <div className="row g-4">
