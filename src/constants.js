@@ -39,7 +39,7 @@ export const GET_PRODUCT = gql`
 `
 
 export const AUTH = gql`
-        query Query {
+        subscription Auth {
                 auth {
                     username
                     picture

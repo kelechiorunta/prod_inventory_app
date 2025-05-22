@@ -4,6 +4,7 @@ import { Formik } from 'formik';
 import * as Yup from 'yup';
 import { Form, Button, Row, Col, Alert, Container } from 'react-bootstrap';
 import { CREATE_NEW_PRODUCT } from '../constants';
+import MainHeader from './MainHeader';
 
 const AddProductForm = () => {
     const [createNewProduct, { data, loading, error }] = useMutation(CREATE_NEW_PRODUCT);
@@ -42,7 +43,7 @@ const AddProductForm = () => {
 
     return (
       <Container md className='col-6-xlg col-12-md col-12-sm mt-100' style={{marginTop: '100px'}}>
-    
+        {/* <MainHeader/> */}
         <Formik
         initialValues={{
             title: '',

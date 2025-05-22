@@ -1,23 +1,35 @@
 import React from 'react';
 import { Navbar, Nav, Container } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
+import { useQuery } from '@apollo/client';
+import { FETCH_PRODUCTS } from '../constants';
+
 const MainHeader = ({ auth }) => {
+
+    const { loading, error, data } = useQuery(FETCH_PRODUCTS, {
+      fetchPolicy: 'cache-first',
+      nextFetchPolicy: 'cache-first',
+    });
+    
+    //   if (error) return <h1>Something went wrong</h1>;
+    //   if (loading) return <h1>Loading...</h1>;
   
   return (
     <Navbar style={{position: 'fixed', top: 0, left: 0, zIndex: 50, width: '100%'}} className='fixed top-0 left-0' bg="dark" variant="dark" expand="lg" collapseOnSelect>
       <Container>
-            <a className="navbar-brand" href="/">ShopMate</a>
-              {auth && <img src={auth && (auth.picture || auth.image)} style={{ borderRadius: '50%', margin: 'auto' }} width={30} height={30} alt='avatar' />}
+            <Link className="navbar-brand" to="/">ShopMate</Link>
+              {data && data?.auth && <img src={data?.auth && (data?.auth.picture || data?.auth.image)} style={{ borderRadius: '50%', margin: 'auto' }} width={30} height={30} alt='avatar' />}
         
         <Navbar.Toggle aria-controls="main-navbar-nav" />
             <Navbar.Collapse id="main-navbar-nav">
                 
             <Nav className="ms-auto">
-                <a className="nav-link" href="/">Home</a>
-                {auth && auth?.username.startsWith("Kelechi") &&
-                    <a className="nav-link" href="/product">Add Product</a>
+                <Link className="nav-link" to="/">Home</Link>
+                {data && data?.auth?.username.startsWith("Kelechi") &&
+                    <Link className="nav-link" to="/product">Add Product</Link>
                 }
                 {/* <a className="nav-link" href="/about">About Us</a> */}
-                <a className="nav-link" href="/search">Search</a>
+                <Link className="nav-link" to="/search">Search</Link>
                 {/* <a className="nav-link" href="/checkout">Checkout</a> */}
                 <a className="nav-link" href="/logout">Logout</a>
             </Nav>
