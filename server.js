@@ -15,7 +15,11 @@ import resolvers from './resolvers.js';
 import { connectDB } from './db.js';
 import authRouter from './routes.js';
 import passport from 'passport'
-import http from 'http';
+
+import { useServer } from 'graphql-ws/use/ws'
+import { WebSocketServer } from 'ws';
+import { createServer } from 'http';
+
 const app = express();
 
 
@@ -88,53 +92,6 @@ app.use(passport.session())
 app.use('/', authRouter);
 // configurePassport(passport)
 
-// 🔥 Only needed for Yoga: Run session + passport manually for GraphQL context
-// const yoga = createYoga({
-//   schema,
-//   context: async ({ request }) => {
-//     const req = request.raw; // Node's IncomingMessage (from Yoga)
-
-//     // Re-run session and passport middlewares just for Yoga
-//     await new Promise((resolve, reject) => {
-//       session(sessionOptions)(req, {}, (err) => {
-//         if (err) return reject(err);
-//         passport.initialize()(req, {}, (err) => {
-//           if (err) return reject(err);
-//           passport.session()(req, {}, (err) => {
-//             if (err) return reject(err);
-//             return resolve(null);
-//           });
-//         });
-//       });
-//     });
-
-//     const user = req.user;
-//     const isAuthenticated = req.isAuthenticated?.() ?? false;
-
-//     console.log('[GraphQL Context] user:', user);
-//     console.log('[GraphQL Context] auth:', isAuthenticated);
-
-//     return {
-//       user: user ?? null,
-//       isAuthenticated,
-//     };
-//   },
-//   cors: {
-//     origin: 'http://localhost:3301',
-//     credentials: true,
-//   },
-//   maskedErrors: false,
-// });
-
-// console.log("YOGA:", yoga)
-// app.use('/graphql', yoga);
-
-// function getUser(req, res, next) {
-//   console.log('SESSION:', req.session);
-//   console.log('REQ USER:', req.user);
-//   console.log('REQ AUTH:', req.isAuthenticated());
-// }
-
 // Middleware to enable GraphQL Introspection and Client Queries
 app.use('/graphql', graphqlHTTP((req) => ({
     schema,
@@ -143,7 +100,9 @@ app.use('/graphql', graphqlHTTP((req) => ({
       isAuthenticated: req.isAuthenticated(),
       user: req.user  // this is set by Passport after login
     },
-  graphiql: true,
+    graphiql: {
+      subscriptionEndpoint: 'ws://localhost:3301/graphql',
+    },
   
 }))
 )
@@ -166,10 +125,19 @@ app.get('/*', (req, res) => {
 
 const PORT = 3301;
 
-// server.listen(PORT, () => {
-//   console.log('Server is running on http://localhost:3301/graphql');
-// });
+const httpServer = createServer(app);
 
-app.listen(PORT, () => {
-    console.log(`Server is listening at PORT ${PORT}`)
+const wsServer = new WebSocketServer({
+  server: httpServer,
+  path: '/graphql',
 })
+
+useServer({ schema }, wsServer)
+
+httpServer.listen(PORT, () => {
+  console.log('Server is running on http://localhost:3301/graphql');
+});
+
+// app.listen(PORT, () => {
+//     console.log(`Server is listening at PORT ${PORT}`)
+// })
