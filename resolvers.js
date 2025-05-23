@@ -29,6 +29,7 @@ const resolvers = {
   // Query Resolvers
   // Query: {
     auth: (args, context) => {
+      // console.log('CONTEXT', context)
       if (!context.isAuthenticated) {
         throw new Error('Not authenticated');
       }
@@ -89,8 +90,8 @@ const resolvers = {
         return products;
       }
       
-    }
-  ,
+    },
+  //  },
    
   // Mutation: {
     //Mutation Resolvers
@@ -170,7 +171,7 @@ const resolvers = {
     
   }
 
+// }
 
-// };
 
 export default resolvers;

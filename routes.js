@@ -33,6 +33,7 @@ authRouter.post('/signin',  passport.authenticate('local'), (req, res, next) => 
     // next();
     // res.redirect('/')
     req.session.user = req.user
+    req.session.authenticated = req.isAuthenticated()
     res.json({ message: 'Login successful', user: req.user, isValid: req.isAuthenticated() });
 
 });
