@@ -15,7 +15,7 @@ import resolvers from './resolvers.js';
 import { connectDB } from './db.js';
 import authRouter from './routes.js';
 import passport from 'passport'
-
+import http from 'http';
 const app = express();
 
 
@@ -88,59 +88,35 @@ app.use(passport.session())
 app.use('/', authRouter);
 // configurePassport(passport)
 
-// Middleware to intercept authenticated user 
-app.use((req, res, next) => {
-    // if (req.session.user) {
-    //     console.log(req.session.user)
-    //     // console.log(req.isAuthenticated())
-    // // next();
-
-    // }
-    console.log("No authenticated user")
-    next();
-})
-
-// // // --- Yoga GraphQL Server ---
-// const yoga = createYoga({
-//   schema,
-//   context: ({ request, res }) => {
-  
-//     const req = request || request.raw;
-
-//     // Log session and auth state
-//     console.log('SESSION:', req.session);
-//     console.log('REQ USER:', req.user);
-//     console.log('REQ AUTH:', req.isAuthenticated());
-
-//     return {
-//       user: req.user ?? null,
-//       isAuthenticated: req.isAuthenticated() ?? false,
-//     };
-//   },
-//   cors: {
-//     origin: 'http://localhost:3301', // or whatever frontend origin
-//     credentials: true,
-//   },
-//   maskedErrors: false,
-// });
-
+// 🔥 Only needed for Yoga: Run session + passport manually for GraphQL context
 // const yoga = createYoga({
 //   schema,
 //   context: async ({ request }) => {
-//     const req = request.raw;
+//     const req = request.raw; // Node's IncomingMessage (from Yoga)
 
-//     // Optional: run session and passport middleware manually (if not handled globally)
+//     // Re-run session and passport middlewares just for Yoga
 //     await new Promise((resolve, reject) => {
-//       passport.session()(req, {}, err => (err ? reject(err) : resolve(null)));
+//       session(sessionOptions)(req, {}, (err) => {
+//         if (err) return reject(err);
+//         passport.initialize()(req, {}, (err) => {
+//           if (err) return reject(err);
+//           passport.session()(req, {}, (err) => {
+//             if (err) return reject(err);
+//             return resolve(null);
+//           });
+//         });
+//       });
 //     });
 
-//     console.log('SESSION:', req.session);          // Should now show session data
-//     console.log('REQ USER:', req.user);            // Should now show the user
-//     console.log('REQ AUTH:', req.isAuthenticated()); // Should be true if user is logged in
+//     const user = req.user;
+//     const isAuthenticated = req.isAuthenticated?.() ?? false;
+
+//     console.log('[GraphQL Context] user:', user);
+//     console.log('[GraphQL Context] auth:', isAuthenticated);
 
 //     return {
-//       user: req.user ?? null,
-//       isAuthenticated: req.isAuthenticated() ?? false,
+//       user: user ?? null,
+//       isAuthenticated,
 //     };
 //   },
 //   cors: {
@@ -150,14 +126,8 @@ app.use((req, res, next) => {
 //   maskedErrors: false,
 // });
 
-// const server = createServer(yoga);
-
-// app.use(
-//   '/graphql',
-//   // cors(),
-//   // bodyParser.json(),
-//   yoga
-// );
+// console.log("YOGA:", yoga)
+// app.use('/graphql', yoga);
 
 // function getUser(req, res, next) {
 //   console.log('SESSION:', req.session);
@@ -165,7 +135,7 @@ app.use((req, res, next) => {
 //   console.log('REQ AUTH:', req.isAuthenticated());
 // }
 
-// // Middleware to enable GraphQL Introspection and Client Queries
+// Middleware to enable GraphQL Introspection and Client Queries
 app.use('/graphql', graphqlHTTP((req) => ({
     schema,
     rootValue: resolvers,

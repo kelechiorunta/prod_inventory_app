@@ -36,10 +36,10 @@ import { split } from '@apollo/client';
 // })
 
 const client = new ApolloClient({
-  // link: new HttpLink({
+  link: new HttpLink({
     uri: 'http://localhost:3301/graphql', // update if using env vars or reverse proxy
     credentials: 'include',              // important for sessions and cookies!
-  // }),
+   }),
   cache: new InMemoryCache(),
 });
 
