@@ -3,10 +3,10 @@ import User from "./models/User.js";
 import Product from "./models/Product.js";
 import axios from "axios";
 
-const DUMMY_PRODUCTS = [
-  { id: "1", title: "MacBook Air", price: 300000 },
-  { id: "2", title: "AirPods Pro", price: 120000 },
-];
+// const DUMMY_PRODUCTS = [
+//   { id: "1", title: "MacBook Air", price: 300000 },
+//   { id: "2", title: "AirPods Pro", price: 120000 },
+// ];
 
 // No need to call this anymore as the products from the api are now in
 // the database
@@ -188,6 +188,32 @@ const DUMMY_PRODUCTS = [
 // export default resolvers;
 
 
+import eventBus from "./eventBus.js";
+
+const asyncIteratorFromEvent = (eventName) => {
+  const iterator = {
+    next: () =>
+      new Promise((resolve) => {
+        const handler = (payload) => {
+          resolve({ value: { notifyNewProduct: payload }, done: false });
+        };
+        eventBus.once(eventName, handler);
+      }),
+    return: async () => {
+      return { value: undefined, done: true };
+    },
+    throw: (error) => {
+      throw error;
+    },
+    [Symbol.asyncIterator]() {
+      return this;
+    },
+  };
+
+  return iterator;
+};
+
+
 const resolvers = {
   // ✅ Query Resolvers
   Query: {
@@ -244,9 +270,12 @@ const resolvers = {
 
   // ✅ Mutation Resolvers
  Mutation: {
-    createNewProduct: async ({ input }, context) => {
+    createNewProduct: async (parent, { input }, context) => {
       try {
         const product = await new Product(input).save();
+        // Fire event manually
+        eventBus.emit('PRODUCT_ADDED', product);
+  
         return product;
       } catch (error) {
         console.error("Create product error:", error);
@@ -254,7 +283,7 @@ const resolvers = {
       }
     },
 
-    updateProduct: async ({ id, input }, context) => {
+    updateProduct: async (parent, { id, input }, context) => {
       try {
         const updated = await Product.findOneAndUpdate({ id }, input, { new: true });
         if (!updated) throw new Error("Failed to update product");
@@ -265,7 +294,7 @@ const resolvers = {
       }
     },
 
-    deleteProduct: async ({ id }, context) => {
+    deleteProduct: async (parent, { id }, context) => {
       try {
         const result = await Product.deleteOne({ id });
         return result;
@@ -301,14 +330,43 @@ const resolvers = {
   // ✅ Subscription Resolver (Must return AsyncIterable)
   Subscription: {
     authUpdate: {
-      subscribe: async function*(parent, args, context) {
+      subscribe: async function* (parent, args, context) {
         while (true) {
           yield { authUpdate: { username: context?.user?.username || "guest" } };
           await new Promise(resolve => setTimeout(resolve, 4000));
         }
       },
     },
-  },
+    notifyNewProduct: {
+      subscribe: async function* () {
+        const queue = [];
+    
+        const listener = (product) => {
+          if (product) queue.push(product);
+        };
+    
+        eventBus.on('PRODUCT_ADDED', listener);
+    
+        try {
+          while (true) {
+            if (queue.length > 0) {
+              const product = queue.shift();
+    
+              // Only yield if product is valid
+              if (product) {
+                yield { notifyNewProduct: product };
+              }
+            } else {
+              await new Promise(resolve => setTimeout(resolve, 300)); // Poll every 300ms
+            }
+          }
+        } finally {
+          eventBus.off('PRODUCT_ADDED', listener);
+        }
+      }
+    }
+    
+  }
   
  };
 

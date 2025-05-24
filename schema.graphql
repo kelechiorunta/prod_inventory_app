@@ -90,6 +90,7 @@ input CreateProductInput {
 
 type Subscription {
     authUpdate:User
+    notifyNewProduct:Product
     alertResponse:[PaymentResponse],
     test:String
 }

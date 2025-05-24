@@ -48,6 +48,16 @@ export const AUTH = gql`
         }
 `
 
+export const SUBSCRIBE_TO_NEW_PRODUCTS = gql`
+  subscription OnNewProduct {
+    notifyNewProduct {
+      id
+      title
+      price
+      category
+    }
+  }`
+
 export const CREATE_NEW_PRODUCT = gql`
           mutation CreateNewProduct(
                     $title: String!

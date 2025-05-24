@@ -7,12 +7,20 @@ import EditProductForm from './components/EditProductForm.jsx';
 import PaymentForm from './components/PaymentForm.jsx';
 import VerifyPayment from './components/VerifyPayment.jsx';
 import SearchProduct from './components/SearchProduct.jsx';
-
+import ProductSubscriptionToast from './components/ProductSubscriptionToast.jsx';
+import { ToastContainer } from 'react-toastify';
+import Modal from './components/Modal.jsx';
 
 function App() {
   return (
+    <>
+      <Modal>
+        <ProductSubscriptionToast/>
+        <ToastContainer/>
+      </Modal>
+      
       <Routes>
-        <Route element={<ProtectedRoute />}>
+      <Route element={<ProtectedRoute />}>
           <Route path="/" element={<Home />} />
           <Route path="/search" element={<SearchProduct />} />
           <Route path="/product" element={<AddProductForm />} />
@@ -23,6 +31,8 @@ function App() {
        
           <Route path="/login" element={<Login />} />
       </Routes>
+    </>
+      
   );
 }
 
