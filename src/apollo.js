@@ -5,10 +5,17 @@ import { split, HttpLink, InMemoryCache, ApolloClient } from '@apollo/client';
 
 
 const wsLink = new GraphQLWsLink(createClient({
-  url: 'ws://localhost:3301/graphql',
+    url: 'ws://localhost:3301/graphql',
+    options: {
+        reconnect: true,
+    },
 }));
 
-const httpLink = new HttpLink({ uri: 'http://localhost:3301/graphql' })
+const httpLink = new HttpLink(
+    {
+        uri: 'http://localhost:3301/graphql',
+        credentials: 'include'
+     })
 
 const splitLink = split(
   ({ query }) => {
@@ -24,7 +31,8 @@ const splitLink = split(
 
 const client = new ApolloClient({
   link: splitLink,
-  cache: new InMemoryCache()
+    cache: new InMemoryCache(),
+    credentials: 'include'
 })
 
 export {client}

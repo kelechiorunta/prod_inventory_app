@@ -2,8 +2,8 @@ import React from 'react';
 import { Button } from 'react-bootstrap';
 import { createPortal } from 'react-dom';
 
-export default function Modal({handleModal, children}) {
-  return createPortal(
+export default function Modal({isActive, handleModal, children}) {
+  return isActive && createPortal(
     <div
       style={{
         inset: 0,
