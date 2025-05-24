@@ -63,6 +63,10 @@ type DeleteResponse {
   deletedCount: Int!
 }
 
+type DeletePayload {
+    id: ID!
+}
+
 type Mutation {
   createNewProduct(input: CreateProductInput!): Product!
   initializePayment(email: String!, price: Float!): PaymentResponse
@@ -91,6 +95,7 @@ input CreateProductInput {
 type Subscription {
     authUpdate:User
     notifyNewProduct:Product
+    notifyDeleteProduct: DeletePayload
     alertResponse:[PaymentResponse],
     test:String
 }

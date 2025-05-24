@@ -228,9 +228,9 @@ const resolvers = {
 
     users: async () => await User.find(),
     products: async (parent, args, context) => context?.user && await Product.find(),
-    getProduct: async ({ id }, context) => context?.user && await Product.findOne({ id }),
+    getProduct: async (parent, { id }, context) => context?.user && await Product.findOne({ id }),
 
-    verifyPayment: async ({ token }, context) => {
+    verifyPayment: async (parent, { token }, context) => {
       if (context.user) {
         try {
           const response = await fetch(`https://api.paystack.co/transaction/verify/${token}`, {
@@ -256,7 +256,7 @@ const resolvers = {
       }
     },
 
-    searchProduct: async ({ name, category, sort = 'asc', limit = 10 }, context) => {
+    searchProduct: async (parent, { name, category, sort = 'asc', limit = 10 }, context) => {
       const query = {};
       if (context.user) {
         if (name) query.title = { $regex: name, $options: 'i' };
@@ -297,6 +297,7 @@ const resolvers = {
     deleteProduct: async (parent, { id }, context) => {
       try {
         const result = await Product.deleteOne({ id });
+        eventBus.emit('PRODUCT_DELETED', { id })
         return result;
       } catch (err) {
         console.error("Delete error:", err);
@@ -304,7 +305,7 @@ const resolvers = {
       }
     },
 
-    initializePayment: async ({ email, price }) => {
+    initializePayment: async (parent, { email, price }, context) => {
       const payload = {
         email,
         amount: price * 1000,
@@ -338,7 +339,7 @@ const resolvers = {
       },
     },
     notifyNewProduct: {
-      subscribe: async function* () {
+      subscribe: async function* (parent, args, context) {
         const queue = [];
     
         const listener = (product) => {
@@ -364,7 +365,30 @@ const resolvers = {
           eventBus.off('PRODUCT_ADDED', listener);
         }
       }
-    }
+    },
+    notifyDeleteProduct: {
+      subscribe: async function* () {
+        const queue = [];
+  
+        const handler = (payload) => {
+          queue.push(payload);
+        };
+  
+        eventBus.on('PRODUCT_DELETED', handler);
+  
+        try {
+          while (true) {
+            if (queue.length) {
+              yield { notifyDeleteProduct: queue.shift() };
+            } else {
+              await new Promise(resolve => setTimeout(resolve, 500));
+            }
+          }
+        } finally {
+          eventBus.off('PRODUCT_DELETED', handler);
+        }
+      },
+    },
     
   }
   
