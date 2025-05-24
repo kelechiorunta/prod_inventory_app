@@ -40,7 +40,7 @@ export const GET_PRODUCT = gql`
 
 export const AUTH = gql`
         subscription Auth {
-                auth {
+                authUpdate {
                     username
                     picture
                     email

@@ -21,7 +21,9 @@ authRouter.get('/logout', function(req, res, next) {
 
 authRouter.get('/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
 authRouter.get('/oauth2/redirect/google', passport.authenticate('google'), (req, res, next) => {
-    try {
+  try {
+        req.session.user = req.user
+        req.session.authenticated = req.isAuthenticated()
         res.redirect('/');
     } catch (err) {
         res.redirect('/login')
@@ -32,9 +34,15 @@ authRouter.post('/signup', signupController);
 authRouter.post('/signin',  passport.authenticate('local'), (req, res, next) => {
     // next();
     // res.redirect('/')
-    req.session.user = req.user
-    req.session.authenticated = req.isAuthenticated()
-    res.json({ message: 'Login successful', user: req.user, isValid: req.isAuthenticated() });
+    try {
+      req.session.user = req.user
+      req.session.authenticated = req.isAuthenticated()
+      res.json({ message: 'Login successful', user: req.user, isValid: req.isAuthenticated() });
+      // res.redirect('/');
+  } catch (err) {
+      res.redirect('/login')
+  }
+    
 
 });
 
@@ -54,6 +62,16 @@ authRouter.post("/paystack/webhook", express.json(), (req, res) => {
 
 authRouter.get('/isAuthenticated', loginSession, isAuthenticatedUser)
 
+export var authenticatedUser = {}
+
 // authRouter.post('/login', loginController);
+authRouter.use((req, res, next) => {
+  console.log("USER AUTHENTICATED", req.session.user)
+  console.log("USER ISAUTHENTICATED", req.session.authenticated)
+  authenticatedUser.user = req.session.user
+  authenticatedUser.isActive = req.session.authenticated
+  next()
+})
+
 
 export default authRouter
