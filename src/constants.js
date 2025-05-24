@@ -58,6 +58,13 @@ export const SUBSCRIBE_TO_NEW_PRODUCTS = gql`
     }
   }`
 
+  export const SUBSCRIBE_TO_DELETE_PRODUCTS = gql`
+  subscription OnDeleteProduct {
+    notifyDeleteProduct {
+      id
+    }
+  }`
+
 export const CREATE_NEW_PRODUCT = gql`
           mutation CreateNewProduct(
                     $title: String!
