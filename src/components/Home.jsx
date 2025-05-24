@@ -89,6 +89,8 @@ import MainHeader from './MainHeader.jsx';
 import { Container } from 'react-bootstrap';
 import Subscription from './Subscription.jsx';
 import Modal from './Modal.jsx';
+import ProductSubscriptionToast from './ProductSubscriptionToast.jsx';
+import { ToastContainer } from 'react-toastify';
 
 export default function Home() {
   const { loading, error, data } = useQuery(FETCH_PRODUCTS, {
@@ -105,7 +107,7 @@ export default function Home() {
     }
       const timeoutId = setTimeout(() => {
         setActive(false);
-      }, 5000);
+      }, 3000);
 
       return () => clearTimeout(timeoutId);
   }, [loading]);
@@ -115,7 +117,6 @@ export default function Home() {
   return (
     <div className="App">
       <MainHeader auth={data?.auth} />
-
       <Container style={{ padding: '100px' }}>
         <Modal isActive={active}>
           <Subscription user={authSubData?.authUpdate} />
