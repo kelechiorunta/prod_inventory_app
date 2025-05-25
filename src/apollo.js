@@ -6,9 +6,9 @@ import { split, HttpLink, InMemoryCache, ApolloClient } from '@apollo/client';
 
 const wsLink = new GraphQLWsLink(createClient({
     url: 'ws://localhost:3301/graphql',
-    // options: {
-    //     reconnect: true,
-    // },
+    options: {
+        reconnect: true,
+    },
 }));
 
 const httpLink = new HttpLink(

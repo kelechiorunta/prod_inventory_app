@@ -65,6 +65,25 @@ export const SUBSCRIBE_TO_NEW_PRODUCTS = gql`
     }
   }`
 
+  export const SUBSCRIBE_TO_SEARCHED_PRODUCTS = gql`
+  subscription OnSearchProduct {
+    notifySearchProduct {
+      id
+      title
+      price
+      category
+    }
+  }`
+
+  export const SUBSCRIBE_TO_AUTH_USER = gql`
+  subscription OnAuthentication {
+    notifyAuthUser {
+      username
+      picture
+      email
+    }
+  }`
+
 export const CREATE_NEW_PRODUCT = gql`
           mutation CreateNewProduct(
                     $title: String!

@@ -1,23 +1,31 @@
 import React, { useEffect, useState } from 'react'
 import { useSubscription } from '@apollo/client'
-import { AUTH } from '../constants'
+import { AUTH, SUBSCRIBE_TO_AUTH_USER } from '../constants'
 
-export default function Subscription({user}) {
-  const { data, loading } = useSubscription(AUTH)
+export default function Subscription() {
+  const { data, error, loading } = useSubscription(SUBSCRIBE_TO_AUTH_USER)
   const [visible, setVisible] = useState(false)
   const [username, setUsername] = useState('')
 
   useEffect(() => {
-    if (user?.username) {
-      setUsername(user.username)
-      setVisible(true)
-
-      // Auto-hide after 3 seconds
-      const timer = setTimeout(() => setVisible(false), 3000)
-      return () => clearTimeout(timer)
-    }
-  }, [user])
-
+    if (error) {
+        console.error('Subscription error:', error.message);
+      }
+  
+      if (data?.notifyAuthUser) {
+          const user = data.notifyAuthUser;
+          setUsername(`🎉${user?.username==='Kelechi'? 'Admin:' : 'User:'} ${user?.username}`);
+        setVisible(true);
+  
+        // Hide toast after 4 seconds
+        const timeout = setTimeout(() => {
+          setVisible(false);
+        }, 4000);
+  
+        return () => clearTimeout(timeout);
+      }
+  }, [data, error]);
+    
   if (!visible || loading) return null
 
   return (

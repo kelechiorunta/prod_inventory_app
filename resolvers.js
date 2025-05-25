@@ -221,6 +221,7 @@ const resolvers = {
       if (!context.isAuthenticated) {
         throw new Error('Not authenticated');
       }
+      eventBus.emit('AUTHENTICATED_USER', context.user);
       return context.user;
     },
     test: (parent, args, context) =>
@@ -263,7 +264,14 @@ const resolvers = {
         if (category && category !== 'all') query.category = category;
 
         const sortOption = sort === 'desc' ? -1 : 1;
-        return await Product.find(query).sort({ price: sortOption }).limit(limit);
+        const searchedItems = await Product.find(query).sort({ price: sortOption }).limit(limit)
+        
+        if (searchedItems) {
+          eventBus.emit('SEARCHED_PRODUCT', searchedItems)
+        
+          // return await Product.find(query).sort({ price: sortOption }).limit(limit);
+          return searchedItems;
+        }
       }
     },
    },
@@ -338,6 +346,34 @@ const resolvers = {
         }
       },
     },
+    notifyAuthUser: {
+      subscribe: async function* (parent, args, context) {
+        const queue = [];
+    
+        const listener = (user) => {
+          if (user) queue.push(user);
+        };
+    
+        eventBus.on('AUTHENTICATED_USER', listener);
+    
+        try {
+          while (true) {
+            if (queue.length > 0) {
+              const user = queue.shift();
+    
+              // Only yield if product is valid
+              if (user) {
+                yield { notifyAuthUser: user };
+              }
+            } else {
+              await new Promise(resolve => setTimeout(resolve, 300)); // Poll every 300ms
+            }
+          }
+        } finally {
+          eventBus.off('AUTHENTICATED_USER', listener);
+        }
+      }
+    },
     notifyNewProduct: {
       subscribe: async function* (parent, args, context) {
         const queue = [];
@@ -389,6 +425,31 @@ const resolvers = {
         }
       },
     },
+
+    notifySearchProduct: {
+      subscribe: async function* () {
+        const queue = [];
+    
+        const handler = (products) => {
+          queue.push(products);
+        };
+    
+        eventBus.on('SEARCHED_PRODUCT', handler);
+    
+        try {
+          while (true) {
+            if (queue.length) {
+              yield { notifySearchProduct: queue.shift() };
+            } else {
+              await new Promise(resolve => setTimeout(resolve, 500));
+            }
+          }
+        } finally {
+          eventBus.off('SEARCHED_PRODUCT', handler);
+        }
+      },
+    },
+    
     
   }
   

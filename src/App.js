@@ -9,11 +9,13 @@ import VerifyPayment from './components/VerifyPayment.jsx';
 import SearchProduct from './components/SearchProduct.jsx';
 import ProductDeleteToast from './components/ProductDeleteToast.jsx';
 import ProductSubscriptionToast from './components/ProductSubscriptionToast.jsx';
+import FoundProductToast from './components/FoundProductToaster.jsx';
 
 
 function App() {
   return (
     <>  
+      <FoundProductToast/>
       <ProductSubscriptionToast/>
       <ProductDeleteToast/>
       <Routes>
