@@ -94,8 +94,10 @@ input CreateProductInput {
 
 type Subscription {
     authUpdate:User
+    notifyAuthUser:User
     notifyNewProduct:Product
     notifyDeleteProduct: DeletePayload
+    notifySearchProduct:[Product]
     alertResponse:[PaymentResponse],
     test:String
 }
