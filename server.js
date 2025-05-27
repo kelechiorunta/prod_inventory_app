@@ -121,7 +121,7 @@ app.use('/graphql', graphqlHTTP((req) => ({
     // rootValue: resolvers, //No need for this since our schema is built with makeExecutableSchema and not buildSchema
     context: {
       isAuthenticated: req.isAuthenticated(),
-      user: req.user  // this is set by Passport after login
+      user: req.user ?? req.session.user // this is set by Passport after login
     },
     graphiql: {
       subscriptionEndpoint: 'ws://localhost:3301/graphql',

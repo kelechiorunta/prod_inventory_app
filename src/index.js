@@ -7,14 +7,17 @@ import { BrowserRouter } from 'react-router-dom';
 import { ApolloProvider } from '@apollo/client';
 import MainHeader from './components/MainHeader';
 import { client } from './apollo';
+import { ViewProvider } from './components/ViewContext';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <BrowserRouter>
       <ApolloProvider client={client}>
+        <ViewProvider>
         <MainHeader />
         <App />
+        </ViewProvider>
       </ApolloProvider>
     </BrowserRouter>
   </React.StrictMode>

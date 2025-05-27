@@ -6,6 +6,7 @@ type Query{
   getProduct(id: ID!):Product
   verifyPayment(token: ID!): VerifiedPayment!
   searchProduct(name: String, category: CategoryEnum, sort: String, limit: Int): [Product]
+  messages(userId: String!, contactId: String!): [Message!]!
 }
 
 enum CategoryEnum {
@@ -32,6 +33,14 @@ type User {
   username: String,
   email: String,
   picture: String,
+}
+
+type Message {
+  id: ID
+  content: String
+  sender: String
+  receiver: String
+  createdAt: String
 }
 
 type VerifiedPayment {
@@ -72,6 +81,7 @@ type Mutation {
   initializePayment(email: String!, price: Float!): PaymentResponse
   updateProduct(id: ID!, input: UpdateProductInput!): Product!
   deleteProduct(id: ID!): DeleteResponse!
+  sendMessage(sender: String!, receiver: String!, content: String!): Message
 }
 
 input UpdateProductInput {
@@ -100,5 +110,6 @@ type Subscription {
     notifySearchProduct:[Product]
     alertResponse:[PaymentResponse],
     test:String
+    newMessage(userId: String!): Message!
 }
 

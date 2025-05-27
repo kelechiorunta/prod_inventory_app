@@ -10,6 +10,7 @@ import SearchProduct from './components/SearchProduct.jsx';
 import ProductDeleteToast from './components/ProductDeleteToast.jsx';
 import ProductSubscriptionToast from './components/ProductSubscriptionToast.jsx';
 import FoundProductToast from './components/FoundProductToaster.jsx';
+import ChatNotifications from './components/ChatNotifications.jsx';
 
 
 function App() {
@@ -17,7 +18,8 @@ function App() {
     <>  
       <FoundProductToast/>
       <ProductSubscriptionToast/>
-      <ProductDeleteToast/>
+      <ProductDeleteToast />
+      
       <Routes>
       <Route element={<ProtectedRoute />}>
           <Route path="/" element={<Home />} />
@@ -26,6 +28,7 @@ function App() {
           <Route path="/product/:id" element={<EditProductForm />} />
           <Route path="/payment/:id" element={<PaymentForm />} />
           <Route path="/payment/callback" element={<VerifyPayment />} />
+          <Route path="/chat/:userId" element={<ChatNotifications />} />
         </Route>
        
           <Route path="/login" element={<Login />} />
