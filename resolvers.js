@@ -189,6 +189,12 @@ import axios from "axios";
 
 
 import eventBus from "./eventBus.js";
+import { chatBus, EVENTS } from "./eventBus.js";
+import { withFilter } from "graphql-subscriptions";
+import { PubSub } from "graphql-subscriptions";
+import Message from "./models/Message.js";
+
+const pubsub = new PubSub()
 
 const asyncIteratorFromEvent = (eventName) => {
   const iterator = {
@@ -221,7 +227,7 @@ const resolvers = {
       if (!context.isAuthenticated) {
         throw new Error('Not authenticated');
       }
-      eventBus.emit('AUTHENTICATED_USER', context.user);
+      eventBus.emit('AUTHENTICATED_USER', context?.user);
       return context.user;
     },
     test: (parent, args, context) =>
@@ -230,6 +236,16 @@ const resolvers = {
     users: async () => await User.find(),
     products: async (parent, args, context) => context?.user && await Product.find(),
     getProduct: async (parent, { id }, context) => context?.user && await Product.findOne({ id }),
+
+    messages: async (parent, { userId, contactId }, context) => {
+      return await Message.find({
+        $or: [
+          { sender: userId, receiver: contactId },
+          { sender: contactId, receiver: userId },
+        ],
+      }).sort({ createdAt: 1 }); // ascending to show oldest first
+    },
+    
 
     verifyPayment: async (parent, { token }, context) => {
       if (context.user) {
@@ -289,8 +305,14 @@ const resolvers = {
         console.error("Create product error:", error);
         return null;
       }
-    },
-
+   },
+   
+   sendMessage: async (_, { sender, receiver, content }) => {
+    const message = await Message.create({ sender, receiver, content });
+    chatBus.emit(EVENTS.NEW_MESSAGE, message); // ✅ This triggers subscribers
+    return message;
+   },
+   
     updateProduct: async (parent, { id, input }, context) => {
       try {
         const updated = await Product.findOneAndUpdate({ id }, input, { new: true });
@@ -341,8 +363,23 @@ const resolvers = {
     authUpdate: {
       subscribe: async function* (parent, args, context) {
         while (true) {
-          yield { authUpdate: { username: context?.user?.username || "guest" } };
-          await new Promise(resolve => setTimeout(resolve, 4000));
+          yield { authUpdate: { username: context?.user?.username } };
+          await new Promise(resolve => setTimeout(resolve, 300));
+        }
+      },
+    },
+    newMessage: {
+      subscribe: async function* (parent, { userId }, context) {
+        const asyncIterator = chatBus.asyncIterator(EVENTS.NEW_MESSAGE);
+
+        for await (const message of asyncIterator) {
+          // Manual filter
+          if (
+            message.sender === userId ||
+            message.receiver === userId
+          ) {
+            yield { newMessage: message };
+          }
         }
       },
     },
@@ -364,6 +401,7 @@ const resolvers = {
               // Only yield if product is valid
               if (user) {
                 yield { notifyAuthUser: user };
+                await new Promise(resolve => setTimeout(resolve, 300));
               }
             } else {
               await new Promise(resolve => setTimeout(resolve, 300)); // Poll every 300ms
@@ -425,7 +463,6 @@ const resolvers = {
         }
       },
     },
-
     notifySearchProduct: {
       subscribe: async function* () {
         const queue = [];

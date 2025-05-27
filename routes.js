@@ -23,7 +23,8 @@ authRouter.get('/google', passport.authenticate('google', { scope: ['profile', '
 authRouter.get('/oauth2/redirect/google', passport.authenticate('google'), (req, res, next) => {
   try {
         req.session.user = req.user
-        req.session.authenticated = req.isAuthenticated()
+    req.session.authenticated = req.isAuthenticated()
+    // res.json({ message: 'Login successful', user: req.user, isValid: req.isAuthenticated() });
         res.redirect('/');
     } catch (err) {
         res.redirect('/login')

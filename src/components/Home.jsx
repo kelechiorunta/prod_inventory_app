@@ -86,11 +86,10 @@ import { useQuery, useSubscription } from '@apollo/client';
 import { FETCH_PRODUCTS, AUTH } from '../constants.js';
 import ProductCard from './ProductCard.jsx';
 import MainHeader from './MainHeader.jsx';
-import { Container } from 'react-bootstrap';
+import { Container, Spinner } from 'react-bootstrap';
 import Subscription from './Subscription.jsx';
 import Modal from './Modal.jsx';
-import ProductSubscriptionToast from './ProductSubscriptionToast.jsx';
-import { ToastContainer } from 'react-toastify';
+import { ViewProvider, ViewChild } from './ViewContext.jsx';
 
 export default function Home() {
   const { loading, error, data } = useQuery(FETCH_PRODUCTS, {
@@ -104,31 +103,44 @@ export default function Home() {
   useEffect(() => {
     if (loading) {
       setActive(true)
+    } else {
+      setActive(false)
     }
-      const timeoutId = setTimeout(() => {
-        setActive(false);
-      }, 3000);
+      // const timeoutId = setTimeout(() => {
+      //   setActive(false);
+      // }, 5000);
 
-      return () => clearTimeout(timeoutId);
+      // return () => clearTimeout(timeoutId);
   }, [loading]);
 
+  
   if (error) return <h1>Something went wrong</h1>;
 
   return (
     <div className="App">
       <MainHeader auth={data?.auth} />
       <Container style={{ padding: '100px' }}>
-        <Modal isActive={active}>
-          <Subscription user={authSubData?.authUpdate} />
-        </Modal>
-
-        <div className="row g-4">
-          {data?.products.map((product, index) => (
-            <div key={index} className="col-12 col-md-12 col-lg-6 col-xl-4">
-              <ProductCard product={product} auth={data?.auth} />
-            </div>
-          ))}
-        </div>
+      
+        {/* {(active) && */}
+          <Modal isActive={active}>
+            <Spinner animation="border" role="status" />
+            <Subscription user={authSubData?.authUpdate} />
+          </Modal>
+        {/* } */}
+        <ViewProvider>
+          <div className="row g-4">
+            {data?.products.map((product, index) => (
+              
+              <div key={index} className="col-12 col-md-12 col-lg-6 col-xl-4">
+                <ViewChild loading={loading && data} index={index} id={`product${index}`}>
+                  <ProductCard product={product} auth={data?.auth} />
+                </ViewChild>
+                </div>
+             
+            ))}
+          </div>
+        </ViewProvider>
+        
       </Container>
     </div>
   );

@@ -5,6 +5,7 @@ import * as Yup from 'yup';
 import { Form, Button, Alert, Container } from 'react-bootstrap';
 import { INITIALIZE_PAYMENT } from '../constants';
 import { useParams, useLocation } from 'react-router-dom';
+import PaystackPayment from './PaystackPayment';
 
 const PaymentForm = () => {
   const params = useParams();
@@ -16,6 +17,33 @@ const PaymentForm = () => {
     email: Yup.string().email('Invalid email').required('Email is required'),
     price: Yup.number().min(10, 'Minimum amount is 10').required('Price is required'),
   });
+
+  const handleSuccess = async (response) => {
+    const ref = response.reference;
+    try {
+      const verifyRes = await fetch(`https://api.paystack.co/transaction/verify/${ref}`, {
+        headers: {
+          Authorization: `Bearer ${process.env.PAYSTACK_SECRET}`,
+          'Content-Type': 'application/json',
+        },
+      });
+  
+      const data = await verifyRes.json();
+      if (!data.status) throw new Error(data.message || 'Verification failed');
+  
+      return {
+        reference: data.data.reference,
+        amount: data.data.amount,
+        status: data.data.status,
+        customerEmail: data.data.customer.email,
+        gatewayResponse: data.data.gateway_response,
+      };
+    } catch (err) {
+      throw new Error('Payment verification failed');
+    }
+  };
+  
+
 
   return (
     <Container className="mt-5 col-md-6" style={{marginTop: '100px', paddingTop: '100px'}}>
@@ -73,9 +101,12 @@ const PaymentForm = () => {
             <Button variant="primary" type="submit" disabled={loading}>
               {loading ? 'Initializing...' : 'Pay Now'}
             </Button>
+
+            <PaystackPayment email={values.email} amount={values.price} onSuccess={handleSuccess} />
           </Form>
         )}
       </Formik>
+      
     </Container>
   );
 };

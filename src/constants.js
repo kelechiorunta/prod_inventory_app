@@ -47,6 +47,40 @@ export const AUTH = gql`
                 }
         }
 `
+export const ON_NEW_MESSAGE = gql`
+  subscription OnNewMessage($userId: String!) {
+    newMessage(userId: $userId) {
+      id
+      content
+      sender
+      receiver
+      createdAt
+    }
+  }`
+
+  export const SEND_MESSAGE = gql`
+  mutation SendMessage($sender: String!, $receiver: String!, $content: String!) {
+    sendMessage(sender: $sender, receiver: $receiver, content: $content) {
+      id
+      sender
+      receiver
+      content
+      createdAt
+    }
+  }
+`;
+
+export const GET_MESSAGES = gql`
+  query GetMessages($userId: String!, $contactId: String!) {
+    messages(userId: $userId, contactId: $contactId) {
+      id
+      sender
+      receiver
+      content
+      createdAt
+    }
+  }
+`;
 
 export const SUBSCRIBE_TO_NEW_PRODUCTS = gql`
   subscription OnNewProduct {

@@ -1,16 +1,28 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Navbar, Nav, Container } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { useQuery } from '@apollo/client';
 import { FETCH_PRODUCTS } from '../constants';
+import { ViewContext } from './ViewContext';
 
 const MainHeader = ({ auth }) => {
+
+    const { clearViewState } = useContext(ViewContext)
 
     const { loading, error, data } = useQuery(FETCH_PRODUCTS, {
       fetchPolicy: 'cache-first',
       nextFetchPolicy: 'cache-first',
     });
     
+  const handleLogout = () => {
+    try {
+      clearViewState();
+      window.location.href = '/logout'
+    }
+    catch (err) {
+      console.error('Unable to Logout', err)
+    }
+  }
     //   if (error) return <h1>Something went wrong</h1>;
     //   if (loading) return <h1>Loading...</h1>;
   
@@ -30,8 +42,9 @@ const MainHeader = ({ auth }) => {
                 }
                 {/* <a className="nav-link" href="/about">About Us</a> */}
                 <Link className="nav-link" to="/search">Search</Link>
+                <a className="nav-link" href={`/chat/${data && data?.auth?.username}`}>Chat</a>
                 {/* <a className="nav-link" href="/checkout">Checkout</a> */}
-                <a className="nav-link" href="/logout">Logout</a>
+                <a onClick={handleLogout} className="nav-link" href="/logout">Logout</a>
             </Nav>
                     
         </Navbar.Collapse>

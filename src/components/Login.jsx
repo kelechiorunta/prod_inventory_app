@@ -36,8 +36,9 @@ export default function Login() {
       }
 
        setSuccessMessage(data.message || 'Login successful');
-       setServerError('');
-       navigate('/', {state: data.user})
+      setServerError('');
+      window.location.href = '/'
+      //  navigate('/', {state: data.user})
       // Optionally redirect or store session
     } catch (err) {
       setServerError(err.message);
