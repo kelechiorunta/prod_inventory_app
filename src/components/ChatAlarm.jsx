@@ -30,11 +30,11 @@ const ChatAlarm = () => {
       console.error('Subscription error:', error.message);
     }
 
-    if (data?.newMessage) {
+    if (data?.incomingMessage) {
       // Show toast ONLY when not on the /chat page
       if (!location.pathname.startsWith('/chat')) {
-        const msg = data.newMessage;
-        setMessage(`💬 New message from ${msg.sender.username}: "${msg.content}"`);
+        const msg = data.incomingMessage;
+        setMessage(`💬 New message from ${msg.senderName}: "${msg.content}"`);
         setVisible(true);
 
         const timeout = setTimeout(() => setVisible(false), 4000);
