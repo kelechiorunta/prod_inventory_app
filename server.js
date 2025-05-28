@@ -146,7 +146,7 @@ app.get('/*', (req, res) => {
   })
 })
 
-const PORT = 3301;
+const PORT = process.env.PORT || 3301
 
 const httpServer = createServer(app);
 
