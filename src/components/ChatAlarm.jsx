@@ -36,7 +36,7 @@ const ChatAlarm = () => {
       const alreadyShown = shownMessages.current.has(msg.id);
 
       if (!onChatPage && !alreadyShown) {
-        setMessage(`📩 New message from ${msg.senderName}`);
+        setMessage(`📩 New message from ${msg.senderName}: ${msg.content}`);
         setVisible(true);
         shownMessages.current.add(msg.id); // Mark as shown
 
