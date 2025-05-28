@@ -6,7 +6,7 @@ import reportWebVitals from './reportWebVitals';
 import { BrowserRouter } from 'react-router-dom';
 import { ApolloProvider } from '@apollo/client';
 import MainHeader from './components/MainHeader';
-import { client } from './apollo';
+import client from './apollo';
 import { ViewProvider } from './components/ViewContext';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
