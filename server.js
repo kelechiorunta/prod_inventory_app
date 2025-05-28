@@ -63,9 +63,16 @@ if (store) {
   store.on('error', (err) => { console.error(err) })
 }
 
+const allowedOrigins = ['https://prod-inventory-app.onrender.com', '*']
 //Cors setup
 let corsSetup = {
-    origin: '*',
+    origin: function (origin, callback) {
+      if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
+        return callback(null, true)
+      } else {
+        return callback('Domain not supported', false)
+      }
+    },
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true,
     method: ["GET", "POST"]
@@ -118,18 +125,25 @@ app.use((req, res, next) => {
 })
 
 // Middleware to enable GraphQL Introspection and Client Queries
-app.use('/graphql', graphqlHTTP((req) => ({
-    schema,
-    // rootValue: resolvers, //No need for this since our schema is built with makeExecutableSchema and not buildSchema
-    context: {
-      isAuthenticated: req.isAuthenticated(),
-      user: req.user ?? req.session.user // this is set by Passport after login
-    },
-    graphiql: {
-      subscriptionEndpoint: 'ws://localhost:3301/graphql',
-    },
-}))
-)
+app.use(
+  '/graphql',
+  graphqlHTTP((req) => {
+    const isDev = process.env.NODE_ENV === 'development';
+    const protocol = isDev ? 'ws' : 'wss';
+    const host = isDev ? 'localhost:3301' : req.headers.host;
+
+    return {
+      schema,
+      context: {
+        isAuthenticated: req.isAuthenticated?.(),
+        user: req.user ?? req.session?.user,
+      },
+      graphiql: {
+        subscriptionEndpoint: `${protocol}://${host}/graphql`,
+      },
+    };
+  })
+);
 
 app.use((err, req, res, next) => {
     console.error("Something went wrong", err);
