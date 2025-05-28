@@ -392,11 +392,11 @@ const resolvers = {
       },
     },
     incomingMessage: {
-      subscribe: async function* (parent, _args, context) {
+      subscribe: async function* (parent, args, context) {
         const asyncIterator = chatBus.asyncIterator(EVENTS.NEW_MESSAGE);
     
         // Ensure user is authenticated
-        const user = context.user;
+        const user = context?.user;
         if (!user || !user._id) {
           throw new Error('Unauthorized subscription');
         }
