@@ -43,7 +43,7 @@ const ChatAlarm = () => {
     }
   }, [data, error, location]);
 
-//   if (!visible) return null;
+  if (!visible) return null;
 
   return <div style={toastStyles}>{message}</div>;
 };
