@@ -31,17 +31,17 @@ const ChatAlarm = () => {
       console.error('Subscription error:', error.message);
     }
 
-    if (data?.incomingMessage) {
+    
       // Show toast ONLY when not on the /chat page
-      if (!location.pathname.startsWith('/chat')) {
+      if (data?.incomingMessage && !location.pathname.startsWith('/chat')) {
         const msg = data.incomingMessage;
         setMessage(`💬 New message from ${msg.senderName}: "${msg.content}"`);
         setVisible(true);
 
-        const timeout = setTimeout(() => setVisible(false), 4000);
+          const timeout = setTimeout(() => { setVisible(false); setMessage('') }, 4000);
         return () => clearTimeout(timeout);
       }
-    }
+
   }, [data, error, location]);
 
   if (!visible) return null;
