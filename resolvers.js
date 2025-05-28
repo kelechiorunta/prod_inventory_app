@@ -391,6 +391,27 @@ const resolvers = {
         }
       },
     },
+    incomingMessage: {
+      subscribe: async function* (parent, _args, context) {
+        const asyncIterator = chatBus.asyncIterator(EVENTS.NEW_MESSAGE);
+    
+        // Ensure user is authenticated
+        const user = context.user;
+        if (!user || !user.id) {
+          throw new Error('Unauthorized subscription');
+        }
+    
+        for await (const message of asyncIterator) {
+          // Manual filter based on authenticated user
+          if (
+            message.sender === user.id ||
+            message.receiver === user.id
+          ) {
+            yield { incomingMessage: message };
+          }
+        }
+      },
+    },
     notifyAuthUser: {
       subscribe: async function* (parent, args, context) {
         const queue = [];

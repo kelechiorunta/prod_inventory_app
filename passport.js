@@ -1,6 +1,8 @@
 import { Strategy as LocalStrategy } from "passport-local";
 import User from "./models/User.js";
 import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
+import dotenv from 'dotenv';
+dotenv.config();
 // import passport from 'passport'
 
 export const configureLocalPassport = (passport) => {

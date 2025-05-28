@@ -114,5 +114,6 @@ type Subscription {
     alertResponse:[PaymentResponse],
     test:String
     newMessage(userId: String!): Message!
+    incomingMessage: Message!
 }
 
