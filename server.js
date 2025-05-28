@@ -24,6 +24,8 @@ import { fileURLToPath } from 'url'
 import { authenticatedUser } from './routes.js';
 import signature from 'cookie-signature';
 import User from './models/User.js';
+import dotenv from 'dotenv';
+dotenv.config();
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
@@ -126,7 +128,6 @@ app.use('/graphql', graphqlHTTP((req) => ({
     graphiql: {
       subscriptionEndpoint: 'ws://localhost:3301/graphql',
     },
-  
 }))
 )
 
