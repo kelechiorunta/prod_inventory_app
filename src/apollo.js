@@ -5,7 +5,7 @@ import { split, HttpLink, InMemoryCache, ApolloClient } from '@apollo/client';
 
 
 const wsLink = new GraphQLWsLink(createClient({
-    url: 'ws://localhost:3301/graphql',
+  url: `ws://${process.env.NODE_ENV==='development'? 'localhost:3301' : window.location.host}/graphql`,
     options: {
         reconnect: true,
     },

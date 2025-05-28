@@ -11,6 +11,7 @@ import ProductDeleteToast from './components/ProductDeleteToast.jsx';
 import ProductSubscriptionToast from './components/ProductSubscriptionToast.jsx';
 import FoundProductToast from './components/FoundProductToaster.jsx';
 import ChatNotifications from './components/ChatNotifications.jsx';
+import ChatDashboard from './components/ChatDashBoard.jsx';
 
 
 function App() {
@@ -28,7 +29,7 @@ function App() {
           <Route path="/product/:id" element={<EditProductForm />} />
           <Route path="/payment/:id" element={<PaymentForm />} />
           <Route path="/payment/callback" element={<VerifyPayment />} />
-          <Route path="/chat/:userId" element={<ChatNotifications />} />
+          <Route path="/chat/:userId" element={<ChatDashboard/>} />
         </Route>
        
           <Route path="/login" element={<Login />} />

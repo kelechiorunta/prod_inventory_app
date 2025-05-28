@@ -3,6 +3,7 @@ import { gql } from "@apollo/client";
 export const FETCH_PRODUCTS = gql`
    query Query {
                     auth {
+                    _id
                     username
                     picture
                     email
@@ -54,6 +55,8 @@ export const ON_NEW_MESSAGE = gql`
       content
       sender
       receiver
+      senderName
+      receiverName
       createdAt
     }
   }`
@@ -76,8 +79,20 @@ export const GET_MESSAGES = gql`
       id
       sender
       receiver
+      senderName
+      receiverName
       content
       createdAt
+    }
+  }
+`;
+
+export const FETCH_USERS = gql`
+  query FetchUsers($excludeId: ID!) {
+    users(excludeId: $excludeId) {
+      _id
+      username
+      picture        
     }
   }
 `;
