@@ -73,6 +73,16 @@ export const ON_NEW_MESSAGE = gql`
   }
 `;
 
+export const NEW_INCOMING_MESSAGE = gql`
+  subscription OnIncomingMessage {
+    incomingMessage {
+      id
+      content
+      senderName
+    }
+  }
+`;
+
 export const GET_MESSAGES = gql`
   query GetMessages($userId: String!, $contactId: String!) {
     messages(userId: $userId, contactId: $contactId) {

@@ -40,10 +40,12 @@ import { GraphQLWsLink } from '@apollo/client/link/subscriptions';
 import { createClient } from 'graphql-ws';
 import { getMainDefinition } from '@apollo/client/utilities';
 
+
 // ✅ Dynamically switch between ws:// and wss://
 const wsProtocol = window.location.protocol === 'https:' ? 'wss' : 'ws';
 const wsHost =
   process.env.NODE_ENV === 'development'
+  // window.location.protocol === 'http:'
     ? 'localhost:3301'
     : window.location.host;
 
@@ -60,6 +62,7 @@ const wsLink = new GraphQLWsLink(
 const httpLink = new HttpLink({
   uri:
     process.env.NODE_ENV === 'development'
+    // window.location.protocol === 'http:'
       ? 'http://localhost:3301/graphql'
       : `${window.location.origin}/graphql`,
   credentials: 'include',

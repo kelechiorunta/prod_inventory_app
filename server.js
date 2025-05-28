@@ -63,7 +63,7 @@ if (store) {
   store.on('error', (err) => { console.error(err) })
 }
 
-const allowedOrigins = ['https://prod-inventory-app.onrender.com', '*']
+const allowedOrigins = ['https://prod-inventory-app.onrender.com', 'http://localhost:3301', '*']
 //Cors setup
 let corsSetup = {
     origin: function (origin, callback) {
