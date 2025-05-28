@@ -12,9 +12,9 @@ import {
 import { BsSend, BsChatDots } from 'react-icons/bs';
 import { useParams } from 'react-router-dom';
 
-export default function ChatBox() {
-  const { userId } = useParams(); // current user ID from route
-  const [contactId, setContactId] = useState('Christy'); // example contact (you can improve this with a contact list)
+export default function ChatBox({userId, contactId}) {
+//   const { userId } = useParams(); // current user ID from route
+//   const [contactId, setContactId] = useState('Kelechi'); // example contact (you can improve this with a contact list)
   const [messages, setMessages] = useState([]);
   const [content, setContent] = useState('');
   const chatEndRef = useRef(null);
@@ -111,7 +111,7 @@ export default function ChatBox() {
                     }`}
                     >
                     <div className="small fw-bold">
-                        {msg.sender === userId ? 'You' : msg.sender}
+                        {msg.sender === userId ? 'You' : msg.senderName}
                     </div>
                     <div>{msg.content}</div>
                     <div className="text-muted small">

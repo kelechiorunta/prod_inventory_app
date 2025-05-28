@@ -233,7 +233,15 @@ const resolvers = {
     test: (parent, args, context) =>
       context?.user ? 'Welcome Bro' : 'Test Success, GraphQL server is up & running !!',
 
-    users: async () => await User.find(),
+    // users: async () => await User.find(),
+    users: async (parent, { excludeId }, context) => {
+      try {
+        const users = await User.find({ _id: { $ne: excludeId } });
+        return users;
+      } catch (error) {
+        throw new Error('Failed to fetch users');
+      }
+  },
     products: async (parent, args, context) => context?.user && await Product.find(),
     getProduct: async (parent, { id }, context) => context?.user && await Product.findOne({ id }),
 

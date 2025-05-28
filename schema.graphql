@@ -1,12 +1,12 @@
 type Query{
   auth:User
   test:String
-  users:[User]
   products:[Product]
   getProduct(id: ID!):Product
   verifyPayment(token: ID!): VerifiedPayment!
   searchProduct(name: String, category: CategoryEnum, sort: String, limit: Int): [Product]
   messages(userId: String!, contactId: String!): [Message!]!
+  users(excludeId: ID!): [User!]!
 }
 
 enum CategoryEnum {
@@ -30,6 +30,7 @@ type Product {
 }
 
 type User {
+  _id: ID!
   username: String,
   email: String,
   picture: String,
@@ -40,6 +41,8 @@ type Message {
   content: String
   sender: String
   receiver: String
+  senderName: String
+  receiverName: String
   createdAt: String
 }
 
