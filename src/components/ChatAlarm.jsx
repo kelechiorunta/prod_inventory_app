@@ -1,19 +1,15 @@
-import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
+import { useEffect, useState, useRef } from 'react';
 import { useSubscription } from '@apollo/client';
-import { gql } from '@apollo/client';
-import { NEW_INCOMING_MESSAGE } from '../constants.js';
-
-
+import { NEW_INCOMING_MESSAGE } from '../constants';
 
 const toastStyles = {
   position: 'fixed',
   top: '1rem',
   right: '1rem',
-  backgroundColor: '#007bff',
+  backgroundColor: '#4caf50',
   color: 'white',
   padding: '1rem 1.5rem',
-  fontSize: '12px',
   borderRadius: '8px',
   boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
   zIndex: 9999,
@@ -21,28 +17,34 @@ const toastStyles = {
 };
 
 const ChatAlarm = () => {
+  const location = useLocation();
   const { data, error } = useSubscription(NEW_INCOMING_MESSAGE);
   const [visible, setVisible] = useState(false);
   const [message, setMessage] = useState('');
-  const location = useLocation();
+  const shownMessages = useRef(new Set()); // store shown message IDs
 
   useEffect(() => {
     if (error) {
-      console.error('Subscription error:', error.message);
+      console.error('Subscription error:', error);
     }
 
-    
-      // Show toast ONLY when not on the /chat page
-      if (data?.incomingMessage && !location.pathname.startsWith('/chat')) {
-        const msg = data.incomingMessage;
-        setMessage(`💬 New message from ${msg.senderName}: "${msg.content}"`);
+    if (data?.incomingMessage) {
+      const msg = data.incomingMessage;
+
+      // ✅ Only show toast if not on chat pages
+      const onChatPage = location.pathname.startsWith('/chat') || location.pathname === '/chat-notification';
+      const alreadyShown = shownMessages.current.has(msg.id);
+
+      if (!onChatPage && !alreadyShown) {
+        setMessage(`📩 New message from ${msg.senderName}`);
         setVisible(true);
+        shownMessages.current.add(msg.id); // Mark as shown
 
-          const timeout = setTimeout(() => { setVisible(false); setMessage('') }, 4000);
-        return () => clearTimeout(timeout);
+        const timer = setTimeout(() => setVisible(false), 4000);
+        return () => clearTimeout(timer);
       }
-
-  }, [data, error, location]);
+    }
+  }, [data, location, error]);
 
   if (!visible) return null;
 
@@ -50,3 +52,4 @@ const ChatAlarm = () => {
 };
 
 export default ChatAlarm;
+
