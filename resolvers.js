@@ -397,15 +397,15 @@ const resolvers = {
     
         // Ensure user is authenticated
         const user = context.user;
-        if (!user || !user.id) {
+        if (!user || !user._id) {
           throw new Error('Unauthorized subscription');
         }
     
         for await (const message of asyncIterator) {
           // Manual filter based on authenticated user
           if (
-            message.sender === user.id ||
-            message.receiver === user.id
+            message.sender === user._id ||
+            message.receiver === user._id
           ) {
             yield { incomingMessage: message };
           }
