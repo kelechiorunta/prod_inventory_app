@@ -395,23 +395,23 @@ const resolvers = {
       subscribe: async function* (parent, args, context) {
         const asyncIterator = chatBus.asyncIterator(EVENTS.NEW_MESSAGE);
     
-        // Ensure user is authenticated
         const user = context?.user;
         if (!user || !user._id) {
           throw new Error('Unauthorized subscription');
         }
     
         for await (const message of asyncIterator) {
-          // Manual filter based on authenticated user
+          // Compare IDs as strings
           if (
-            message.sender === user._id ||
-            message.receiver === user._id
+            String(message.sender) === String(user._id) ||
+            String(message.receiver) === String(user._id)
           ) {
             yield { incomingMessage: message };
           }
         }
       },
     },
+    
     notifyAuthUser: {
       subscribe: async function* (parent, args, context) {
         const queue = [];
