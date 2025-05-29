@@ -114,7 +114,7 @@ export default function ChatNotifications({userId, contactId, contactName}) {
                         {msg.sender === userId ? 'You' : msg.senderName}
                     </div>
                     <div>{msg.content}</div>
-                    <div className="text-muted small">
+                        <div className={`text-muted small ${msg.sender !== userId && 'text-white'}`}>
                             {msg.createdAt &&
                                 new Date(Number(msg.createdAt)).toLocaleString('en-US', {
                                 year: 'numeric',
