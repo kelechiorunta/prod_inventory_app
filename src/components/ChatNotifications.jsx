@@ -12,7 +12,7 @@ import {
 import { BsSend, BsChatDots } from 'react-icons/bs';
 import { useParams } from 'react-router-dom';
 
-export default function ChatBox({userId, contactId}) {
+export default function ChatNotifications({userId, contactId, contactName}) {
 //   const { userId } = useParams(); // current user ID from route
 //   const [contactId, setContactId] = useState('Kelechi'); // example contact (you can improve this with a contact list)
   const [messages, setMessages] = useState([]);
@@ -85,7 +85,7 @@ export default function ChatBox({userId, contactId}) {
     <Card className="shadow-lg">
       <Card.Header className="d-flex justify-content-between align-items-center">
         <BsChatDots className="me-2" />
-        <span>Chat with {contactId}</span>
+        <span>Chat with {contactName}</span>
       </Card.Header>
 
       <Card.Body style={{ maxHeight: '400px', overflowY: 'auto' }}>
