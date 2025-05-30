@@ -20,6 +20,7 @@ export default function ChatDashboard() {
                 currentUserId={userId}
                 selectedId={selectedUser?._id}
                 contactName={selectedUser?.username}
+                contactAvatar={selectedUser?.picture}
                 onSelect={(user) => setSelectedUser(user)}
               />
             </Card.Body>
@@ -33,6 +34,7 @@ export default function ChatDashboard() {
               userId={userId}
               contactId={selectedUser._id}
               contactName={selectedUser?.username}
+              contactAvatar={selectedUser?.picture}
               key={selectedUser._id} // re-mount on contact switch
             />
           ) : (
