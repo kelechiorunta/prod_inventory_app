@@ -7,6 +7,8 @@ const messageSchema = new mongoose.Schema({
   receiver: { type: String, required: true },   // user ID or username
   senderName: { type: String, required: false },
   receiverName: { type: String, required: false },
+  senderAvatar: { type: String, required: false },
+  receiverAvatar: { type: String, required: false },
   createdAt: { type: Date, default: Date.now },
 });
 
@@ -17,6 +19,7 @@ messageSchema.pre('save', async function (next) {
         const senderUser = await User.findById(this.sender);
         if (senderUser) {
           this.senderName = senderUser.username;
+          this.senderAvatar = senderUser.picture;
         }
       }
   
@@ -24,6 +27,7 @@ messageSchema.pre('save', async function (next) {
         const receiverUser = await User.findById(this.receiver);
         if (receiverUser) {
           this.receiverName = receiverUser.username;
+          this.receiverAvatar = receiverUser.picture;
         }
       }
   

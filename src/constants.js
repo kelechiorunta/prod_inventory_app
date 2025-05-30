@@ -57,6 +57,8 @@ export const ON_NEW_MESSAGE = gql`
       receiver
       senderName
       receiverName
+      senderAvatar
+      receiverAvatar
       createdAt
     }
   }`
@@ -91,6 +93,8 @@ export const GET_MESSAGES = gql`
       receiver
       senderName
       receiverName
+      senderAvatar
+      receiverAvatar
       content
       createdAt
     }
