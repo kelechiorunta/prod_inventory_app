@@ -13,7 +13,7 @@ import {
 import { BsSend, BsChatDots } from 'react-icons/bs';
 import { useParams } from 'react-router-dom';
 
-export default function ChatNotifications({userId, contactId, contactName}) {
+export default function ChatNotifications({userId, contactId, contactName, contactAvatar}) {
 //   const { userId } = useParams(); // current user ID from route
 //   const [contactId, setContactId] = useState('Kelechi'); // example contact (you can improve this with a contact list)
   const [messages, setMessages] = useState([]);
@@ -116,7 +116,7 @@ export default function ChatNotifications({userId, contactId, contactName}) {
                         {msg.sender === userId ?
                           <Image src={msg.senderAvatar} roundedCircle width={32} height={32} />
                             :
-                          <Image src={msg.receiverAvatar} roundedCircle width={32} height={32} />
+                          <Image src={contactAvatar} roundedCircle width={32} height={32} />
                         }
                         {msg.sender === userId ? 'You' : msg.senderName}
                     </div>
