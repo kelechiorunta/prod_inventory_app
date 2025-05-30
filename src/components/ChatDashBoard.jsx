@@ -15,7 +15,7 @@ export default function ChatDashboard() {
         <Col xs={12} md={4} lg={3} className="mb-3">
           <Card className="h-100 shadow-sm">
             <Card.Header>Contacts</Card.Header>
-            <Card.Body style={{ padding: 0, overflowY: 'auto', maxHeight: '75vh' }}>
+            <Card.Body style={{ padding: 0, overflowY: 'auto', minHeight: '75vh' }}>
               <ChatUsers
                 currentUserId={userId}
                 selectedId={selectedUser?._id}
@@ -36,7 +36,8 @@ export default function ChatDashboard() {
               key={selectedUser._id} // re-mount on contact switch
             />
           ) : (
-            <Card className="h-100 d-flex align-items-center justify-content-center">
+              <Card className="h-100 d-flex align-items-center justify-content-center"
+                style={{minHeight: '75vh'}}>
               <h5 className="text-muted">Select a contact to start chatting</h5>
             </Card>
           )}
