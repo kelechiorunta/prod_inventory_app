@@ -4,7 +4,7 @@ import { FaMoneyBill, FaTrash } from 'react-icons/fa';
 import { DELETE_PRODUCT, FETCH_PRODUCTS } from '../constants';
 import { useMutation } from '@apollo/client';
 import { useNavigate } from 'react-router-dom';
-import { Modal } from 'react-bootstrap';
+import Modal from './Modal.jsx';
 
 export default function ProductCard({ product, auth }) {
     const navigate = useNavigate();
@@ -48,7 +48,7 @@ export default function ProductCard({ product, auth }) {
         <div className="card h-100 shadow-sm ">
             <Link to={
                 auth && auth.username.startsWith('Kelechi') ?
-                `/product/${product.id}` : <Modal><ProductCard product={product}/></Modal>}>
+                `/product/${product.id}` : <Modal isActive={true}><ProductCard product={product}/></Modal>}>
               <img
                 src={product.image}
                 className="card-img-top p-3"
