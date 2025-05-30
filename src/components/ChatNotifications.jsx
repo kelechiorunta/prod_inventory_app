@@ -8,6 +8,7 @@ import {
   Button,
   InputGroup,
   ListGroup,
+  Image
 } from 'react-bootstrap';
 import { BsSend, BsChatDots } from 'react-icons/bs';
 import { useParams } from 'react-router-dom';
@@ -89,7 +90,7 @@ export default function ChatNotifications({userId, contactId, contactName}) {
         <span>Chat with {contactName}</span>
       </Card.Header>
 
-      <Card.Body style={{ maxHeight: '400px', overflowY: 'auto' }}>
+      <Card.Body style={{ maxHeight: '400px', overflowY: 'auto', minHeight: '75vh' }}>
         <ListGroup variant="flush">
           {messages && messages.length === 0 && (
             <ListGroup.Item className="text-muted text-center">
@@ -111,7 +112,12 @@ export default function ChatNotifications({userId, contactId, contactName}) {
                         : 'bg-primary text-white text-start'
                     }`}
                     >
-                    <div className="small fw-bold">
+                        <div className="small fw-bold">
+                        {msg?.senderAvatar? 
+                          <Image src={msg.senderAvatar} roundedCircle width={32} height={32} />
+                            :
+                          <Image src={msg.receiverAvatar} roundedCircle width={32} height={32} />
+                        }
                         {msg.sender === userId ? 'You' : msg.senderName}
                     </div>
                     <div>{msg.content}</div>
