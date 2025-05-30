@@ -82,7 +82,7 @@ export default function ChatNotifications({userId, contactId, contactName}) {
   };
 
   return (
-    <Card className="shadow-lg">
+    <Card className="shadow-lg min-h-screen">
       <Card.Header className="d-flex justify-content-between align-items-center">
         <BsChatDots className="me-2" />
         <span>Chat with {contactName}</span>
