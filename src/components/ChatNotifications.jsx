@@ -113,7 +113,7 @@ export default function ChatNotifications({userId, contactId, contactName}) {
                     }`}
                     >
                     <div className="small fw-bold">
-                        {msg?.senderAvatar? 
+                        {msg?.receiverAvatar? 
                           <Image src={msg.receiverAvatar} roundedCircle width={32} height={32} />
                             :
                           <Image src={msg.senderAvatar} roundedCircle width={32} height={32} />
