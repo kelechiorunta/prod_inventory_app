@@ -2,13 +2,14 @@ import React from 'react';
 import { ListGroup, Spinner, Image } from 'react-bootstrap';
 import { useQuery } from '@apollo/client';
 import { FETCH_USERS } from '../constants.js';
+import Modal from './Modal.jsx';
 
 export default function ChatUsers({ currentUserId, onSelect, selectedId }) {
   const { data, loading, error } = useQuery(FETCH_USERS, {
     variables: { excludeId: currentUserId },
   });
 
-  if (loading) return <Spinner animation="border" />;
+  if (loading) return <Modal isActive={loading}><Spinner animation="border" /></Modal>;
   if (error)   return <p className="text-danger">Error loading users</p>;
 
   return (
