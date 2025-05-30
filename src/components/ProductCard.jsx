@@ -48,7 +48,7 @@ export default function ProductCard({ product, auth }) {
         <div className="card h-100 shadow-sm ">
             <Link to={
                 auth && auth.username.startsWith('Kelechi') ?
-                `/product/${product.id}` : <Modal isActive={true}><ProductCard product={product}/></Modal>}>
+                `/product/${product.id}` : `/productdetails/${product.id}`}>
               <img
                 src={product.image}
                 className="card-img-top p-3"

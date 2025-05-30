@@ -13,6 +13,8 @@ import FoundProductToast from './components/FoundProductToaster.jsx';
 import ChatNotifications from './components/ChatNotifications.jsx';
 import ChatDashboard from './components/ChatDashBoard.jsx';
 import ChatAlarm from './components/ChatAlarm.jsx';
+import Modal from './components/Modal.jsx';
+import ProductCard from './components/ProductCard.jsx';
 
 
 function App() {
