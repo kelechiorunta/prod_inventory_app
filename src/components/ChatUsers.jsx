@@ -13,7 +13,7 @@ export default function ChatUsers({ currentUserId, onSelect, selectedId,  }) {
   if (error)   return <p className="text-danger">Error loading users</p>;
 
   return (
-    <ListGroup variant="flush" style={{minHeight: '100vh'}}>
+    <ListGroup variant="flush" style={{minHeight: '75vh'}}>
       {data.users.map((user) => (
         <ListGroup.Item
           key={user._id}
