@@ -90,12 +90,12 @@ export default function ChatNotifications({userId, contactId, contactName, conta
         <span>Chat with {contactName}</span>
       </Card.Header>
 
-      <Card.Body style={{ maxHeight: '400px', overflowY: 'auto', minHeight: '70vh' }}>
+      <Card.Body style={{ maxHeight: '400px', overflowY: 'auto', minHeight: '500px' }}>
         <ListGroup variant="flush">
           {messages && messages.length === 0 && (
             <ListGroup.Item
               className="text-muted text-center"
-              style={{minHeight: '70vh' }}>
+              style={{minHeight: '500px' }}>
               No messages yet.
             </ListGroup.Item>
                   )}

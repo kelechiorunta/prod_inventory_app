@@ -13,7 +13,7 @@ export default function ChatDashboard() {
       <Row>
         {/* Sidebar */}
         <Col xs={12} md={4} lg={3} className="mb-3">
-          <Card className="shadow-sm">
+          <Card className="shadow-sm" style={{minHeight: '75vh' }}>
             <Card.Header>Contacts</Card.Header>
             <Card.Body style={{ padding: 0, overflowY: 'auto', minHeight: '75vh' }}>
               <ChatUsers
