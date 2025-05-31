@@ -348,7 +348,8 @@ const resolvers = {
         email,
         amount: price * 1000,
         currency: "NGN",
-        callback_url: "http://localhost:3301/payment/callback",
+        callback_url: process.env.NODE_ENV === "development" ?
+          "http://localhost:3301/payment/callback" : "https://prod-inventory-app.onrender.com/payment/callback",
       };
 
       const response = await axios.post(
@@ -410,8 +411,7 @@ const resolvers = {
           }
         }
       },
-    },
-    
+    },   
     notifyAuthUser: {
       subscribe: async function* (parent, args, context) {
         const queue = [];
