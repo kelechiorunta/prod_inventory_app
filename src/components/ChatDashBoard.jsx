@@ -38,8 +38,8 @@ export default function ChatDashboard() {
               key={selectedUser._id} // re-mount on contact switch
             />
           ) : (
-              <Card className="h-100 d-flex align-items-center justify-content-center"
-                style={{minHeight: '75vh'}}>
+              <Card className="d-flex align-items-center justify-content-center"
+                style={{minHeight: '400px'}}>
               <h5 className="text-muted">Select a contact to start chatting</h5>
             </Card>
           )}
