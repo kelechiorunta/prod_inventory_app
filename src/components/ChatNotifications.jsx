@@ -155,6 +155,14 @@ export default function ChatNotifications({userId, contactId, contactName, conta
     style={{minHeight: '470px'}}>
       <Card.Header className="d-flex justify-content-between align-items-center">
         <BsChatDots className="me-2" />
+        {(isContactTyping) && (
+            <div className="text-muted small px-3 py-1 d-flex align-items-center">
+              <span className="me-2">{contactName} is typing</span>
+              <div className="typing-dots">
+                <span>.</span><span>.</span><span>.</span>
+              </div>
+            </div>
+        )}
         <span>Chat with {contactName}</span>
       </Card.Header>
 
@@ -183,14 +191,14 @@ export default function ChatNotifications({userId, contactId, contactName, conta
                     }`}
                       >
                         
-                    {(isContactTyping) && (
+                    {/* {(isContactTyping) && (
                       <div className="text-muted small px-3 py-1 d-flex align-items-center">
                         <span className="me-2">{contactName} is typing</span>
                         <div className="typing-dots">
                           <span>.</span><span>.</span><span>.</span>
                         </div>
                       </div>
-                    )}
+                    )} */}
                     <div className="small fw-bold">
                         {msg.sender === userId ?
                           <Image src={msg.senderAvatar} roundedCircle width={32} height={32} />
