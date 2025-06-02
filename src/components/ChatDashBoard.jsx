@@ -39,7 +39,7 @@ export default function ChatDashboard() {
             />
           ) : (
               <Card className="h-100 d-flex align-items-center justify-content-center"
-                style={{minHeight: '470px'}}>
+                style={{minHeight: '450px'}}>
               <h5 className="text-muted">Select a contact to start chatting</h5>
             </Card>
           )}
