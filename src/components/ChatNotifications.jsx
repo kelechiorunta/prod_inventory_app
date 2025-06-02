@@ -183,7 +183,7 @@ export default function ChatNotifications({userId, contactId, contactName, conta
                     }`}
                       >
                         
-                    {(isContactTyping && msg.sender === userId) && (
+                    {(isContactTyping) && (
                       <div className="text-muted small px-3 py-1 d-flex align-items-center">
                         <span className="me-2">{contactName} is typing</span>
                         <div className="typing-dots">
