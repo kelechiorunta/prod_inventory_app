@@ -11,7 +11,8 @@ import {
   Image
 } from 'react-bootstrap';
 import { BsSend, BsChatDots } from 'react-icons/bs';
-import { useParams } from 'react-router-dom';
+import debounce from 'lodash.debounce'; // First, install lodash.debounce: npm i lodash.debounce
+import { SEND_TYPING_STATUS } from '../constants'; // Ensure it's imported
 
 export default function ChatNotifications({userId, contactId, contactName, contactAvatar}) {
 //   const { userId } = useParams(); // current user ID from route
@@ -82,6 +83,33 @@ export default function ChatNotifications({userId, contactId, contactName, conta
     }
   };
 
+  const [sendTypingStatus] = useMutation(SEND_TYPING_STATUS);
+
+  const debounceTyping = useRef(
+    debounce((isTyping) => {
+      sendTypingStatus({
+        variables: {
+          senderId: userId,
+          receiverId: contactId,
+          isTyping,
+        },
+      });
+    }, 500) // debounce interval in ms
+  ).current;
+
+  const typingTimeout = useRef(null);
+
+  const handleTyping = (value) => {
+    setContent(value);
+    debounceTyping(true);
+
+    if (typingTimeout.current) clearTimeout(typingTimeout.current);
+
+    typingTimeout.current = setTimeout(() => {
+      debounceTyping(false);
+    }, 1500); // stop typing after 1.5s of inactivity
+  };
+
   return (
     <Card className="shadow-lg"
     style={{minHeight: '470px'}}>
@@ -143,14 +171,18 @@ export default function ChatNotifications({userId, contactId, contactName, conta
       <Card.Footer>
         <Form onSubmit={(e) => e.preventDefault()}>
           <InputGroup>
-            <Form.Control
-              as="textarea"
-              rows={1}
-              placeholder="Type a message..."
-              value={content}
-              onChange={(e) => setContent(e.target.value)}
-              onKeyDown={handleKeyPress}
-            />
+          <Form.Control
+            as="textarea"
+            rows={1}
+            placeholder="Type a message..."
+            value={content}
+            onChange={(e) => {
+              handleTyping(e.target.value)
+            }}
+            onBlur={() => debounceTyping(false)}
+            onKeyDown={handleKeyPress}
+          />
+
             <Button variant="primary" onClick={handleSend}>
               <BsSend />
             </Button>
