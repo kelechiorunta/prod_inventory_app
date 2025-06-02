@@ -366,7 +366,7 @@ const resolvers = {
       return response.data.data;
    },
    sendTypingStatus: async (parent, { receiverId, isTyping }, context) => {
-    const senderId = context.user?.id;
+    const senderId = context.user?._id;
 
     if (!senderId) {
       throw new Error('User not authenticated');
