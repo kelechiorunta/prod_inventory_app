@@ -123,7 +123,7 @@ export default function ChatNotifications({userId, contactId, contactName, conta
 
   useEffect(() => {
     if (typingData?.typingIndicator) {
-      const { isTyping } = typingData.typingStatus;
+      const { isTyping } = typingData.typingIndicator;
   
       if (isTyping) {
         setIsContactTyping(true);
