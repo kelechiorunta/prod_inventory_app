@@ -181,7 +181,16 @@ export default function ChatNotifications({userId, contactId, contactName, conta
                         ? 'bg-light text-end'
                         : 'bg-primary text-white text-start'
                     }`}
-                    >
+                      >
+                        
+                    {(isContactTyping && msg.sender === userId) && (
+                      <div className="text-muted small px-3 py-1 d-flex align-items-center">
+                        <span className="me-2">{contactName} is typing</span>
+                        <div className="typing-dots">
+                          <span>.</span><span>.</span><span>.</span>
+                        </div>
+                      </div>
+                    )}
                     <div className="small fw-bold">
                         {msg.sender === userId ?
                           <Image src={msg.senderAvatar} roundedCircle width={32} height={32} />
@@ -204,14 +213,6 @@ export default function ChatNotifications({userId, contactId, contactName, conta
                           </ListGroup.Item>
                     </div>
                   ))}
-                            {isContactTyping && (
-                  <div className="text-muted small px-3 py-1 d-flex align-items-center">
-                    <span className="me-2">{contactName} is typing</span>
-                    <div className="typing-dots">
-                      <span>.</span><span>.</span><span>.</span>
-                    </div>
-                  </div>
-                )}
 
                 <div ref={chatEndRef} />
                 </ListGroup>
