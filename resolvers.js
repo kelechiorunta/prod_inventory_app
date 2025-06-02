@@ -373,9 +373,11 @@ const resolvers = {
     }
 
     chatBus.emit(EVENTS.TYPING, {
-      senderId,
-      receiverId,
-      isTyping,
+      typingIndicator: {
+        senderId,
+        receiverId,
+        isTyping,
+      }
     });
 
     return true;
