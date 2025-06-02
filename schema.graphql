@@ -124,6 +124,7 @@ type Subscription {
     test:String
     newMessage(userId: String!): Message!
     incomingMessage: Message!
-    typingIndicator: TypingEvent!
+    typingIndicator(senderId: ID!, receiverId: ID!): TypingEvent!
+
 }
 
