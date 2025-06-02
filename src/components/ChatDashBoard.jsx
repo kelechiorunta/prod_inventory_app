@@ -40,7 +40,7 @@ export default function ChatDashboard() {
           ) : (
             <Card
             className="d-flex align-items-center justify-content-center"
-            style={{ height: '75vh' }}
+            style={{ height: '80vh' }}
           >
             <h5 className="text-muted">Select a contact to start chatting</h5>
           </Card>
