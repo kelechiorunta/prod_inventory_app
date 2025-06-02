@@ -431,7 +431,7 @@ const resolvers = {
       subscribe: (parent, args, context) => {
         return chatBus.asyncIterator(EVENTS.TYPING);
       },
-      resolve: (payload) => payload,
+      resolve: (payload) => payload.typingIndicator,
     },
     notifyAuthUser: {
       subscribe: async function* (parent, args, context) {
