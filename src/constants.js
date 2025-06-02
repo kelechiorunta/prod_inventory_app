@@ -101,6 +101,12 @@ export const GET_MESSAGES = gql`
   }
 `;
 
+export const SEND_TYPING_STATUS = gql`
+  mutation SendTypingStatus($senderId: ID!, $receiverId: ID!, $isTyping: Boolean!) {
+    sendTypingStatus(senderId: $senderId, receiverId: $receiverId, isTyping: $isTyping)
+  }
+`;
+
 export const FETCH_USERS = gql`
   query FetchUsers($excludeId: ID!) {
     users(excludeId: $excludeId) {

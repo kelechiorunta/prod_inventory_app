@@ -364,7 +364,22 @@ const resolvers = {
       );
 
       return response.data.data;
-    },
+   },
+   sendTypingStatus: async (parent, { receiverId, isTyping }, context) => {
+    const senderId = context.user?.id;
+
+    if (!senderId) {
+      throw new Error('User not authenticated');
+    }
+
+    chatBus.emit(EVENTS.TYPING, {
+      senderId,
+      receiverId,
+      isTyping,
+    });
+
+    return true;
+  },
   },
 
   // ✅ Subscription Resolver (Must return AsyncIterable)
@@ -411,7 +426,13 @@ const resolvers = {
           }
         }
       },
-    },   
+    },  
+    typingIndicator: {
+      subscribe: (parent, args, context) => {
+        return chatBus.asyncIterator(EVENTS.TYPING);
+      },
+      resolve: (payload) => payload,
+    },
     notifyAuthUser: {
       subscribe: async function* (parent, args, context) {
         const queue = [];
