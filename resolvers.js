@@ -430,11 +430,24 @@ const resolvers = {
       },
     },  
     typingIndicator: {
-      subscribe: (parent, args, context) => {
-        return chatBus.asyncIterator(EVENTS.TYPING);
+      subscribe: async function* (parent, args, context) {
+        const asyncIterator = chatBus.asyncIterator(EVENTS.TYPING);
+    
+        const user = context?.user;
+        if (!user || !user._id) {
+          throw new Error('Unauthorized subscription');
+        }
+    
+        for await (const event of asyncIterator) {
+          const typing = event.typingIndicator;
+    
+          // Only send typing events where the user is the intended receiver
+          if (String(typing.receiverId) === String(user._id)) {
+            yield { typingIndicator: typing };
+          }
+        }
       },
-      resolve: (payload) => payload.typingIndicator,
-    },
+    },    
     notifyAuthUser: {
       subscribe: async function* (parent, args, context) {
         const queue = [];
