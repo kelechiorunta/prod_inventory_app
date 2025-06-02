@@ -122,7 +122,7 @@ export default function ChatNotifications({userId, contactId, contactName, conta
   const typingTimeoutRef = useRef(null);
 
   useEffect(() => {
-    if (typingData?.typingStatus) {
+    if (typingData?.typingIndicator) {
       const { isTyping } = typingData.typingStatus;
   
       if (isTyping) {
@@ -141,6 +141,11 @@ export default function ChatNotifications({userId, contactId, contactName, conta
         setIsContactTyping(false);
       }
     }
+    return () => {
+      if (typingTimeoutRef.current) {
+        clearTimeout(typingTimeoutRef.current);
+      }
+    };
   }, [typingData]);
   
   
