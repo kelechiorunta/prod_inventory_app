@@ -84,18 +84,18 @@ export default function ChatNotifications({userId, contactId, contactName, conta
 
   return (
     <Card className="shadow-lg"
-    style={{minHeight: '460px'}}>
+    style={{minHeight: '470px'}}>
       <Card.Header className="d-flex justify-content-between align-items-center">
         <BsChatDots className="me-2" />
         <span>Chat with {contactName}</span>
       </Card.Header>
 
-      <Card.Body style={{ maxHeight: '460px', overflowY: 'auto', minHeight: '460px' }}>
+      <Card.Body style={{ maxHeight: '470px', overflowY: 'auto', minHeight: '470px' }}>
         <ListGroup variant="flush">
           {messages && messages.length === 0 && (
             <ListGroup.Item
               className="text-muted text-center"
-              style={{minHeight: '460px' }}>
+              style={{minHeight: '470px' }}>
               No messages yet.
             </ListGroup.Item>
                   )}
