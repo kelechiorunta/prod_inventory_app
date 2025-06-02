@@ -1,7 +1,7 @@
 // ChatBox.js
 import React, { useEffect, useState, useRef } from 'react';
 import { useQuery, useMutation, useSubscription } from '@apollo/client';
-import { GET_MESSAGES, SEND_MESSAGE, ON_NEW_MESSAGE } from '../constants'
+import { GET_MESSAGES, SEND_MESSAGE, ON_NEW_MESSAGE, TYPING_INDICATOR } from '../constants'
 import {
   Card,
   Form,
@@ -110,6 +110,41 @@ export default function ChatNotifications({userId, contactId, contactName, conta
     }, 1500); // stop typing after 1.5s of inactivity
   };
 
+  const { data: typingData } = useSubscription(TYPING_INDICATOR, {
+    variables: {
+      senderId: contactId, // the one you're chatting *with*
+      receiverId: userId   // you
+    },
+  });
+  
+  const [isContactTyping, setIsContactTyping] = useState(false);
+  
+  const typingTimeoutRef = useRef(null);
+
+  useEffect(() => {
+    if (typingData?.typingStatus) {
+      const { isTyping } = typingData.typingStatus;
+  
+      if (isTyping) {
+        setIsContactTyping(true);
+  
+        // Reset timer
+        if (typingTimeoutRef.current) {
+          clearTimeout(typingTimeoutRef.current);
+        }
+  
+        // Hide typing indicator after 2s of no updates
+        typingTimeoutRef.current = setTimeout(() => {
+          setIsContactTyping(false);
+        }, 2000);
+      } else {
+        setIsContactTyping(false);
+      }
+    }
+  }, [typingData]);
+  
+  
+
   return (
     <Card className="shadow-lg"
     style={{minHeight: '470px'}}>
@@ -163,7 +198,16 @@ export default function ChatNotifications({userId, contactId, contactName, conta
                     </div>
                           </ListGroup.Item>
                     </div>
-                ))}
+                  ))}
+                            {isContactTyping && (
+                  <div className="text-muted small px-3 py-1 d-flex align-items-center">
+                    <span className="me-2">{contactName} is typing</span>
+                    <div className="typing-dots">
+                      <span>.</span><span>.</span><span>.</span>
+                    </div>
+                  </div>
+                )}
+
                 <div ref={chatEndRef} />
                 </ListGroup>
       </Card.Body>

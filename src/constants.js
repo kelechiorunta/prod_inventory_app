@@ -85,6 +85,16 @@ export const NEW_INCOMING_MESSAGE = gql`
   }
 `;
 
+export const TYPING_INDICATOR = gql`
+  subscription TypingStatus($senderId: ID!, $receiverId: ID!) {
+    typingIndicator(senderId: $senderId, receiverId: $receiverId) {
+      senderId
+      receiverId
+      isTyping
+    }
+  }
+`;
+
 export const GET_MESSAGES = gql`
   query GetMessages($userId: String!, $contactId: String!) {
     messages(userId: $userId, contactId: $contactId) {
