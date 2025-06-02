@@ -365,21 +365,19 @@ const resolvers = {
 
       return response.data.data;
    },
-   sendTypingStatus: async (parent, { receiverId, isTyping }, context) => {
-    const senderId = context.user?._id;
-
+   sendTypingStatus: async (parent, { senderId, receiverId, isTyping }, context) => {
     if (!senderId) {
       throw new Error('User not authenticated');
     }
-
+  
     chatBus.emit(EVENTS.TYPING, {
       typingIndicator: {
         senderId,
         receiverId,
         isTyping,
-      }
+      },
     });
-
+  
     return true;
   },
   },
@@ -430,7 +428,7 @@ const resolvers = {
       },
     },  
     typingIndicator: {
-      subscribe: async function* (parent, args, context) {
+      subscribe: async function* (parent, { senderId, receiverId }, context) {
         const asyncIterator = chatBus.asyncIterator(EVENTS.TYPING);
     
         const user = context?.user;
@@ -441,8 +439,7 @@ const resolvers = {
         for await (const event of asyncIterator) {
           const typing = event.typingIndicator;
     
-          // Only send typing events where the user is the intended receiver
-          if (String(typing.receiverId) === String(user._id)) {
+          if (String(receiverId) === String(senderId)) {
             yield { typingIndicator: typing };
           }
         }
