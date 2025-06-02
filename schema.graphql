@@ -87,7 +87,7 @@ type Mutation {
   updateProduct(id: ID!, input: UpdateProductInput!): Product!
   deleteProduct(id: ID!): DeleteResponse!
   sendMessage(sender: String!, receiver: String!, content: String!): Message
-  sendTypingStatus(receiverId: ID!, isTyping: Boolean!): Boolean!
+  sendTypingStatus(senderId: ID!, receiverId: ID!, isTyping: Boolean!): Boolean
 }
 
 type TypingEvent {

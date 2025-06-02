@@ -1,7 +1,7 @@
 // ChatBox.js
 import React, { useEffect, useState, useRef } from 'react';
 import { useQuery, useMutation, useSubscription } from '@apollo/client';
-import { GET_MESSAGES, SEND_MESSAGE, ON_NEW_MESSAGE, TYPING_INDICATOR, SEND_TYPING_STATUS } from '../constants'
+import { GET_MESSAGES, SEND_MESSAGE, ON_NEW_MESSAGE, TYPING_INDICATOR } from '../constants'
 import {
   Card,
   Form,
