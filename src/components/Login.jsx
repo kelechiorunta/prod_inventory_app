@@ -4,9 +4,6 @@ import { Button, Container, Form as BootstrapForm, Alert, NavLink, Row, Col } fr
 import * as Yup from 'yup';
 import { useNavigate } from 'react-router-dom';
 
-
-
-
 const LoginSchema = Yup.object().shape({
   username: Yup.string().required('Username is required'),
   password: Yup.string().min(6, 'Password must be at least 6 characters').required('Password is required'),
@@ -51,10 +48,10 @@ export default function Login() {
 
   return (
     
-      <Container xlg className='col-lg-6 col-xs-12 col-md-6 col-sm-12 flex-wrap' style={{display: 'flex', gap: '20px', maxWidth: '90%', marginTop: '100px' }}>
+      <Container xlg className='col-lg-6 col-xs-12 col-md-6 col-sm-12 flex-wrap' style={{minWidth: 300, display: 'flex', gap: '20px', maxWidth: '90%', marginTop: '100px' }}>
        
           <Row
-          style={{minWidth: '400px', minHeight: '400px'}}
+          style={{minWidth: '300px', minHeight: '400px'}}
           as={Col}
           xlg className="col-xlg-6 px-4 py-2 ">
           <h2 style={{fontFamily: 'Cinzel'}}
