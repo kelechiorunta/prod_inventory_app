@@ -155,6 +155,7 @@ export default function ChatNotifications({userId, contactId, contactName, conta
     style={{minHeight: '470px'}}>
       <Card.Header className="d-flex justify-content-between align-items-center">
         <BsChatDots className="me-2" />
+        <div style={{height: '50px'}}>
         {(isContactTyping) && (
             <div className="text-muted small px-3 py-1 d-flex align-items-center">
               <span className="me-2">{contactName} is typing</span>
@@ -162,7 +163,8 @@ export default function ChatNotifications({userId, contactId, contactName, conta
                 <span>.</span><span>.</span><span>.</span>
               </div>
             </div>
-        )}
+          )}
+        </div>
         <span>Chat with {contactName}</span>
       </Card.Header>
 
