@@ -193,6 +193,8 @@ import { chatBus, EVENTS } from "./eventBus.js";
 import { withFilter } from "graphql-subscriptions";
 import { PubSub } from "graphql-subscriptions";
 import Message from "./models/Message.js";
+import Stock from "./models/Stock.js";
+import SessionUser from "./models/SessionUser.js";
 
 const pubsub = new PubSub()
 
@@ -254,6 +256,20 @@ const resolvers = {
       }).sort({ createdAt: 1 }); // ascending to show oldest first
     },
     
+    getUserStocks: async (parent, args, context) => {
+      if (context.user) {
+        try {
+          const sessionUser = await SessionUser.findOne({ user_email: context?.user?.email }).populate('stocks')
+          if (!sessionUser) throw new Error('No current user')
+          const stocks = await Stock.find({ _id: sessionUser.stocks })
+          if (!stocks) throw new Error('No stocks for this client')   
+          return stocks
+        }
+        catch (err) {
+          throw new Error(err)
+        }
+      }
+    },
 
     verifyPayment: async (parent, { token }, context) => {
       if (context.user) {

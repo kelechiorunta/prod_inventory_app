@@ -58,3 +58,38 @@
   0%, 80%, 100% { opacity: 0; }
   40% { opacity: 1; }
 }
+
+/* .sidebar {
+  width: 250px;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  overflow-x: hidden;
+  border-right: 1px solid #ddd;
+} */
+
+/* Add this to App.css or a global style */
+.sidebar {
+  width: 250px;
+  position: fixed;
+  top: 190;
+  left: 0;
+  z-index: 0;
+}
+
+main {
+  margin-left: 250px;
+}
+
+@media (max-width: 991px) {
+  .sidebar {
+    position: static;
+    width: 100%;
+    margin-left: 0;
+  }
+
+  main {
+    margin-left: 0;
+  }
+}

@@ -7,6 +7,7 @@ type Query{
   searchProduct(name: String, category: CategoryEnum, sort: String, limit: Int): [Product]
   messages(userId: String!, contactId: String!): [Message!]!
   users(excludeId: ID!): [User!]!
+  getUserStocks: [Stock]!
 }
 
 enum CategoryEnum {
@@ -18,6 +19,13 @@ enum CategoryEnum {
   electronics
 }
 
+type Stock {
+  id: ID
+  month: String
+  year: Int
+  stockIn: Float
+  stockOut: Float
+}
 
 type Product {
   id: ID

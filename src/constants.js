@@ -38,6 +38,15 @@ export const GET_PRODUCT = gql`
                         }
     }
 `
+export const GET_STOCKS = gql`
+    query Query {
+                getUserStocks{
+                            month
+                            year
+                            stockIn
+                            stockOut
+                        }
+}`;
 
 export const AUTH = gql`
         subscription Auth {
@@ -86,8 +95,8 @@ export const NEW_INCOMING_MESSAGE = gql`
 `;
 
 export const TYPING_INDICATOR = gql`
-  subscription TypingStatus($senderId: ID!, $receiverId: ID!) {
-    typingIndicator(senderId: $senderId, receiverId: $receiverId) {
+  subscription TypingIndicator($senderId: ID!, $receiverId: ID!) {
+    typingIndicator {
       senderId
       receiverId
       isTyping
