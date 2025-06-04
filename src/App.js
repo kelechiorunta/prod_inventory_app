@@ -1,4 +1,4 @@
-import { Routes, Route } from 'react-router-dom'
+import { Routes, Route, Navigate } from 'react-router-dom'
 import Home from './components/Home.jsx';
 import Login from './components/Login.jsx';
 import ProtectedRoute from './components/ProtectedRoute.jsx';
@@ -15,6 +15,13 @@ import ChatDashboard from './components/ChatDashBoard.jsx';
 import ChatAlarm from './components/ChatAlarm.jsx';
 import Modal from './components/Modal.jsx';
 import ProductCard from './components/ProductCard.jsx';
+import AppDashBoard from './components/AppDashBoard.jsx';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import '@fortawesome/fontawesome-free/css/all.min.css';
+import Page1 from './components/Page1.jsx';
+import Page2 from './components/Page2.jsx';
+import Page3 from './components/Page3.jsx';
+
 
 
 function App() {
@@ -34,6 +41,12 @@ function App() {
           <Route path="/payment/:id" element={<PaymentForm />} />
           <Route path="/payment/callback" element={<VerifyPayment />} />
           <Route path="/chat/:userId" element={<ChatDashboard/>} />
+          <Route path="/dashboard" element={<AppDashBoard />}>
+            <Route index element={<Navigate to="page1" replace />} />
+            <Route path="page1" element={<Page1 />} />
+            <Route path="page2" element={<Page2 />} />
+            <Route path="page3" element={<Page3 />} />
+          </Route>
         </Route>
        
           <Route path="/login" element={<Login />} />

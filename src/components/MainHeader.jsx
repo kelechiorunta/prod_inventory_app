@@ -43,6 +43,7 @@ const MainHeader = ({ auth }) => {
                 {/* <a className="nav-link" href="/about">About Us</a> */}
                 <Link className="nav-link" to="/search">Search</Link>
                 <a className="nav-link" href={`/chat/${data && data?.auth?._id}`}>Chat</a>
+                <a className="nav-link" href={`/dashboard`}>DashBoard</a>
                 {/* <a className="nav-link" href="/checkout">Checkout</a> */}
                 <a onClick={handleLogout} className="nav-link" href="/logout">Logout</a>
             </Nav>
