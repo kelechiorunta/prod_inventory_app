@@ -151,13 +151,12 @@ export default function ChatNotifications({userId, contactId, contactName, conta
         <BsChatDots className="me-2" />
         <div style={{height: '30px', margin: 'auto'}}>
           {isContactTyping && (
-            <h1>Hello there</h1>
-            // <div className="text-muted small px-3 py-1 d-flex align-items-center">
-            //   <span className="me-2">{contactName} is typing</span>
-            //   <div className="typing-dots">
-            //     <span>.</span><span>.</span><span>.</span>
-            //   </div>
-            // </div>
+            <div className="text-muted small px-3 py-1 d-flex align-items-center">
+              <span className="me-2">{contactName} is typing</span>
+              <div className="typing-dots">
+                <span>.</span><span>.</span><span>.</span>
+              </div>
+            </div>
           )}
         </div>
         <span>Chat with {contactName}</span>
