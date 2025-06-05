@@ -122,23 +122,25 @@ export default function ChatNotifications({userId, contactId, contactName, conta
   useEffect(() => {
     if (typingData?.typingIndicator) {
       const { isTyping } = typingData.typingIndicator;
+
+      setIsContactTyping(isTyping)
   
-      if (isTyping) {
-        setIsContactTyping(true);
-        if (typingTimeoutRef.current) clearTimeout(typingTimeoutRef.current);
-        typingTimeoutRef.current = setTimeout(() => {
-          setIsContactTyping(false);
-        }, 2000);
-      } else {
-        setIsContactTyping(false);
-      }
+      // if (isTyping) {
+      //   setIsContactTyping(true);
+      //   if (typingTimeoutRef.current) clearTimeout(typingTimeoutRef.current);
+      //   typingTimeoutRef.current = setTimeout(() => {
+      //     setIsContactTyping(false);
+      //   }, 2000);
+      // } else {
+      //   setIsContactTyping(false);
+      // }
     }
   
-    return () => {
-      if (typingTimeoutRef.current) {
-        clearTimeout(typingTimeoutRef.current);
-      }
-    };
+    // return () => {
+    //   if (typingTimeoutRef.current) {
+    //     clearTimeout(typingTimeoutRef.current);
+    //   }
+    // };
   }, [typingData, isContactTyping, debounceTyping, sendTypingStatus]);
   
   
