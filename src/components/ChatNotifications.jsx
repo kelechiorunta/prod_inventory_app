@@ -117,7 +117,7 @@ export default function ChatNotifications({userId, contactId, contactName, conta
     },
   });
   
-  const [isContactTyping, setIsContactTyping] = useState(false);
+  const [isContactTyping, setIsContactTyping] = useState(null);
   
   const typingTimeoutRef = useRef(null);
 

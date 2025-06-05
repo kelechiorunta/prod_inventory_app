@@ -470,8 +470,8 @@ const resolvers = {
           console.log('TYPING EVENT RECEIVED:', typing);
     
           if (
-            String(typing.senderId) === String(senderId) &&
-            String(typing.receiverId) === String(receiverId)
+            (String(typing.receiverId) === String(user._id)) ||
+            typing.isTyping === false
           ) {
             yield { typingIndicator: typing };
           }
