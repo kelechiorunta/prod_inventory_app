@@ -471,7 +471,7 @@ const resolvers = {
     
           if (
             (String(typing.receiverId) === String(user._id)) &&
-            typing.isTyping === false
+            String(typing.senderId) === String(receiverId)
           ) {
             yield { typingIndicator: typing };
           }
