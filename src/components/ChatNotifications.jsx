@@ -119,31 +119,34 @@ export default function ChatNotifications({userId, contactId, contactName, conta
   
   const typingTimeoutRef = useRef(null);
 
+  // useEffect(() => {
+  //   if (typingData?.typingIndicator) {
+  //     const { isTyping } = typingData.typingIndicator;
+
+  //     if (isTyping) {
+  //       setIsContactTyping(true);
+  //       if (typingTimeoutRef.current) clearTimeout(typingTimeoutRef.current);
+  //       typingTimeoutRef.current = setTimeout(() => {
+  //         setIsContactTyping(false);
+  //       }, 2000);
+  //     } else {
+  //       setIsContactTyping(false);
+  //     }
+  //   }
+  
+  //   return () => {
+  //     if (typingTimeoutRef.current) {
+  //       clearTimeout(typingTimeoutRef.current);
+  //     }
+  //   };
+  // }, [typingData, isContactTyping, debounceTyping, sendTypingStatus]);
+  
   useEffect(() => {
     if (typingData?.typingIndicator) {
       const { isTyping } = typingData.typingIndicator;
-
-      setIsContactTyping(isTyping)
-      console.log(isTyping && "Hello there")
-      // if (isTyping) {
-      //   setIsContactTyping(true);
-      //   if (typingTimeoutRef.current) clearTimeout(typingTimeoutRef.current);
-      //   typingTimeoutRef.current = setTimeout(() => {
-      //     setIsContactTyping(false);
-      //   }, 2000);
-      // } else {
-      //   setIsContactTyping(false);
-      // }
+      setIsContactTyping(isTyping);
     }
-  
-    // return () => {
-    //   if (typingTimeoutRef.current) {
-    //     clearTimeout(typingTimeoutRef.current);
-    //   }
-    // };
-  }, [typingData, isContactTyping, debounceTyping, sendTypingStatus]);
-  
-  
+  }, [typingData]);
   
 
   return (

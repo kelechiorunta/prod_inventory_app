@@ -394,18 +394,12 @@ const resolvers = {
       return response.data.data;
    },
    sendTypingStatus: async (parent, { senderId, receiverId, isTyping }, context) => {
-    if (!senderId) {
-      throw new Error('User not authenticated');
-    }
-  
-    chatBus.emit(EVENTS.TYPING, {
-      typingIndicator: {
-        senderId,
-        receiverId,
-        isTyping,
-      },
-    });
-  
+    const typingIndicator = { senderId, receiverId, isTyping };
+
+    console.log('EMITTING TYPING:', typingIndicator);
+
+    chatBus.emit(EVENTS.TYPING, { typingIndicator });
+
     return true;
   },
   },
@@ -456,27 +450,15 @@ const resolvers = {
       },
     },  
     typingIndicator: {
-      subscribe: async function* (parent, { senderId, receiverId }, context) {
+      subscribe: async function* () {
         const asyncIterator = chatBus.asyncIterator(EVENTS.TYPING);
-    
-        const user = context?.user;
-        if (!user || !user._id) {
-          throw new Error('Unauthorized subscription');
-        }
-    
-        for await (const event of asyncIterator) {
-          const typing = event.typingIndicator;
 
-          console.log('TYPING EVENT RECEIVED:', typing);
-    
-          if (
-            (String(typing.receiverId) === String(user._id)) ||
-            String(typing.senderId) === String(receiverId)
-          ) {
-            yield { typingIndicator: typing };
-          }
+        for await (const event of asyncIterator) {
+          console.log('RECEIVED TYPING EVENT:', event);
+          yield { typingIndicator: event.typingIndicator };
         }
       },
+    },
     },    
     notifyAuthUser: {
       subscribe: async function* (parent, args, context) {
