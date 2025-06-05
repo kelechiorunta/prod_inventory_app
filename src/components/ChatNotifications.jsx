@@ -124,7 +124,7 @@ export default function ChatNotifications({userId, contactId, contactName, conta
       const { isTyping } = typingData.typingIndicator;
 
       setIsContactTyping(isTyping)
-  
+      console.log(isTyping && "Hello there")
       // if (isTyping) {
       //   setIsContactTyping(true);
       //   if (typingTimeoutRef.current) clearTimeout(typingTimeoutRef.current);
