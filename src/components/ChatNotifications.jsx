@@ -135,7 +135,7 @@ export default function ChatNotifications({userId, contactId, contactName, conta
   
         // Hide typing indicator after 2s of no updates
         typingTimeoutRef.current = setTimeout(() => {
-          setIsContactTyping(true);
+          setIsContactTyping(false);
         }, 500);
       } else {
         setIsContactTyping(false);
