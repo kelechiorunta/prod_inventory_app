@@ -469,8 +469,8 @@ const resolvers = {
     
           // Only yield if this user is the *receiver*
           const isIntendedReceiver =
-            String(typing.senderId) === String(senderId) &&
-            String(typing.receiverId) === String(receiverId);
+            String(typing.receiverId) === String(user._id) &&
+            String(typing.isTyping) === false;
     
           if (isIntendedReceiver) {
             yield { typingIndicator: typing };
