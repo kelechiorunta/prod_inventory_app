@@ -38,7 +38,7 @@ type Product {
 }
 
 type User {
-  _id: ID!
+  _id: ID
   username: String,
   email: String,
   picture: String,
@@ -96,6 +96,7 @@ type Mutation {
   deleteProduct(id: ID!): DeleteResponse!
   sendMessage(sender: String!, receiver: String!, content: String!): Message
   sendTypingStatus(senderId: ID!, receiverId: ID!, isTyping: Boolean!): Boolean
+  updateUser(email: String!, username: String!, picture: String!, password: String!): User
 }
 
 type TypingEvent {

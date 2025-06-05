@@ -21,6 +21,8 @@ import '@fortawesome/fontawesome-free/css/all.min.css';
 import Page1 from './components/Page1.jsx';
 import Page2 from './components/Page2.jsx';
 import Page3 from './components/Page3.jsx';
+import Signup from './components/Signup.jsx';
+import AppSettings from './components/AppSettings.jsx';
 
 
 
@@ -46,10 +48,12 @@ function App() {
             <Route path="page1" element={<Page1 />} />
             <Route path="page2" element={<Page2 />} />
             <Route path="page3" element={<Page3 />} />
+            <Route path="settings" element={<AppSettings />} />
           </Route>
         </Route>
        
           <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
       </Routes>
     </>
       
