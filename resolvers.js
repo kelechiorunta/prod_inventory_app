@@ -467,13 +467,17 @@ const resolvers = {
         for await (const event of asyncIterator) {
           const typing = event.typingIndicator;
     
-          if (String(typing.senderId) === String(user._id) ||
-              String(typing.isTyping) === false) {
+          // Only yield if this user is the *receiver*
+          const isIntendedReceiver =
+            String(typing.senderId) === String(senderId) &&
+            String(typing.receiverId) === String(receiverId);
+    
+          if (isIntendedReceiver) {
             yield { typingIndicator: typing };
           }
         }
       },
-    },    
+    },
     notifyAuthUser: {
       subscribe: async function* (parent, args, context) {
         const queue = [];
