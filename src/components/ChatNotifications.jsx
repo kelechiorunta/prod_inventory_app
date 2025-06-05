@@ -127,26 +127,22 @@ export default function ChatNotifications({userId, contactId, contactName, conta
   
       if (isTyping) {
         setIsContactTyping(true);
-  
-        // Reset timer
-        if (typingTimeoutRef.current) {
-          clearTimeout(typingTimeoutRef.current);
-        }
-  
-        // Hide typing indicator after 2s of no updates
+        if (typingTimeoutRef.current) clearTimeout(typingTimeoutRef.current);
         typingTimeoutRef.current = setTimeout(() => {
           setIsContactTyping(false);
-        }, 500);
+        }, 2000);
       } else {
         setIsContactTyping(false);
       }
     }
+  
     return () => {
       if (typingTimeoutRef.current) {
         clearTimeout(typingTimeoutRef.current);
       }
     };
   }, [typingData]);
+  
   
   
 
@@ -156,7 +152,7 @@ export default function ChatNotifications({userId, contactId, contactName, conta
       <Card.Header className="d-flex justify-content-between align-items-center">
         <BsChatDots className="me-2" />
         <div style={{height: '30px', margin: 'auto'}}>
-        {(isContactTyping) && (
+        {isContactTyping && (
             <div className="text-muted small px-3 py-1 d-flex align-items-center">
               <span className="me-2">{contactName} is typing</span>
               <div className="typing-dots">
