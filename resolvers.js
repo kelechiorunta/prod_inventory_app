@@ -468,7 +468,7 @@ const resolvers = {
           const typing = event.typingIndicator;
     
           if (String(typing.receiverId) === String(user._id) ||
-              String(typing.isTyping) === false) {
+              String(typing.isTyping) === true) {
             yield { typingIndicator: typing };
           }
         }
