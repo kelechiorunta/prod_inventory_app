@@ -466,9 +466,13 @@ const resolvers = {
     
         for await (const event of asyncIterator) {
           const typing = event.typingIndicator;
+
+          console.log('TYPING EVENT RECEIVED:', typing);
     
-          if (String(typing.receiverId) === String(senderId) ||
-              (typing.isTyping === false)) {
+          if (
+            String(typing.senderId) === String(senderId) &&
+            String(typing.receiverId) === String(receiverId)
+          ) {
             yield { typingIndicator: typing };
           }
         }
