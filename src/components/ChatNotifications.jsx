@@ -92,7 +92,7 @@ export default function ChatNotifications({userId, contactId, contactName, conta
           senderId: userId,
           receiverId: contactId,
           isTyping,
-        }, onCompleted: setIsContactTyping(isTyping)
+        } //, onCompleted: setIsContactTyping(isTyping)
       });
     }, 500) // debounce interval in ms
   ).current;
@@ -139,7 +139,7 @@ export default function ChatNotifications({userId, contactId, contactName, conta
         clearTimeout(typingTimeoutRef.current);
       }
     };
-  }, [typingData, isContactTyping]);
+  }, [typingData, isContactTyping, debounceTyping, sendTypingStatus]);
   
   
   
