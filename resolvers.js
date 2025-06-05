@@ -467,8 +467,8 @@ const resolvers = {
         for await (const event of asyncIterator) {
           const typing = event.typingIndicator;
     
-          if (String(typing.receiverId) === String(user._id) ||
-              String(typing.isTyping) === true) {
+          if (String(typing.senderId) === String(user._id) ||
+              String(typing.isTyping) === false) {
             yield { typingIndicator: typing };
           }
         }
