@@ -19,6 +19,8 @@ authRouter.get('/logout', function(req, res, next) {
   });
 });
 
+authRouter.post('/signup', signupController)
+
 authRouter.get('/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
 authRouter.get('/oauth2/redirect/google', passport.authenticate('google'), (req, res, next) => {
   try {

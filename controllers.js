@@ -9,34 +9,64 @@ export const isAuthenticatedUser = (req, res) => {
     }
 }
 
-export const signupController = async (req, res, next) => {
-    const { username, email, password } = req.body
+
+export const signupController = async (req, res) => {
+    const { username, password, email } = req.body;
+  
     try {
-        if (!email || !password || !username) {
-            return res.status(401).json({ error: "Invalid or Incomplete entries" })
-        }
-
-        const user = await User.findOne({ email });
-
-        if (user) {
-            return res.status(401).json({ error: "User already exists"})
-        }
-
-        const newUser = new User({ username, email, password })
-        // newUser.token = token;
-        await newUser.save()
-        const token = jwt.sign({id: newUser._id}, process.env.JWT_SECRET, { expiresIn: '1d' })
-
-        if (req.session) {
-         req.session.token = token
-        }
-        next()
-        // res.status(200).json({message: "User signed up successfully", user: req.session.token})
+      if (!username || !password ||!email) {
+        return res.status(400).json({ error: 'All fields are required!' });
+      }
+  
+      const existingUser = await User.findOne({ username });
+      if (existingUser) {
+        return res.status(400).json({ error: 'User already exists!' });
+      }
+  
+      const newUser = new User({ username, password, email });
+      await newUser.save();
+  
+      // Optionally log them in immediately:
+      req.login(newUser, (err) => {
+        if (err) return res.status(500).json({ error: 'Auto-login failed after signup' });
+        return res.status(201).json({ message: 'Signup successful', user: newUser });
+      });
+    } catch (err) {
+      console.error(err);
+      return res.status(500).json({ error: 'Server error during signup' });
     }
-    catch (err) {
-        res.status(500).json({error: err})
-    }
-}
+  };
+
+// This needs JWT deserialization. No need for this since Passport.js has its serialization strategy after signup or login
+// export const signupController = async (req, res, next) => {
+//     const { username, email, password } = req.body
+//     try {
+//         if (!email || !password || !username) {
+//             return res.status(401).json({ error: "Invalid or Incomplete entries" })
+//         }
+
+//         const user = await User.findOne({ email });
+
+//         if (user) {
+//             return res.status(401).json({ error: "User already exists"})
+//         }
+
+//         const newUser = new User({ username, email, password })
+//         // newUser.token = token;
+//         await newUser.save()
+//         const token = jwt.sign({id: newUser._id}, process.env.JWT_SECRET, { expiresIn: '1d' })
+
+//         if (req.session) {
+//          req.session.token = token
+//         }
+//         next()
+//         // res.status(200).json({message: "User signed up successfully", user: req.session.token})
+//     }
+//     catch (err) {
+//         res.status(500).json({error: err})
+//     }
+// }
+
 
 export const loginController = async (req, res) => {
     const { email, password } = req.body

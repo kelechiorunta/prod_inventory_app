@@ -70,7 +70,18 @@ export const ON_NEW_MESSAGE = gql`
       receiverAvatar
       createdAt
     }
-  }`
+  }`;
+
+  export const UPDATE_USER = gql`
+  mutation UpdateUser($email: String!, $username: String!, $picture: String!, $password: String!) {
+    updateUser(email: $email, username: $username, picture: $picture, password: $password) {
+      _id
+      email
+      username
+      picture
+    }
+  }
+`;
 
   export const SEND_MESSAGE = gql`
   mutation SendMessage($sender: String!, $receiver: String!, $content: String!) {

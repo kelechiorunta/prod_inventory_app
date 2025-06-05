@@ -85,10 +85,11 @@
 
 import React, { useMemo } from 'react';
 import { useQuery } from '@apollo/client';
-import { Card, Spinner, Alert } from 'react-bootstrap';
+import { Card, Alert } from 'react-bootstrap';
 import { Bar } from 'react-chartjs-2';
 import { GET_STOCKS } from '../constants';
-import Modal from '../components/Modal.jsx'
+import Skeleton from 'react-loading-skeleton';
+import 'react-loading-skeleton/dist/skeleton.css';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -163,9 +164,9 @@ const AppStockChart = () => {
     };
   }, []);
 
-  // Loading/Error handling *after* hooks
-  if (loading) return <Modal isActive={loading}><Spinner animation="border" variant="primary" /></Modal>;
-  if (error) return <Alert variant="danger">Error loading stock data</Alert>;
+  if (error) {
+    return <Alert variant="danger">Error loading stock data</Alert>;
+  }
 
   return (
     <Card
@@ -173,7 +174,7 @@ const AppStockChart = () => {
         width: '60%',
         height: 400,
         marginTop: 0,
-        marginLeft: 200,
+        marginLeft: 240,
         display: 'block',
         borderRadius: 10,
       }}
@@ -181,11 +182,19 @@ const AppStockChart = () => {
     >
       <Card.Body>
         <Card.Title>Stock Overview</Card.Title>
-        <Bar data={chartData} options={chartOptions} />
+        {loading ? (
+          <div>
+            <Skeleton height={30} width={150} className="mb-3" />
+            <Skeleton height={300} />
+          </div>
+        ) : (
+          <Bar data={chartData} options={chartOptions} />
+        )}
       </Card.Body>
     </Card>
   );
 };
 
 export default AppStockChart;
+
 

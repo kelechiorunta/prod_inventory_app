@@ -317,7 +317,19 @@ const resolvers = {
    },
 
   // ✅ Mutation Resolvers
- Mutation: {
+  Mutation: {
+    updateUser: async (parent, { email, username, picture, password }, context) => {
+      const user = await User.findOne({ email });
+      if (!user) throw new Error('User not found');
+
+      if (username) user.username = username;
+      if (picture) user.picture = picture;
+      if (password) user.password = password//await bcrypt.hash(password, 12);
+
+      await user.save();
+      return user;
+    }
+  ,
     createNewProduct: async (parent, { input }, context) => {
       try {
         const product = await new Product(input).save();

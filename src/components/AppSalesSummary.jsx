@@ -33,7 +33,7 @@ const summaryData = [
 
 const AppSalesSummary = () => {
   return (
-    <div style={{ backgroundColor: '#f5f7ff', padding: '1rem', borderRadius: '10px', width: '80%', marginLeft: 200 }}>
+    <div style={{ backgroundColor: '#f5f7ff', padding: '1rem', borderRadius: '10px', width: '80%', marginLeft: 240 }}>
       <h5 className="mb-4">Sales Summary</h5>
       <Row>
         {summaryData.map((item, index) => (

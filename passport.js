@@ -53,9 +53,10 @@ export const configureGooglePassport = (passport) => {
         {
             clientID: process.env.GOOGLE_CLIENT_ID,
             clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-            callbackURL: process.env.NODE_ENV === 'development' ?
-                'http://localhost:3301/oauth2/redirect/google' :
-                'https://prod-inventory-app.onrender.com/oauth2/redirect/google',
+            callbackURL:
+            process.env.NODE_ENV === 'development'
+        ? 'http://localhost:3301/oauth2/redirect/google'
+        : 'https://prod-inventory-app.onrender.com/oauth2/redirect/google',
             scope: ['profile', 'email']
         },
         async (accessToken, refreshToken, profile, done) => {
