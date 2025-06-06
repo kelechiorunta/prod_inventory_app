@@ -92,7 +92,7 @@ export default function ChatNotifications({userId, contactId, contactName, conta
           senderId: userId,
           receiverId: contactId,
           isTyping,
-        } , onCompleted: console.log(isTyping && "true")
+        } , onCompleted: console.log('DEBOUNCE: ', isTyping && "true")
       });
     }, 500) // debounce interval in ms
   ).current;
@@ -144,6 +144,7 @@ export default function ChatNotifications({userId, contactId, contactName, conta
   useEffect(() => {
     if (typingData?.typingIndicator) {
       const { isTyping } = typingData.typingIndicator;
+      console.log('isTying: ', isTyping && 'true')
       setIsContactTyping(isTyping);
     }
   }, [typingData]);
