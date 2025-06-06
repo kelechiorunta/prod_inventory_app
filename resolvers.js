@@ -458,8 +458,7 @@ const resolvers = {
           yield { typingIndicator: event.typingIndicator };
         }
       },
-    },
-    },    
+    },  
     notifyAuthUser: {
       subscribe: async function* (parent, args, context) {
         const queue = [];
@@ -566,6 +565,7 @@ const resolvers = {
     
     
   }
-
+  
+ };
 
 export default resolvers
