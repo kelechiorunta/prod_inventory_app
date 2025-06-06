@@ -398,7 +398,7 @@ const resolvers = {
 
     console.log('EMITTING TYPING:', typingIndicator);
 
-     chatBus.emit(EVENTS.TYPING, { typingIndicator } );
+     chatBus.emit(EVENTS.TYPING, typingIndicator  );
 
     return true;
   },
@@ -453,15 +453,16 @@ const resolvers = {
       subscribe: async function* (parent, { senderId, receiverId }, context) {
         if (context?.user) {
           const user = context?.user
+        }
           const asyncIterator = chatBus.asyncIterator(EVENTS.TYPING);
       
           for await (const event of asyncIterator) {
-            console.log('RECEIVED EVENT:', event.typingIndicator);
-            if (String(event.typingIndicator.receiverId) === String(user?._id)) {
+            console.log('RECEIVED EVENT:', event);
+            if (String(event.receiverId) === String(senderId) || (event.isTyping === false)) {
               console.log('YIELDING TYPING EVENT');
-              yield { typingIndicator: event.typingIndicator };
+              yield { typingIndicator: event };
             }
-          }
+        
         }
       },
     },    
