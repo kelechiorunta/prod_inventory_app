@@ -398,7 +398,7 @@ const resolvers = {
 
     console.log('EMITTING TYPING:', typingIndicator);
 
-    chatBus.emit(EVENTS.TYPING, { typingIndicator });
+    chatBus.emit(EVENTS.TYPING, typingIndicator );
 
     return true;
   },
@@ -450,12 +450,12 @@ const resolvers = {
       },
     },  
     typingIndicator: {
-      subscribe: async function* () {
+      subscribe: async function* (parent, args, context) {
         const asyncIterator = chatBus.asyncIterator(EVENTS.TYPING);
 
         for await (const event of asyncIterator) {
           console.log('RECEIVED TYPING EVENT:', event);
-          yield { typingIndicator: event.typingIndicator };
+          yield { typingIndicator: event};
         }
       },
     },  
