@@ -395,13 +395,12 @@ const resolvers = {
    },
    sendTypingStatus: async (parent, { senderId, receiverId, isTyping }, context) => {
     const typingIndicator = { senderId, receiverId, isTyping };
-
     console.log('EMITTING TYPING:', typingIndicator);
-
-     chatBus.emit(EVENTS.TYPING, typingIndicator  );
-
+  
+    chatBus.emit(EVENTS.TYPING, typingIndicator);
+  
     return true;
-  },
+  }
   },
 
   // ✅ Subscription Resolver (Must return AsyncIterable)
@@ -455,18 +454,24 @@ const resolvers = {
         if (!user || !user._id) {
           throw new Error('Unauthorized subscription');
         }
-          const asyncIterator = chatBus.asyncIterator(EVENTS.TYPING);
-      
-          for await (const event of asyncIterator) {
-            console.log('RECEIVED EVENT:', event);
-            if (String(event.receiverId) === String(user._id) || String(event.senderId) === String(user._id)) {
-              console.log('YIELDING TYPING EVENT');
-              yield { typingIndicator: event };
-            }
-        
+    
+        const asyncIterator = chatBus.asyncIterator(EVENTS.TYPING);
+    
+        for await (const event of asyncIterator) {
+          // Ensure we only send events relevant to this user
+          const isRelevant =
+            (String(event.senderId) === String(senderId) &&
+             String(event.receiverId) === String(receiverId)) ||
+            (String(event.senderId) === String(receiverId) &&
+             String(event.receiverId) === String(senderId));
+    
+          if (isRelevant) {
+            yield { typingIndicator: event };
+          }
         }
       },
-    },    
+    },
+    
     notifyAuthUser: {
       subscribe: async function* (parent, args, context) {
         const queue = [];
