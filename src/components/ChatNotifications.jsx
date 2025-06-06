@@ -238,7 +238,7 @@ export default function ChatNotifications({userId, contactId, contactName, conta
             onChange={(e) => {
               handleTyping(e.target.value)
             }}
-            onBlur={() => debounceTyping(false)}
+            // onBlur={() => debounceTyping(false)}
             onKeyDown={handleKeyPress}
           />
 
