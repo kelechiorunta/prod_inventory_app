@@ -398,7 +398,7 @@ const resolvers = {
 
     console.log('EMITTING TYPING:', typingIndicator);
 
-     chatBus.emit(EVENTS.TYPING, { ...typingIndicator, isTyping: true } );
+     chatBus.emit(EVENTS.TYPING, typingIndicator );
 
     return true;
   },
