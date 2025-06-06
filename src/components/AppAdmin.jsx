@@ -4,9 +4,11 @@ import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
 import { FETCH_PRODUCTS } from '../constants';
 import { useQuery } from '@apollo/client';
+import { useNavigate } from 'react-router-dom';
 
 const AppAdmin = () => {
-  const { data, error, loading } = useQuery(FETCH_PRODUCTS);
+    const { data, error, loading } = useQuery(FETCH_PRODUCTS);
+    const navigate = useNavigate();
 
   if (loading) {
     return (
@@ -53,8 +55,8 @@ const AppAdmin = () => {
             ⋮
           </Dropdown.Toggle>
           <Dropdown.Menu>
-            <Dropdown.Item>Profile</Dropdown.Item>
-            <Dropdown.Item>Logout</Dropdown.Item>
+            <Dropdown.Item onClick={()=>navigate('/dashboard/settings')}>Profile</Dropdown.Item>
+                      <Dropdown.Item onClick={() => { window.location.href = '/logout' }}>Logout</Dropdown.Item>
           </Dropdown.Menu>
         </Dropdown>
       </Col>

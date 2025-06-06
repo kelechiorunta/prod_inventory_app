@@ -21,7 +21,7 @@ export default function Page2() {
         display: 'flex',
         // alignItems: 'center'
       }}>
-      <div style={{ marginLeft: 250, marginTop: 50, display: 'flex', flexDirection: 'column', height: '100%', width: '70%' }}
+      <div style={{ marginLeft: 250, marginTop: 50, display: 'flex', flexDirection: 'column', height: '100%', width: '80%' }}
         className="container">
         <AppInventorySearchBar
           onSearchChange={handleSearchChange}
