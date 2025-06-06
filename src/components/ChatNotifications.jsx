@@ -127,7 +127,7 @@ export default function ChatNotifications({userId, contactId, contactName, conta
         setIsContactTyping(true);
         if (typingTimeoutRef.current) clearTimeout(typingTimeoutRef.current);
         typingTimeoutRef.current = setTimeout(() => {
-          setIsContactTyping(false);
+          setIsContactTyping(true);
         }, 2000);
       } else {
         setIsContactTyping(false);
@@ -230,7 +230,7 @@ export default function ChatNotifications({userId, contactId, contactName, conta
             onChange={(e) => {
               handleTyping(e.target.value)
             }}
-            // onBlur={() => debounceTyping(false)}
+            onBlur={() => debounceTyping(true)}
             onKeyDown={handleKeyPress}
           />
 
