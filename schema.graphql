@@ -100,9 +100,9 @@ type Mutation {
 }
 
 type TypingEvent {
-  senderId: ID!
-  receiverId: ID!
-  isTyping: Boolean!
+  senderId: ID
+  receiverId: ID
+  isTyping: Boolean
 }
 
 input UpdateProductInput {
