@@ -460,10 +460,14 @@ const resolvers = {
         for await (const event of asyncIterator) {
           // Ensure we only send events relevant to this user
           const isRelevant =
-            (String(event.senderId) === String(senderId) &&
-             String(event.receiverId) === String(receiverId)) ||
-            (String(event.senderId) === String(receiverId) &&
-             String(event.receiverId) === String(senderId));
+            ((String(event.senderId) === String(user._id)) ||
+             (event.isTyping === false)) 
+            
+          // const isRelevant =
+          //   (String(event.senderId) === String(senderId) &&
+          //    String(event.receiverId) === String(receiverId)) ||
+          //   (String(event.senderId) === String(receiverId) &&
+          //    String(event.receiverId) === String(senderId));
     
           if (isRelevant) {
             yield { typingIndicator: event };
