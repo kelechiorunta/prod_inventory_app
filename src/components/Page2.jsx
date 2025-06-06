@@ -1,7 +1,15 @@
 import React from 'react'
 import { Container } from 'react-bootstrap'
+import AppInventorySearchBar from './AppInventorySearchBar.jsx';
 
 export default function Page2() {
+  const handleSearchChange = (e) => {
+    console.log('Searching:', e.target.value);
+  };
+
+  const handleAddProduct = () => {
+    console.log('Add product modal triggered');
+  };
   return (
     <div style={
       {
@@ -12,7 +20,12 @@ export default function Page2() {
         display: 'flex',
         flexDirection: 'column'
       }}>
-      
+      <div className="container mt-4">
+        <AppInventorySearchBar
+          onSearchChange={handleSearchChange}
+          onAddProduct={handleAddProduct}
+        />
+    </div>
     </div>
   )
 }
