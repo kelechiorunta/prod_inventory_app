@@ -99,7 +99,7 @@ export default function ChatNotifications({userId, contactId, contactName, conta
         variables: {
           senderId: userId,
           receiverId: contactId,
-          isTyping: true,
+          isTyping: isTyping,
         }
       });
     }, 500)
