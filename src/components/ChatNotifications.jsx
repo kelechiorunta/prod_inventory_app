@@ -121,9 +121,9 @@ export default function ChatNotifications({userId, contactId, contactName, conta
 
   useEffect(() => {
     if (typingData?.typingIndicator) {
-      const { isTyping } = typingData.typingIndicator;
+      const { isTyping, senderId } = typingData.typingIndicator;
 
-      if (isTyping) {
+      if (senderId && senderId.length > 0) {
         setIsContactTyping(true);
         if (typingTimeoutRef.current) clearTimeout(typingTimeoutRef.current);
         typingTimeoutRef.current = setTimeout(() => {
