@@ -133,7 +133,7 @@ type Subscription {
     test:String
     newMessage(userId: String!): Message!
     incomingMessage: Message!
-    typingIndicator(senderId: ID!, receiverId: ID!): TypingEvent!
+    typingIndicator(senderId: ID, receiverId: ID): TypingEvent!
 
 }
 
