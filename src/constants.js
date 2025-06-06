@@ -107,7 +107,7 @@ export const NEW_INCOMING_MESSAGE = gql`
 
 export const TYPING_INDICATOR = gql`
   subscription TypingIndicator($senderId: ID!, $receiverId: ID!) {
-    typingIndicator {
+    typingIndicator(senderId: $senderId, receiverId: $receiverId) {
       senderId
       receiverId
       isTyping
