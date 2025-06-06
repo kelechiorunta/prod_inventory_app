@@ -112,34 +112,35 @@ export default function ChatNotifications({userId, contactId, contactName, conta
     debounceTyping(true);
   
     if (typingTimeout.current) clearTimeout(typingTimeout.current);
+  
     typingTimeout.current = setTimeout(() => {
       debounceTyping(false);
-    }, 1500); // stop typing after 1.5s of inactivity
+    }, 1500);
   };
   
   const typingTimeoutRef = useRef(null);
 
   useEffect(() => {
-    if (typingData?.typingIndicator) {
-      const { isTyping, senderId } = typingData.typingIndicator;
-
-      if (senderId && senderId.length > 0) {
-        setIsContactTyping(true);
-        if (typingTimeoutRef.current) clearTimeout(typingTimeoutRef.current);
-        typingTimeoutRef.current = setTimeout(() => {
-          setIsContactTyping(true);
-        }, 2000);
-      } else {
+    if (!typingData?.typingIndicator) return;
+  
+    const { isTyping } = typingData.typingIndicator;
+  
+    if (isTyping) {
+      setIsContactTyping(true);
+  
+      if (typingTimeoutRef.current) clearTimeout(typingTimeoutRef.current);
+      typingTimeoutRef.current = setTimeout(() => {
         setIsContactTyping(false);
-      }
+      }, 2000);
+    } else {
+      setIsContactTyping(false);
     }
   
     return () => {
-      if (typingTimeoutRef.current) {
-        clearTimeout(typingTimeoutRef.current);
-      }
+      if (typingTimeoutRef.current) clearTimeout(typingTimeoutRef.current);
     };
-  }, [typingData]);  
+  }, [typingData]);
+    
 
   return (
     <Card className="shadow-lg"
