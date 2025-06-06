@@ -85,6 +85,13 @@ export default function ChatNotifications({userId, contactId, contactName, conta
   const [isContactTyping, setIsContactTyping] = useState(null);
   const [sendTypingStatus] = useMutation(SEND_TYPING_STATUS);
 
+  const { data: typingData } = useSubscription(TYPING_INDICATOR, {
+    variables: {
+      senderId: contactId, // the one you're chatting *with*
+      receiverId: userId   // you
+    },
+  });
+
   const debounceTyping = useRef(
     debounce((isTyping) => {
       sendTypingStatus({
@@ -92,7 +99,14 @@ export default function ChatNotifications({userId, contactId, contactName, conta
           senderId: userId,
           receiverId: contactId,
           isTyping,
-        } , onCompleted: console.log('DEBOUNCE: ', isTyping && "true")
+        }, onCompleted: () => {
+          console.log('DEBOUNCE: ', isTyping && "true");
+          if (typingData?.typingIndicator) {
+            const { isTyping } = typingData.typingIndicator;
+            console.log('isTying: ', isTyping && 'true')
+            setIsContactTyping(isTyping);
+          }
+         }
       });
     }, 500) // debounce interval in ms
   ).current;
@@ -110,12 +124,7 @@ export default function ChatNotifications({userId, contactId, contactName, conta
     // }, 1500); // stop typing after 1.5s of inactivity
   };
 
-  const { data: typingData } = useSubscription(TYPING_INDICATOR, {
-    variables: {
-      senderId: contactId, // the one you're chatting *with*
-      receiverId: userId   // you
-    },
-  });
+  
   
   const typingTimeoutRef = useRef(null);
 
