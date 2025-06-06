@@ -450,15 +450,19 @@ const resolvers = {
       },
     },  
     typingIndicator: {
-      subscribe: async function* (parent, args, context) {
+      subscribe: async function* (parent, { senderId, receiverId }, context) {
         const asyncIterator = chatBus.asyncIterator(EVENTS.TYPING);
-
+    
         for await (const event of asyncIterator) {
-          console.log('RECEIVED TYPING EVENT:', event);
-          yield { typingIndicator: event};
+          if (
+            event.senderId === senderId &&
+            event.receiverId === receiverId
+          ) {
+            yield { typingIndicator: event };
+          }
         }
       },
-    },  
+    },    
     notifyAuthUser: {
       subscribe: async function* (parent, args, context) {
         const queue = [];
