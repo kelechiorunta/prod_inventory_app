@@ -147,7 +147,7 @@ export default function ChatNotifications({userId, contactId, contactName, conta
       console.log('isTying: ', isTyping && 'true')
       setIsContactTyping(isTyping);
     }
-  }, [typingData]);
+  }, [typingData, debounceTyping, isContactTyping]);
   
 
   return (
