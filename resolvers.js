@@ -454,10 +454,9 @@ const resolvers = {
         const asyncIterator = chatBus.asyncIterator(EVENTS.TYPING);
     
         for await (const event of asyncIterator) {
-          if (
-            event.senderId === senderId &&
-            event.receiverId === receiverId
-          ) {
+          console.log('RECEIVED EVENT:', event);
+          if (event.senderId === senderId && event.receiverId === receiverId) {
+            console.log('YIELDING TYPING EVENT');
             yield { typingIndicator: event };
           }
         }

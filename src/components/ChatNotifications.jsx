@@ -82,7 +82,7 @@ export default function ChatNotifications({userId, contactId, contactName, conta
       handleSend();
     }
   };
-  const [isContactTyping, setIsContactTyping] = useState(null);
+  const [isContactTyping, setIsContactTyping] = useState(false);
   const [sendTypingStatus] = useMutation(SEND_TYPING_STATUS);
 
   const { data: typingData } = useSubscription(TYPING_INDICATOR, {
@@ -90,6 +90,7 @@ export default function ChatNotifications({userId, contactId, contactName, conta
       senderId: contactId, // the one you're chatting *with*
       receiverId: userId   // you
     },
+    fetchPolicy: 'no-cache'
   });
 
   const debounceTyping = useRef(
@@ -99,65 +100,46 @@ export default function ChatNotifications({userId, contactId, contactName, conta
           senderId: userId,
           receiverId: contactId,
           isTyping,
-        }, onCompleted: () => {
-          console.log('DEBOUNCE: ', isTyping && "true");
-          if (typingData?.typingIndicator) {
-            const { isTyping } = typingData.typingIndicator;
-            console.log('isTying: ', isTyping && 'true')
-            setIsContactTyping(isTyping);
-          }
-         }
+        }
       });
-    }, 500) // debounce interval in ms
+    }, 500)
   ).current;
-
+  
   const typingTimeout = useRef(null);
 
   const handleTyping = (value) => {
     setContent(value);
     debounceTyping(true);
-
-    // if (typingTimeout.current) clearTimeout(typingTimeout.current);
-
-    // typingTimeout.current = setTimeout(() => {
-    //   debounceTyping(false);
-    // }, 1500); // stop typing after 1.5s of inactivity
-  };
-
   
+    if (typingTimeout.current) clearTimeout(typingTimeout.current);
+    typingTimeout.current = setTimeout(() => {
+      debounceTyping(false);
+    }, 1500); // stop typing after 1.5s of inactivity
+  };
   
   const typingTimeoutRef = useRef(null);
 
-  // useEffect(() => {
-  //   if (typingData?.typingIndicator) {
-  //     const { isTyping } = typingData.typingIndicator;
-
-  //     if (isTyping) {
-  //       setIsContactTyping(true);
-  //       if (typingTimeoutRef.current) clearTimeout(typingTimeoutRef.current);
-  //       typingTimeoutRef.current = setTimeout(() => {
-  //         setIsContactTyping(false);
-  //       }, 2000);
-  //     } else {
-  //       setIsContactTyping(false);
-  //     }
-  //   }
-  
-  //   return () => {
-  //     if (typingTimeoutRef.current) {
-  //       clearTimeout(typingTimeoutRef.current);
-  //     }
-  //   };
-  // }, [typingData, isContactTyping, debounceTyping, sendTypingStatus]);
-  
   useEffect(() => {
     if (typingData?.typingIndicator) {
       const { isTyping } = typingData.typingIndicator;
-      console.log('isTying: ', isTyping && 'true')
-      setIsContactTyping(isTyping);
+
+      if (isTyping) {
+        setIsContactTyping(true);
+        if (typingTimeoutRef.current) clearTimeout(typingTimeoutRef.current);
+        typingTimeoutRef.current = setTimeout(() => {
+          setIsContactTyping(false);
+        }, 2000);
+      } else {
+        setIsContactTyping(false);
+      }
     }
-  }, [typingData, debounceTyping, isContactTyping]);
   
+    return () => {
+      if (typingTimeoutRef.current) {
+        clearTimeout(typingTimeoutRef.current);
+      }
+    };
+  }, [typingData]);  
 
   return (
     <Card className="shadow-lg"
