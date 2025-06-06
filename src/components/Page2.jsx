@@ -1,6 +1,8 @@
 import React from 'react'
 import { Container } from 'react-bootstrap'
 import AppInventorySearchBar from './AppInventorySearchBar.jsx';
+import AppInventoryProductList from './AppInventoryProductList.jsx';
+import AppSideAction from './AppSideAction.jsx';
 
 export default function Page2() {
   const handleSearchChange = (e) => {
@@ -13,19 +15,21 @@ export default function Page2() {
   return (
     <div style={
       {
-        padding: 200,
+        // padding: 200,
         width: '100%',
-        height: '100vh',
-        margin: 'auto',
+        height: '100%',
         display: 'flex',
-        flexDirection: 'column'
+        // alignItems: 'center'
       }}>
-      <div className="container mt-4">
+      <div style={{ marginLeft: 250, marginTop: 50, display: 'flex', flexDirection: 'column', height: '100%', width: '70%' }}
+        className="container">
         <AppInventorySearchBar
           onSearchChange={handleSearchChange}
           onAddProduct={handleAddProduct}
         />
-    </div>
+        <AppInventoryProductList/>
+      </div>
+        <AppSideAction/>
     </div>
   )
 }

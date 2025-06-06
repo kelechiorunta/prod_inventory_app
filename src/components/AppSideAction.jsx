@@ -3,8 +3,11 @@ import { Card, Container, Row, Col } from 'react-bootstrap';
 import AppAdmin from './AppAdmin';
 import AppQuickActions from './AppQuickActions';
 import AppFastMovingItems from './AppFastMovingItems';
+import { useLocation } from 'react-router-dom';
+import AppRecentActivity from './AppRecentActivity';
 
 const AppSideAction = () => {
+    const location = useLocation();
   return (
     <Container fluid className="p-3" style={{ maxWidth: 320 }}>
       {/* Admin Section */}
@@ -30,10 +33,10 @@ const AppSideAction = () => {
       {/* Fast Moving Items */}
       <Card className="border-0 shadow-sm">
         <Card.Header className="bg-white border-0 fw-bold text-uppercase">
-          Fast Moving Items
+          {location.pathname==='/dashboard/page2'? '' : 'Fast Moving Items'}
         </Card.Header>
         <Card.Body className="p-2">
-          <AppFastMovingItems />
+          {location.pathname==='/dashboard/page2'? <AppRecentActivity/> : <AppFastMovingItems />}
         </Card.Body>
       </Card>
     </Container>
