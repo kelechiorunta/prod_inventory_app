@@ -456,10 +456,10 @@ const resolvers = {
           const asyncIterator = chatBus.asyncIterator(EVENTS.TYPING);
       
           for await (const event of asyncIterator) {
-            console.log('RECEIVED EVENT:', event);
-            if (String(event.receiverId) === String(user?._id)) {
+            console.log('RECEIVED EVENT:', event.typingIndicator);
+            if (String(event.typingIndicator.receiverId) === String(user?._id)) {
               console.log('YIELDING TYPING EVENT');
-              yield { typingIndicator: event };
+              yield { typingIndicator: event.typingIndicator };
             }
           }
         }
