@@ -92,7 +92,7 @@ export default function ChatNotifications({userId, contactId, contactName, conta
           senderId: userId,
           receiverId: contactId,
           isTyping,
-        } //, onCompleted: setIsContactTyping(isTyping)
+        } , onCompleted: console.log(isTyping && "true")
       });
     }, 500) // debounce interval in ms
   ).current;
@@ -103,11 +103,11 @@ export default function ChatNotifications({userId, contactId, contactName, conta
     setContent(value);
     debounceTyping(true);
 
-    if (typingTimeout.current) clearTimeout(typingTimeout.current);
+    // if (typingTimeout.current) clearTimeout(typingTimeout.current);
 
-    typingTimeout.current = setTimeout(() => {
-      debounceTyping(false);
-    }, 1500); // stop typing after 1.5s of inactivity
+    // typingTimeout.current = setTimeout(() => {
+    //   debounceTyping(false);
+    // }, 1500); // stop typing after 1.5s of inactivity
   };
 
   const { data: typingData } = useSubscription(TYPING_INDICATOR, {
