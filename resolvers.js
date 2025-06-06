@@ -460,7 +460,7 @@ const resolvers = {
         for await (const event of asyncIterator) {
           // Ensure we only send events relevant to this user
           const isRelevant =
-            ((String(event.senderId) === String(user._id)) ||
+            ((String(event.receiverId) === String(user._id)) ||
              (event.isTyping === false)) 
             
           // const isRelevant =
