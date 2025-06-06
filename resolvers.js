@@ -451,14 +451,15 @@ const resolvers = {
     },  
     typingIndicator: {
       subscribe: async function* (parent, { senderId, receiverId }, context) {
-        if (context?.user) {
-          const user = context?.user
+        const user = context?.user;
+        if (!user || !user._id) {
+          throw new Error('Unauthorized subscription');
         }
           const asyncIterator = chatBus.asyncIterator(EVENTS.TYPING);
       
           for await (const event of asyncIterator) {
             console.log('RECEIVED EVENT:', event);
-            if (String(event.receiverId) === String(senderId) || (event.isTyping === true)) {
+            if (String(event.receiverId) === String(user._id) || String(event.senderId) === String(user._id)) {
               console.log('YIELDING TYPING EVENT');
               yield { typingIndicator: event };
             }
