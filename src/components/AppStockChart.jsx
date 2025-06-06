@@ -165,7 +165,14 @@ const AppStockChart = () => {
   }, []);
 
   if (error) {
-    return <Alert variant="danger">Error loading stock data</Alert>;
+    return <div style={{
+        width: '60%',
+        height: 400,
+        marginTop: 0,
+        marginLeft: 240,
+        display: 'block',
+        borderRadius: 10,
+      }}><Alert variant="danger">Error loading stock data</Alert></div>
   }
 
   return (
