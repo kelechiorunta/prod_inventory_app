@@ -451,13 +451,16 @@ const resolvers = {
     },  
     typingIndicator: {
       subscribe: async function* (parent, { senderId, receiverId }, context) {
-        const asyncIterator = chatBus.asyncIterator(EVENTS.TYPING);
-    
-        for await (const event of asyncIterator) {
-          console.log('RECEIVED EVENT:', event);
-          if (event.senderId === senderId && event.receiverId === receiverId) {
-            console.log('YIELDING TYPING EVENT');
-            yield { typingIndicator: event };
+        if (context?.user) {
+          const user = context?.user
+          const asyncIterator = chatBus.asyncIterator(EVENTS.TYPING);
+      
+          for await (const event of asyncIterator) {
+            console.log('RECEIVED EVENT:', event);
+            if (String(event.receiverId) === String(user?._id)) {
+              console.log('YIELDING TYPING EVENT');
+              yield { typingIndicator: event };
+            }
           }
         }
       },
