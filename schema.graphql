@@ -11,6 +11,7 @@ type Query{
   groupMessages(groupId: ID!): [Message!]!
   myGroups: [Group!]!
   allUsers: [User]!
+  slicedProducts(pageNo: Int!): [Product]!
 }
 
 enum CategoryEnum {

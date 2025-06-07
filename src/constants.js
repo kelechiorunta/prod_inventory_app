@@ -147,6 +147,21 @@ export const FETCH_USERS = gql`
   }
 `;
 
+export const FETCH_PAGINATED_PRODUCTS = gql`
+  query SlicedProducts($pageNo: Int!) {
+    slicedProducts(pageNo: $pageNo) {
+      id
+      title
+      category
+      price
+      rating {
+        count
+      }
+      image
+    }
+  }
+`;
+
 export const SUBSCRIBE_TO_NEW_PRODUCTS = gql`
   subscription OnNewProduct {
     notifyNewProduct {

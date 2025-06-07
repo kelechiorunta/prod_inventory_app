@@ -43,7 +43,7 @@ const recentActivities = [
 
 const AppRecentActivity = () => {
   return (
-    <Card className="p-3 shadow-sm" style={{ borderRadius: '12px' }}>
+    <Card className="p-4 shadow-sm border-0" style={{ borderRadius: '12px', marginTop: -35, padding: 24 }}>
       <h5><strong>Recent Activity</strong></h5>
       <ListGroup variant="flush">
         {recentActivities.map((activity, idx) => (
