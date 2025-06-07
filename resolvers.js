@@ -541,15 +541,15 @@ const resolvers = {
     },
 
     // // Subscribe to typing indicator
-    // groupTypingIndicator: {
-    //   subscribe: async function* (_, { groupId }) {
-    //     for await (const data of chatBus.asyncIterator(EVENTS.GROUP_TYPING_INDICATOR)) {
-    //       if (data.groupId === groupId) {
-    //         yield { groupTypingIndicator: data };
-    //       }
-    //     }
-    //   },
-    // },
+    groupTypingIndicator: {
+      subscribe: async function* (_, { groupId }) {
+        for await (const data of chatBus.asyncIterator(EVENTS.GROUP_TYPING)) {
+          if (data.groupId === groupId) {
+            yield { groupTypingIndicator: data };
+          }
+        }
+      },
+    },
 
     // newGroupMessage: {
     //   subscribe: async (_, { groupId }, context) => {
@@ -559,11 +559,11 @@ const resolvers = {
     //   },
     // },
 
-    groupTypingIndicator: {
-      subscribe: (_, { groupId }) => {
-        return chatBus.asyncIterator(EVENTS.GROUP_TYPING);
-      },
-    },
+    // groupTypingIndicator: {
+    //   subscribe: (_, { groupId }) => {
+    //     return chatBus.asyncIterator(EVENTS.GROUP_TYPING);
+    //   },
+    // },
 
     notifyAuthUser: {
       subscribe: async function* (parent, args, context) {
