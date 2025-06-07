@@ -238,13 +238,13 @@ export default function GroupChatBox({ userId, groupId, userName, userAvatar }) 
     if (groupMessagesData?.groupMessages) {
       setMessages(groupMessagesData.groupMessages);
     }
-  }, [groupMessagesData]);
+  }, [groupMessagesData, userId, groupId]);
 
   useEffect(() => {
     if (newGroupMessageData?.newGroupMessage) {
       setMessages((prev) => [...prev, newGroupMessageData.newGroupMessage]);
     }
-  }, [newGroupMessageData]);
+  }, [newGroupMessageData, userId, groupId]);
 
   useEffect(() => {
     if (!typingData?.groupTypingIndicator) return;
