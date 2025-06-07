@@ -331,6 +331,11 @@ const resolvers = {
       if (!user) throw new Error('Unauthorized');
       return await Group.find({ members: user.id }).populate('members');
     },
+    slicedProducts: async (_, { pageNo }, context) => {
+      const pageSize = 5;
+      const skip = (pageNo - 1) * pageSize;
+      return await Product.find().skip(skip).limit(pageSize);
+    },
    },
 
   // ✅ Mutation Resolvers
