@@ -272,3 +272,102 @@ export const SEARCH_PRODUCT = gql`
     }
   }
 `;
+
+
+// Group Chat SDL
+
+export const GET_GROUP_MESSAGES = gql`
+  query GetGroupMessages($groupId: ID!) {
+    groupMessages(groupId: $groupId) {
+      id
+      content
+      groupId
+      sender
+      senderName
+      senderAvatar
+      createdAt
+    }
+  }
+`;
+
+export const SEND_GROUP_MESSAGE = gql`
+  mutation SendGroupMessage($groupId: ID!, $senderId: ID!, $content: String!) {
+    sendGroupMessage(groupId: $groupId, senderId: $senderId, content: $content) {
+      id
+      content
+      groupId
+      sender
+      senderName
+      senderAvatar
+      createdAt
+    }
+  }
+`;
+
+export const ON_NEW_GROUP_MESSAGE = gql`
+  subscription OnNewGroupMessage($groupId: ID!) {
+    newGroupMessage(groupId: $groupId) {
+      id
+      content
+      groupId
+      sender
+      senderName
+      senderAvatar
+      createdAt
+    }
+  }
+`;
+
+export const GROUP_TYPING_INDICATOR = gql`
+  subscription GroupTypingIndicator($groupId: ID!) {
+    groupTypingIndicator(groupId: $groupId) {
+      groupId
+      senderId
+      senderName
+      isTyping
+    }
+  }
+`;
+
+export const SEND_GROUP_TYPING_STATUS = gql`
+  mutation SendGroupTypingStatus($groupId: ID!, $senderId: ID!, $isTyping: Boolean!) {
+    sendGroupTypingStatus(groupId: $groupId, senderId: $senderId, isTyping: $isTyping)
+  }
+`;
+
+export const GET_USERS = gql`
+  query GetUsers {
+    allUsers {
+      _id
+      username
+      picture
+    }
+  }
+`;
+
+export const CREATE_GROUP = gql`
+  mutation CreateGroup($name: String!, $memberIds: [ID!]!) {
+    createGroup(name: $name, memberIds: $memberIds) {
+      id
+      name
+      members {
+        _id
+        username
+      }
+    }
+  }
+`;
+
+export const GET_GROUPS = gql`
+  query MyGroups {
+    myGroups {
+      id
+      name
+      members {
+        _id
+        username
+        picture
+      }
+    }
+  }
+`;

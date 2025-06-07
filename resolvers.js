@@ -195,6 +195,7 @@ import { PubSub } from "graphql-subscriptions";
 import Message from "./models/Message.js";
 import Stock from "./models/Stock.js";
 import SessionUser from "./models/SessionUser.js";
+import Group from "./models/Group.js";
 
 const pubsub = new PubSub()
 
@@ -239,6 +240,14 @@ const resolvers = {
     users: async (parent, { excludeId }, context) => {
       try {
         const users = await User.find({ _id: { $ne: excludeId } });
+        return users;
+      } catch (error) {
+        throw new Error('Failed to fetch users');
+      }
+    },
+    allUsers: async (parent, args, context) => {
+      try {
+        const users = await User.find();
         return users;
       } catch (error) {
         throw new Error('Failed to fetch users');
@@ -314,10 +323,28 @@ const resolvers = {
         }
       }
     },
+    // Get all messages in a group
+    groupMessages: async (_, { groupId }, context) => {
+      return await Message.find({ groupId }).sort({ createdAt: 1 });
+    },
+    myGroups: async (_, __, { user }) => {
+      if (!user) throw new Error('Unauthorized');
+      return await Group.find({ members: user.id }).populate('members');
+    },
    },
 
   // ✅ Mutation Resolvers
   Mutation: {
+    createGroup: async (_, { name, memberIds }, { user }) => {
+      if (!user) throw new Error('Unauthorized');
+
+      // Ensure the current user is part of the group
+      const uniqueMemberIds = Array.from(new Set([user.id, ...memberIds]));
+
+      const group = await Group.create({ name, members: uniqueMemberIds });
+
+      return await group.populate('members');
+    },
     updateUser: async (parent, { email, username, picture, password }, context) => {
       const user = await User.findOne({ email });
       if (!user) throw new Error('User not found');
@@ -400,7 +427,34 @@ const resolvers = {
     chatBus.emit(EVENTS.TYPING, typingIndicator);
   
     return true;
-  }
+    },
+   // Send a group message and emit event
+   sendGroupMessage: async (_, { groupId, senderId, content }, { user }) => {
+    const message = await Message.create({
+      content,
+      sender: senderId,
+      groupId,
+      senderName: user?.name || 'Unknown',
+      senderAvatar: user?.avatar || '',
+    });
+
+    chatBus.emit(EVENTS.NEW_GROUP_MESSAGE, { groupId, message });
+    return message;
+  },
+
+  // Send group typing indicator
+  sendGroupTypingStatus: async (_, { groupId, senderId, isTyping }, { user }) => {
+    const typingPayload = {
+      groupId,
+      senderId,
+      senderName: user?.username || 'Someone',
+      isTyping,
+      timestamp: Date.now()
+    };
+
+    chatBus.emit(EVENTS.GROUP_TYPING_INDICATOR, typingPayload);
+    return true;
+  },
   },
 
   // ✅ Subscription Resolver (Must return AsyncIterable)
@@ -448,6 +502,7 @@ const resolvers = {
         }
       },
     },  
+
     typingIndicator: {
       subscribe: async function* (parent, { senderId, receiverId }, context) {
         const user = context?.user;
@@ -462,13 +517,6 @@ const resolvers = {
           const isRelevant =
             ((String(event.receiverId) === String(user._id)) ||
              (event.isTyping === false)) 
-            
-          // const isRelevant =
-          //   (String(event.senderId) === String(senderId) &&
-          //    String(event.receiverId) === String(receiverId)) ||
-          //   (String(event.senderId) === String(receiverId) &&
-          //    String(event.receiverId) === String(senderId));
-    
           if (isRelevant) {
             yield { typingIndicator: event };
           }
@@ -476,6 +524,28 @@ const resolvers = {
       },
     },
     
+    // Subscribe to new group messages
+    newGroupMessage: {
+      subscribe: async function* (_, { groupId }) {
+        for await (const { groupId: incomingGroupId, message } of chatBus.asyncIterator(EVENTS.NEW_GROUP_MESSAGE)) {
+          if (incomingGroupId === groupId) {
+            yield { newGroupMessage: message };
+          }
+        }
+      },
+    },
+
+    // Subscribe to typing indicator
+    groupTypingIndicator: {
+      subscribe: async function* (_, { groupId }) {
+        for await (const data of chatBus.asyncIterator(EVENTS.GROUP_TYPING_INDICATOR)) {
+          if (data.groupId === groupId) {
+            yield { groupTypingIndicator: data };
+          }
+        }
+      },
+    },
+
     notifyAuthUser: {
       subscribe: async function* (parent, args, context) {
         const queue = [];
