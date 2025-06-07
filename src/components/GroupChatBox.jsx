@@ -224,8 +224,8 @@ export default function GroupChatBox({ userId, groupId, userName, userAvatar }) 
   });
 
   const { data: newGroupMessageData } = useSubscription(ON_NEW_GROUP_MESSAGE, {
-    variables: { groupIds: [groupId] },
-  });
+    variables: { groupId },
+  });  
 
   const { data: typingData } = useSubscription(GROUP_TYPING_INDICATOR, {
     variables: { groupId },
@@ -276,7 +276,7 @@ export default function GroupChatBox({ userId, groupId, userName, userAvatar }) 
           groupId,
           sender: userId,
           content,
-        },
+        }
       });
 
       if (data?.sendGroupMessage) {
@@ -302,7 +302,7 @@ export default function GroupChatBox({ userId, groupId, userName, userAvatar }) 
         variables: {
           groupId,
           sender: userId,
-          isTyping,
+          isTyping: isTyping,
         },
       });
     }, 500)
