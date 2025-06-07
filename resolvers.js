@@ -442,7 +442,7 @@ const resolvers = {
       createdAt: new Date().toISOString(),
     });
 
-    chatBus.emit(EVENTS.NEW_GROUP_MESSAGE + groupId, message);
+    chatBus.emit(EVENTS.NEW_GROUP_MESSAGE, message);
     return message;
   },
 
@@ -451,7 +451,7 @@ const resolvers = {
     const user = await User.findById(sender);
     if (!user) throw new Error('Sender not found');
 
-    chatBus.emit(EVENTS.GROUP_TYPING + groupId, {
+    chatBus.emit(EVENTS.GROUP_TYPING, {
       groupId,
       sender,
       senderName: user.username,
@@ -530,15 +530,15 @@ const resolvers = {
     },
     
     // // Subscribe to new group messages
-    // newGroupMessage: {
-    //   subscribe: async function* (_, { groupId }) {
-    //     for await (const { groupId: incomingGroupId, message } of chatBus.asyncIterator(EVENTS.NEW_GROUP_MESSAGE)) {
-    //       if (incomingGroupId === groupId) {
-    //         yield { newGroupMessage: message };
-    //       }
-    //     }
-    //   },
-    // },
+    newGroupMessage: {
+      subscribe: async function* (_, { groupId }) {
+        for await (const message of chatBus.asyncIterator(EVENTS.NEW_GROUP_MESSAGE)) {
+          if (message?.groupId === groupId) {
+            yield { newGroupMessage: message };
+          }
+        }
+      },
+    },
 
     // // Subscribe to typing indicator
     // groupTypingIndicator: {
@@ -551,15 +551,17 @@ const resolvers = {
     //   },
     // },
 
-    newGroupMessage: {
-      subscribe: (_, { groupId }, context) => {
-        return chatBus.asyncIterator(EVENTS.NEW_GROUP_MESSAGE + groupId);
-      },
-    },
+    // newGroupMessage: {
+    //   subscribe: async (_, { groupId }, context) => {
+    //     const iterable = chatBus.asyncIterator(EVENTS.NEW_GROUP_MESSAGE);
+
+
+    //   },
+    // },
 
     groupTypingIndicator: {
       subscribe: (_, { groupId }) => {
-        return chatBus.asyncIterator(EVENTS.GROUP_TYPING + groupId);
+        return chatBus.asyncIterator(EVENTS.GROUP_TYPING);
       },
     },
 

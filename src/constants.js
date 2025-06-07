@@ -306,9 +306,7 @@ export const SEND_GROUP_MESSAGE = gql`
 // ✅ 3. Mutation: Send group typing status
 export const SEND_GROUP_TYPING_STATUS = gql`
   mutation SendGroupTypingStatus($groupId: ID!, $sender: ID!, $isTyping: Boolean!) {
-    sendGroupTypingStatus(groupId: $groupId, sender: $sender, isTyping: $isTyping){
-    isTyping
-    }
+    sendGroupTypingStatus(groupId: $groupId, sender: $sender, isTyping: $isTyping)
   }
 `;
 
