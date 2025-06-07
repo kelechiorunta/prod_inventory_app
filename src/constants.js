@@ -291,8 +291,8 @@ export const GET_GROUP_MESSAGES = gql`
 `;
 
 export const SEND_GROUP_MESSAGE = gql`
-  mutation SendGroupMessage($groupId: ID!, $senderId: ID!, $content: String!) {
-    sendGroupMessage(groupId: $groupId, senderId: $senderId, content: $content) {
+  mutation SendGroupMessage($groupId: ID!, $sender: ID!, $content: String!) {
+    sendGroupMessage(groupId: $groupId, sender: $sender, content: $content) {
       id
       content
       groupId
@@ -322,7 +322,7 @@ export const GROUP_TYPING_INDICATOR = gql`
   subscription GroupTypingIndicator($groupId: ID!) {
     groupTypingIndicator(groupId: $groupId) {
       groupId
-      senderId
+      sender
       senderName
       isTyping
     }
@@ -330,8 +330,8 @@ export const GROUP_TYPING_INDICATOR = gql`
 `;
 
 export const SEND_GROUP_TYPING_STATUS = gql`
-  mutation SendGroupTypingStatus($groupId: ID!, $senderId: ID!, $isTyping: Boolean!) {
-    sendGroupTypingStatus(groupId: $groupId, senderId: $senderId, isTyping: $isTyping)
+  mutation SendGroupTypingStatus($groupId: ID!, $sender: ID!, $isTyping: Boolean!) {
+    sendGroupTypingStatus(groupId: $groupId, sender: $sender, isTyping: $isTyping)
   }
 `;
 

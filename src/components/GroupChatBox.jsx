@@ -35,7 +35,7 @@ export default function GroupChatBox({ userId, groupId, userName, userAvatar }) 
   });
 
   const { data: typingData } = useSubscription(GROUP_TYPING_INDICATOR, {
-    variables: { groupIds: [groupId], senderId: userId },
+    variables: { groupIds: [groupId], sender: userId },
   });
 
   const [sendGroupMessage] = useMutation(SEND_GROUP_MESSAGE);
@@ -73,16 +73,27 @@ export default function GroupChatBox({ userId, groupId, userName, userAvatar }) 
 
   const handleSend = async () => {
     if (!content.trim()) return;
-    await sendGroupMessage({
-      variables: {
-        groupId,
-        senderId: userId,
-        senderName: userName,
-        content,
-      },
-    });
-    setContent('');
+  
+    try {
+      const { data } = await sendGroupMessage({
+        variables: {
+          groupId,
+          sender: userId,
+          senderName: userName,
+          content,
+        },
+      });
+  
+      if (data?.sendGroupMessage) {
+        setMessages((prev) => [...prev, data.sendGroupMessage]);
+      }
+  
+      setContent('');
+    } catch (error) {
+      console.error('Failed to send message:', error);
+    }
   };
+  
 
   const handleKeyPress = (e) => {
     if (e.key === 'Enter' && !e.shiftKey) {
@@ -96,7 +107,7 @@ export default function GroupChatBox({ userId, groupId, userName, userAvatar }) 
       sendTyping({
         variables: {
           groupId,
-          senderId: userId,
+          sender: userId,
           senderName: userName,
           isTyping,
         },
