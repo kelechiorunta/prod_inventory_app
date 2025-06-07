@@ -4,7 +4,8 @@ import User from './User.js';
 const messageSchema = new mongoose.Schema({
   content: { type: String, required: true },
   sender: { type: String, required: true },     // user ID or username
-  receiver: { type: String, required: true },   // user ID or username
+  receiver: { type: String, required: false },   // user ID or username
+  groupId: { type: String, required: false }, // group ID (for group chat)
   senderName: { type: String, required: false },
   receiverName: { type: String, required: false },
   senderAvatar: { type: String, required: false },
