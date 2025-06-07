@@ -281,7 +281,6 @@ export const GET_GROUP_MESSAGES = gql`
     groupMessages(groupId: $groupId) {
       id
       content
-      groupId
       sender
       senderName
       senderAvatar
@@ -290,12 +289,12 @@ export const GET_GROUP_MESSAGES = gql`
   }
 `;
 
+// ✅ 2. Mutation: Send group message
 export const SEND_GROUP_MESSAGE = gql`
   mutation SendGroupMessage($groupId: ID!, $sender: ID!, $content: String!) {
     sendGroupMessage(groupId: $groupId, sender: $sender, content: $content) {
       id
       content
-      groupId
       sender
       senderName
       senderAvatar
@@ -304,12 +303,19 @@ export const SEND_GROUP_MESSAGE = gql`
   }
 `;
 
+// ✅ 3. Mutation: Send group typing status
+export const SEND_GROUP_TYPING_STATUS = gql`
+  mutation SendGroupTypingStatus($groupId: ID!, $sender: ID!, $isTyping: Boolean!) {
+    sendGroupTypingStatus(groupId: $groupId, sender: $sender, isTyping: $isTyping)
+  }
+`;
+
+// ✅ 4. Subscription: New group message
 export const ON_NEW_GROUP_MESSAGE = gql`
-  subscription OnNewGroupMessage($groupId: ID!) {
-    newGroupMessage(groupId: $groupId) {
+  subscription OnNewGroupMessage($groupIds: [ID!]!) {
+    newGroupMessage(groupId: $groupIds) {
       id
       content
-      groupId
       sender
       senderName
       senderAvatar
@@ -318,6 +324,7 @@ export const ON_NEW_GROUP_MESSAGE = gql`
   }
 `;
 
+// ✅ 5. Subscription: Group typing indicator
 export const GROUP_TYPING_INDICATOR = gql`
   subscription GroupTypingIndicator($groupId: ID!) {
     groupTypingIndicator(groupId: $groupId) {
@@ -326,12 +333,6 @@ export const GROUP_TYPING_INDICATOR = gql`
       senderName
       isTyping
     }
-  }
-`;
-
-export const SEND_GROUP_TYPING_STATUS = gql`
-  mutation SendGroupTypingStatus($groupId: ID!, $sender: ID!, $isTyping: Boolean!) {
-    sendGroupTypingStatus(groupId: $groupId, sender: $sender, isTyping: $isTyping)
   }
 `;
 
