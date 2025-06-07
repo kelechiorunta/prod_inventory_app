@@ -57,7 +57,7 @@ type User {
 type Message {
   id: ID
   content: String!
-  sender: String!
+  sender: ID!
   receiver: String
   groupId: String
   senderName: String
@@ -108,8 +108,8 @@ type Mutation {
   sendMessage(sender: String!, receiver: String!, content: String!): Message
   sendTypingStatus(senderId: ID!, receiverId: ID!, isTyping: Boolean!): Boolean
   updateUser(email: String!, username: String!, picture: String!, password: String!): User
-  sendGroupMessage(groupId: ID!, senderId: ID!, content: String!): Message!
-  sendGroupTypingStatus(groupId: ID!, senderId: ID!, isTyping: Boolean!): Boolean!
+  sendGroupMessage(groupId: ID!, sender: ID!, content: String!): Message!
+  sendGroupTypingStatus(groupId: ID!, sender: ID!, isTyping: Boolean!): Boolean!
   createGroup(name: String!, memberIds: [ID!]!): Group!
   
 }
@@ -156,7 +156,7 @@ type Subscription {
 
 type GroupTypingStatus {
   groupId: ID!
-  senderId: ID!
+  sender: ID!
   senderName: String!
   isTyping: Boolean!
 }

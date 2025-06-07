@@ -429,10 +429,10 @@ const resolvers = {
     return true;
     },
    // Send a group message and emit event
-   sendGroupMessage: async (_, { groupId, senderId, content }, { user }) => {
+   sendGroupMessage: async (_, { groupId, sender, content }, { user }) => {
     const message = await Message.create({
       content,
-      sender: senderId,
+      sender: sender,
       groupId,
       senderName: user?.name || 'Unknown',
       senderAvatar: user?.avatar || '',
@@ -443,10 +443,10 @@ const resolvers = {
   },
 
   // Send group typing indicator
-  sendGroupTypingStatus: async (_, { groupId, senderId, isTyping }, { user }) => {
+  sendGroupTypingStatus: async (_, { groupId, sender, isTyping }, { user }) => {
     const typingPayload = {
       groupId,
-      senderId,
+      sender,
       senderName: user?.username || 'Someone',
       isTyping,
       timestamp: Date.now()
