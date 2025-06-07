@@ -314,16 +314,16 @@ export const SEND_GROUP_TYPING_STATUS = gql`
 
 // ✅ 4. Subscription: New group message
 export const ON_NEW_GROUP_MESSAGE = gql`
-  subscription OnNewGroupMessage($groupIds: [ID!]!) {
-    newGroupMessage(groupId: $groupIds) {
-      id
-      content
-      sender
-      senderName
-      senderAvatar
-      createdAt
-    }
+  subscription OnNewGroupMessage($groupId: ID!) {
+  newGroupMessage(groupId: $groupId) {
+    id
+    content
+    sender
+    senderName
+    senderAvatar
+    createdAt
   }
+}
 `;
 
 // ✅ 5. Subscription: Group typing indicator
