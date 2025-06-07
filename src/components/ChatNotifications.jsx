@@ -193,7 +193,7 @@ export default function ChatNotifications({userId, contactId, contactName, conta
                         </div>
                       </div>
                     )} */}
-                    <div className="small fw-bold">
+                    <div className="small fw-bold d-flex align-items-center mb-1">
                         {msg.sender === userId ?
                           <Image src={msg.senderAvatar} roundedCircle width={32} height={32} />
                             :
