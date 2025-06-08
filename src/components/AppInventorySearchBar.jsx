@@ -1,12 +1,14 @@
 import React from 'react';
 import { Row, Col, InputGroup, FormControl, Button } from 'react-bootstrap';
 import { FaSearch, FaPlus } from 'react-icons/fa';
+import { useLocation } from 'react-router-dom';
 
 const AppInventorySearchBar = ({ onSearchChange, onAddProduct }) => {
+  const location = useLocation();
   return (
     <Row className="align-items-center p-3 bg-light" style={{ borderRadius: '8px' }}>
       <Col xs="auto">
-        <strong style={{ fontSize: '1.1rem' }}>Inventory</strong>
+        <strong style={{ fontSize: '1.1rem' }}>{location.pathname === '/dashboard/page2' ? 'Inventory' : 'Sales Order'}</strong>
       </Col>
 
       <Col>
@@ -28,7 +30,7 @@ const AppInventorySearchBar = ({ onSearchChange, onAddProduct }) => {
           className="text-white fw-bold d-flex align-items-center"
           onClick={onAddProduct}
         >
-          <FaPlus className="me-2" /> Add New Product
+          <FaPlus className="me-2" /> {location.pathname === '/dashboard/page2'? 'Add New Product' : 'Place Order'}
         </Button>
       </Col>
     </Row>

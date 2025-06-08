@@ -4,8 +4,9 @@ import AppInventorySearchBar from './AppInventorySearchBar.jsx';
 import AppInventoryProductList from './AppInventoryProductList.jsx';
 import AppSideAction from './AppSideAction.jsx';
 import AppSalesReport from './AppSalesReport.jsx';
+import AppWeeklySalesReport from './AppWeeklySalesReport.jsx';
 
-export default function Page3() {
+export default function Page4() {
   const handleSearchChange = (e) => {
     console.log('Searching:', e.target.value);
   };
@@ -28,8 +29,7 @@ export default function Page3() {
           onSearchChange={handleSearchChange}
           onAddProduct={handleAddProduct}
         />
-        <AppInventoryProductList />
-        <AppSalesReport/>
+       <AppWeeklySalesReport/>
       </div>
       <AppSideAction />
     </div>

@@ -12,6 +12,27 @@ type Query{
   myGroups: [Group!]!
   allUsers: [User]!
   slicedProducts(pageNo: Int!): [Product]!
+  getSalesReport: [SalesReport!]!
+  getWeeklySalesReport(weekRange: String!): WeeklySalesReport
+}
+
+type SaleSlot {
+  day: String!
+  hour: String!
+  value: Int!
+}
+
+type WeeklySalesReport {
+  weekRange: String!
+  year: Int!
+  slots: [SaleSlot!]!
+}
+
+type SalesReport {
+  month: String!
+  directSales: Int!
+  retail: Int!
+  wholesale: Int!
 }
 
 enum CategoryEnum {
@@ -112,6 +133,7 @@ type Mutation {
   sendGroupMessage(groupId: ID!, sender: ID!, content: String!): Message!
   sendGroupTypingStatus(groupId: ID!, sender: ID!, isTyping: Boolean!): Boolean!
   createGroup(name: String!, memberIds: [ID!]!): Group!
+  recordSale(weekRange: String!, day: String!, hour: String!, amount: Int!): WeeklySalesReport
   
 }
 

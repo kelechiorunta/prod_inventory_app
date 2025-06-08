@@ -147,6 +147,17 @@ export const FETCH_USERS = gql`
   }
 `;
 
+export const GET_SALES_REPORT = gql`
+  query GetSalesReport {
+    getSalesReport {
+      month
+      directSales
+      retail
+      wholesale
+    }
+  }
+`;
+
 export const FETCH_PAGINATED_PRODUCTS = gql`
   query SlicedProducts($pageNo: Int!) {
     slicedProducts(pageNo: $pageNo) {
@@ -383,6 +394,34 @@ export const GET_GROUPS = gql`
         _id
         username
         picture
+      }
+    }
+  }
+`;
+
+// WeeklySales Schema
+
+export const GET_WEEKLY_SALES = gql`
+  query GetWeeklySalesReport($weekRange: String!) {
+    getWeeklySalesReport(weekRange: $weekRange) {
+      weekRange
+      slots {
+        day
+        hour
+        value
+      }
+    }
+  }
+`;
+
+export const RECORD_SALE = gql`
+  mutation RecordSale($weekRange: String!, $day: String!, $hour: String!, $amount: Int!) {
+    recordSale(weekRange: $weekRange, day: $day, hour: $hour, amount: $amount) {
+      weekRange
+      slots {
+        day
+        hour
+        value
       }
     }
   }
