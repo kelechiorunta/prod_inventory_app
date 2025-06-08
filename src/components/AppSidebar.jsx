@@ -153,8 +153,8 @@ const AppSidebar = () => {
               {navItem('/dashboard/page1', <FaTachometerAlt />, 'Dashboard')}
               {navItem('/dashboard/page2', <FaBoxes />, 'Inventory')}
               {navItem('/dashboard/page3', <FaClipboardList />, 'Sales Orders')}
-              {navItem('/dashboard/suppliers', <FaTruck />, 'Suppliers')}
-              {navItem('/dashboard/reports', <FaChartBar />, 'Reports')}
+              {navItem('/dashboard/page4', <FaTruck />, 'Suppliers')}
+              {navItem('/dashboard/page5', <FaChartBar />, 'Reports')}
             </Nav>
 
             {!isMobile && <hr className="my-3" />}

@@ -16,6 +16,7 @@
     "body-parser": "^2.2.0",
     "bootstrap": "^5.3.6",
     "chart.js": "^4.4.9",
+    "chartjs-chart-matrix": "^3.0.0",
     "connect-mongodb-session": "^5.0.0",
     "cookie": "^1.0.2",
     "cookie-parser": "^1.4.7",

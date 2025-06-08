@@ -33,10 +33,10 @@ const AppSideAction = () => {
       {/* Fast Moving Items */}
       <Card className="border-0 shadow-sm">
         <Card.Header className="bg-white border-0 fw-bold text-uppercase">
-          {location.pathname==='/dashboard/page2'? '' : 'Fast Moving Items'}
+          {location.pathname!=='/dashboard/page1'? '' : 'Fast Moving Items'}
         </Card.Header>
         <Card.Body className="p-2">
-          {location.pathname==='/dashboard/page2'? <AppRecentActivity/> : <AppFastMovingItems />}
+          {location.pathname!=='/dashboard/page1'? <AppRecentActivity/> : <AppFastMovingItems />}
         </Card.Body>
       </Card>
     </Container>

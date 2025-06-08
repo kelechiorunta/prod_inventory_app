@@ -196,6 +196,7 @@ import Message from "./models/Message.js";
 import Stock from "./models/Stock.js";
 import SessionUser from "./models/SessionUser.js";
 import Group from "./models/Group.js";
+import WeeklySalesReport from "./models/WeeklySalesReport.js";
 
 const pubsub = new PubSub()
 
@@ -264,7 +265,19 @@ const resolvers = {
         ],
       }).sort({ createdAt: 1 }); // ascending to show oldest first
     },
-    
+    getSalesReport: async () => {
+      // Simulated static or fetched data (could also use MongoDB)
+      return [
+        { month: 'Jan', directSales: 10000, retail: 5000, wholesale: 8000 },
+        { month: 'Feb', directSales: 9000, retail: 7000, wholesale: 9500 },
+        { month: 'Mar', directSales: 15000, retail: 6000, wholesale: 9200 },
+        // ...
+        { month: 'Dec', directSales: 25000, retail: 10000, wholesale: 17000 },
+      ];
+    },
+    getWeeklySalesReport: async (_, { weekRange }) => {
+      return await WeeklySalesReport.findOne({ weekRange });
+    },
     getUserStocks: async (parent, args, context) => {
       if (context.user) {
         try {
@@ -340,6 +353,19 @@ const resolvers = {
 
   // ✅ Mutation Resolvers
   Mutation: {
+    recordSale: async (_, { weekRange, day, hour, amount }) => {
+      const report = await WeeklySalesReport.findOneAndUpdate(
+        { weekRange },
+        { $inc: { 'slots.$[elem].value': amount } },
+        {
+          new: true,
+          arrayFilters: [{ 'elem.day': day, 'elem.hour': hour }],
+          upsert: true,
+        }
+      );
+
+      return report;
+    },
     createGroup: async (_, { name, memberIds }, { user }) => {
       if (!user) throw new Error('Unauthorized');
 
