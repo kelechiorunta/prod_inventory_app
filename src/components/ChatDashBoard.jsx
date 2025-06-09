@@ -75,7 +75,7 @@ export default function ChatDashboard() {
   };
 
   return (
-    <Container fluid className="mt-3" style={{ paddingTop: '4rem' }}>
+    <Container fluid className="mt-3" style={{ paddingTop: '4rem', fontFamily: 'Cinzel' }}>
       <Row>
         <Col xs={12} md={4} lg={3} className="mb-3">
           <Card className="h-100 shadow-sm" style={{ height: '75vh' }}>

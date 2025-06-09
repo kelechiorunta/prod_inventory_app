@@ -11,9 +11,31 @@ type Query{
   groupMessages(groupId: ID!): [Message!]!
   myGroups: [Group!]!
   allUsers: [User]!
-  slicedProducts(pageNo: Int!): [Product]!
   getSalesReport: [SalesReport!]!
   getWeeklySalesReport(weekRange: String!): WeeklySalesReport
+  getSuppliers(search: String, page: Int, limit: Int): [Supplier]
+  totalSuppliers: Int
+  getProducts(search: String, page: Int, limit: Int): [Product]
+  totalProducts: Int
+}
+
+input SupplierInput {
+  name: String!
+  email: String
+  contact: String
+  company: String
+  address: String
+  logo: String
+}
+
+type Supplier {
+  id: ID
+  name: String
+  email: String
+  contact: String
+  company: String
+  address: String
+  logo: String
 }
 
 type SaleSlot {
@@ -134,7 +156,7 @@ type Mutation {
   sendGroupTypingStatus(groupId: ID!, sender: ID!, isTyping: Boolean!): Boolean!
   createGroup(name: String!, memberIds: [ID!]!): Group!
   recordSale(weekRange: String!, day: String!, hour: String!, amount: Int!): WeeklySalesReport
-  
+  addSupplier(input: SupplierInput!): Supplier!
 }
 
 type TypingEvent {

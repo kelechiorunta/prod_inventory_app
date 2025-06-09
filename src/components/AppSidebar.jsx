@@ -144,6 +144,7 @@ const AppSidebar = () => {
           width: isMobile ? '4rem' : '14rem',
           backgroundColor: '#f5f7ff',
           transition: 'width 0.3s ease-in-out',
+          fontFamily: 'Cinzel',
         }}
       >
         <Collapse in={open || !isMobile}>

@@ -74,7 +74,7 @@
 
 // export default AppInventoryProductList;
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useLazyQuery } from '@apollo/client';
 import { Table, Image, Form } from 'react-bootstrap';
 import Skeleton from 'react-loading-skeleton';
@@ -96,13 +96,28 @@ const ProductSkeletonRow = () => (
 
 const AppInventoryProductList = () => {
   const [page, setPage] = useState(1);
+  const [search, setSearch] = useState('');
+  const [total, setTotal] = useState('');
+  const limit = 5;
+
+  const totalRef = useRef(0); // 👈 cache totalProducts
+
   const [fetchProducts, { data, loading, error }] = useLazyQuery(FETCH_PAGINATED_PRODUCTS);
 
-  const totalPages = 5; // You may fetch this dynamically if needed
-
   useEffect(() => {
-    fetchProducts({ variables: { pageNo: page } });
+    fetchProducts({ variables: { page } });
   }, [page, fetchProducts]);
+
+  // Cache totalProducts if it changes
+  useEffect(() => {
+    if (data?.totalProducts) {
+        totalRef.current = data.totalProducts;
+        setTotal(totalRef.current)
+    }
+  }, [data?.totalProducts, totalRef]);
+
+  const products = data?.getProducts || [];
+  const totalPages = Math.ceil(total / limit); // 👈 use cached total
 
   return (
     <div className="mt-4">
@@ -123,7 +138,7 @@ const AppInventoryProductList = () => {
           <tbody>
             {loading && Array.from({ length: 5 }).map((_, idx) => <ProductSkeletonRow key={idx} />)}
 
-            {!loading && !error && data?.slicedProducts?.map((product) => (
+            {!loading && !error && products.map((product) => (
               <tr key={product.id}>
                 <td><Form.Check type="checkbox" /></td>
                 <td>{product.title}</td>
@@ -149,7 +164,12 @@ const AppInventoryProductList = () => {
             )}
           </tbody>
         </Table>
-        <AppPaginateBtns totalPages={totalPages} currentPage={page} onPageChange={setPage} />
+
+        <AppPaginateBtns
+          totalPages={totalPages}
+          currentPage={page}
+          onPageChange={setPage}
+        />
       </div>
     </div>
   );

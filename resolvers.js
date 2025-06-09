@@ -197,6 +197,7 @@ import Stock from "./models/Stock.js";
 import SessionUser from "./models/SessionUser.js";
 import Group from "./models/Group.js";
 import WeeklySalesReport from "./models/WeeklySalesReport.js";
+import Supplier from "./models/Supplier.js";
 
 const pubsub = new PubSub()
 
@@ -253,7 +254,14 @@ const resolvers = {
       } catch (error) {
         throw new Error('Failed to fetch users');
       }
-  },
+    },
+    getSuppliers: async (_, { search, page = 1, limit = 5 }) => {
+      const regex = new RegExp(search, 'i'); 
+      return Supplier.find({ name: regex })
+        .skip((page - 1) * limit)
+        .limit(limit);
+    },
+    totalSuppliers: async () => Supplier.countDocuments(),
     products: async (parent, args, context) => context?.user && await Product.find(),
     getProduct: async (parent, { id }, context) => context?.user && await Product.findOne({ id }),
 
@@ -344,15 +352,22 @@ const resolvers = {
       if (!user) throw new Error('Unauthorized');
       return await Group.find({ members: user.id }).populate('members');
     },
-    slicedProducts: async (_, { pageNo }, context) => {
-      const pageSize = 5;
-      const skip = (pageNo - 1) * pageSize;
-      return await Product.find().skip(skip).limit(pageSize);
+    getProducts: async (_, { search = '', page = 1, limit = 5 }) => {
+      const regex = new RegExp(search, 'i');
+      return await Product.find()
+        .skip((page - 1) * limit)
+        .limit(limit);
     },
+    totalProducts: async () => Product.countDocuments(),
    },
 
   // ✅ Mutation Resolvers
   Mutation: {
+    addSupplier: async (_, { input }) => {
+      const supplier = new Supplier(input);
+      await supplier.save();
+      return supplier;
+    },
     recordSale: async (_, { weekRange, day, hour, amount }) => {
       const report = await WeeklySalesReport.findOneAndUpdate(
         { weekRange },

@@ -6,7 +6,7 @@ import AppSideAction from './AppSideAction.jsx'
 
 export default function Page1() {
   return (
-    <div style={{ display: 'flex' }}>
+    <div style={{ display: 'flex', fontFamily: 'Cinzel' }}>
       <div style={{ display: 'flex', flexDirection: 'column' }}>
         <AppSalesSummary/>
         <AppStockChart/>
