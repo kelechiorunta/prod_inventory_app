@@ -3,7 +3,7 @@ import { Modal, Button, Form, Row, Col } from 'react-bootstrap';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import { useMutation } from '@apollo/client';
-import { CREATE_NEW_PRODUCT } from '../constants'; // Adjust the path as needed
+import { CREATE_NEW_PRODUCT } from '../constants';
 
 const AppAddProductForm = ({ show, handleClose }) => {
   const [createProduct] = useMutation(CREATE_NEW_PRODUCT);
@@ -24,13 +24,24 @@ const AppAddProductForm = ({ show, handleClose }) => {
     title: Yup.string().required('Product name is required'),
     price: Yup.number().required('Price is required').positive(),
     category: Yup.string().required('Category is required'),
-    image: Yup.string().url('Must be a valid URL').required('Image URL is required'),
+    image: Yup.string().required('Image is required'),
     description: Yup.string().required('Description is required'),
     rating: Yup.object({
       rate: Yup.number().required('Rate is required').min(0).max(5),
       count: Yup.number().required('Count is required').min(0),
     }),
   });
+
+  const handleImageUpload = async (event, setFieldValue) => {
+    const file = event.currentTarget.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setFieldValue('image', reader.result); // base64 string
+      };
+      reader.readAsDataURL(file);
+    }
+  };
 
   const handleSubmit = async (values, actions) => {
     try {
@@ -65,7 +76,7 @@ const AppAddProductForm = ({ show, handleClose }) => {
         <Modal.Title>Add New Product</Modal.Title>
       </Modal.Header>
       <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleSubmit}>
-        {({ handleChange, handleBlur, handleSubmit, values, errors, touched, isSubmitting }) => (
+        {({ handleChange, handleBlur, handleSubmit, values, errors, touched, isSubmitting, setFieldValue }) => (
           <Form onSubmit={handleSubmit}>
             <Modal.Body>
               <Row className="g-2">
@@ -116,16 +127,21 @@ const AppAddProductForm = ({ show, handleClose }) => {
                 </Col>
                 <Col sm={6}>
                   <Form.Group controlId="image">
-                    <Form.Label>Image URL</Form.Label>
+                    <Form.Label>Upload Image</Form.Label>
                     <Form.Control
-                      type="text"
-                      name="image"
-                      value={values.image}
-                      onChange={handleChange}
-                      onBlur={handleBlur}
+                      type="file"
+                      accept="image/*"
+                      onChange={(e) => handleImageUpload(e, setFieldValue)}
                       isInvalid={touched.image && !!errors.image}
                     />
                     <Form.Control.Feedback type="invalid">{errors.image}</Form.Control.Feedback>
+                    {values.image && (
+                      <img
+                        src={values.image}
+                        alt="Preview"
+                        style={{ marginTop: 8, maxHeight: 100 }}
+                      />
+                    )}
                   </Form.Group>
                 </Col>
               </Row>
@@ -147,7 +163,7 @@ const AppAddProductForm = ({ show, handleClose }) => {
               <Row className="g-2 mt-2">
                 <Col sm={6}>
                   <Form.Group controlId="rating.rate">
-                    <Form.Label>Rating (0-5)</Form.Label>
+                    <Form.Label>Rating (0–5)</Form.Label>
                     <Form.Control
                       type="number"
                       name="rating.rate"
