@@ -27,7 +27,7 @@ const MainHeader = ({ auth }) => {
     //   if (loading) return <h1>Loading...</h1>;
   
   return (
-    <Navbar style={{position: 'fixed', top: 0, left: 0, zIndex: 50, width: '100%'}} className='fixed top-0 left-0' bg="dark" variant="dark" expand="lg" collapseOnSelect>
+    <Navbar style={{ fontFamily: 'Cinzel', position: 'fixed', top: 0, left: 0, zIndex: 50, width: '100%'}} className='fixed top-0 left-0' bg="dark" variant="dark" expand="lg" collapseOnSelect>
       <Container>
             <Link className="navbar-brand" to="/">ShopMate</Link>
             <img src={data && data?.auth && data?.auth?.picture ? data?.auth?.picture : './avatar.png'} style={{ borderRadius: '50%', margin: 'auto' }} width={30} height={30} alt='avatar' />

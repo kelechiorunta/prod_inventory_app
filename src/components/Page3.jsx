@@ -20,6 +20,7 @@ export default function Page3() {
         width: '100%',
         height: '100%',
         display: 'flex',
+        fontFamily: 'Cinzel',
         // alignItems: 'center'
       }}>
       <div style={{ marginLeft: 250, marginTop: 50, display: 'flex', flexDirection: 'column', height: '100%', width: '80%' }}

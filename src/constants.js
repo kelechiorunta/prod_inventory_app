@@ -159,8 +159,8 @@ export const GET_SALES_REPORT = gql`
 `;
 
 export const FETCH_PAGINATED_PRODUCTS = gql`
-  query SlicedProducts($pageNo: Int!) {
-    slicedProducts(pageNo: $pageNo) {
+query GetProducts($search: String, $page: Int, $limit: Int) {
+    getProducts(search: $search, page: $page, limit: $limit) {
       id
       title
       category
@@ -170,6 +170,7 @@ export const FETCH_PAGINATED_PRODUCTS = gql`
       }
       image
     }
+    totalProducts
   }
 `;
 
@@ -233,8 +234,17 @@ export const CREATE_NEW_PRODUCT = gql`
                     }
                     }
 
+`;
 
-`
+export const ADD_SUPPLIER = gql`
+  mutation AddSupplier($input: SupplierInput!) {
+    addSupplier(input: $input) {
+      id
+      name
+    }
+  }
+`;
+
 export const UPDATE_PRODUCT = gql`
   mutation UpdateProduct($id: ID!, $input: UpdateProductInput!) {
     updateProduct(id: $id, input: $input) {
@@ -424,5 +434,21 @@ export const RECORD_SALE = gql`
         value
       }
     }
+  }
+`;
+
+// Suppliers Schema
+export const GET_SUPPLIERS = gql`
+  query GetSuppliers($search: String, $page: Int, $limit: Int) {
+    getSuppliers(search: $search, page: $page, limit: $limit) {
+      id
+      name
+      email
+      contact
+      company
+      address
+      logo
+    }
+    totalSuppliers
   }
 `;
