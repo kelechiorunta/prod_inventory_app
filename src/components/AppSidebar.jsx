@@ -97,6 +97,7 @@ import {
   FaQuestionCircle,
   FaCog,
 } from 'react-icons/fa';
+import ThemeToggleButton from './ThemeToggleButton';
 
 const AppSidebar = () => {
   const location = useLocation();
@@ -163,6 +164,7 @@ const AppSidebar = () => {
             <Nav className="flex-column">
               {navItem('/dashboard/help', <FaQuestionCircle />, 'Help')}
               {navItem('/dashboard/settings', <FaCog />, 'Settings')}
+              {/* <ThemeToggleButton/> */}
             </Nav>
           </div>
         </Collapse>

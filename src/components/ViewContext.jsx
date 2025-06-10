@@ -88,7 +88,7 @@ export function ViewProvider({ children }) {
         opacity: isVisible ? '1' : '0',
         height: 'max-content',
       transform: isVisible ? 'translateY(0px)' : 'translateY(200px)',
-      transition: `opacity ${0.1 * index}s ease, transform ${1}s ease`,
+      transition: `opacity ${0.1}s ease, transform ${1}s ease`,
       ...animateStyle, // Allow overriding or extending styles
     }
   

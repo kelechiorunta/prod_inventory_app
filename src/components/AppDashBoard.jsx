@@ -3,6 +3,7 @@ import { Container } from 'react-bootstrap'
 import AppSearchBar from './AppSearchBar.jsx'
 import AppSidebar from './AppSidebar.jsx'
 import { Outlet } from 'react-router-dom';
+import ThemeToggleButton from './ThemeToggleButton.jsx';
 
 export default function AppDashBoard() {
     return (
@@ -16,7 +17,8 @@ export default function AppDashBoard() {
       }}>
           <AppSearchBar />
           <div xlg className='flex' style={{flexDirection: 'row', width: '100%', alignItems: 'center'}}>
-            <AppSidebar />
+                    <AppSidebar />
+                    
             <div style={{display: 'block'}}>
               <Outlet />
             </div>
