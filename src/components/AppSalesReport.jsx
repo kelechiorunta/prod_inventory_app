@@ -118,7 +118,7 @@ const AppSalesReport = () => {
   }
 
   return (
-    <Card style={{ width: '100%', marginLeft: 0, height: 400 }} className="shadow-sm mt-4">
+    <Card style={{ width: '100%', marginLeft: 0, height: 400, fontFamily: 'Cinzel' }} className="shadow-sm mt-4">
       <Card.Body>
         <Card.Title className="mb-4">Sales Report</Card.Title>
         {loading ? (

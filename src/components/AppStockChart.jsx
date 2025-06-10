@@ -184,6 +184,7 @@ const AppStockChart = () => {
         marginLeft: 240,
         display: 'block',
         borderRadius: 10,
+        fontFamily: 'Cinzel'
       }}
       className="shadow-sm"
     >

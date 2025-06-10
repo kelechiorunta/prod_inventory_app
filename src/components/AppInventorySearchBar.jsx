@@ -30,7 +30,7 @@ const AppInventorySearchBar = ({ onSearchChange, onAddProduct }) => {
           className="text-white fw-bold d-flex align-items-center"
           onClick={onAddProduct}
         >
-          <FaPlus className="me-2" /> {location.pathname === '/dashboard/page2'? 'Add New Product' : 'Place Order'}
+          <FaPlus className="me-2" /> {location.pathname === '/dashboard/page2'? 'Edit Product' : 'Place Order'}
         </Button>
       </Col>
     </Row>
