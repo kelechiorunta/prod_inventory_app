@@ -46,7 +46,7 @@ const AppAddSupplierForm = ({ show, handleClose }) => {
   };
 
   return (
-    <Modal show={show} onHide={handleClose} centered>
+    <Modal style={{fontFamily: 'Cinzel'}} show={show} onHide={handleClose} centered>
       <Modal.Header closeButton>
         <Modal.Title>Add New Supplier</Modal.Title>
       </Modal.Header>

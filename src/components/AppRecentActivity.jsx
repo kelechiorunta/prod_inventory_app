@@ -1,42 +1,46 @@
 import React from 'react';
 import { Card, ListGroup, Image, Row, Col } from 'react-bootstrap';
 import { BsClock } from 'react-icons/bs';
-
+import mac from './MacbookPro.png'
+import iphone from './iphone 14 pro.png'
+import zoom75 from './zoom75.png'
+import airpods from './airpodsPro.png'
+import samsung from './samsung_galaxy_fold.png'
 // Sample activity data (replace with real-time data or props)
 const recentActivities = [
   {
     type: 'Restocked',
     quantity: 6,
     productName: 'Macbook Pro',
-    image: './MacbookPro.png',
+    image: mac,
     timeAgo: '1 m ago',
   },
   {
     type: 'Sold',
     quantity: 2,
     productName: 'iPhone 14 pro',
-    image: 'https://via.placeholder.com/40',
+    image: iphone,
     timeAgo: '12 m ago',
   },
   {
     type: 'Sold',
     quantity: 1,
     productName: 'Zoom75',
-    image: 'https://via.placeholder.com/40',
+    image: zoom75,
     timeAgo: '23 m ago',
   },
   {
     type: 'Restocked',
     quantity: 12,
     productName: 'Zoom75',
-    image: 'https://via.placeholder.com/40',
+    image: airpods,
     timeAgo: '42 m ago',
   },
   {
     type: 'Sold',
     quantity: 3,
     productName: 'Samsung Odyssey',
-    image: 'https://via.placeholder.com/40',
+    image: samsung,
     timeAgo: '2 h ago',
   },
 ];

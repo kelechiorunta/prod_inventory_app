@@ -29,7 +29,7 @@ export default function Page3() {
           onSearchChange={handleSearchChange}
           onAddProduct={handleAddProduct}
         />
-        <AppInventoryProductList />
+        {/* <AppInventoryProductList /> */}
         <AppSalesReport/>
       </div>
       <AppSideAction />

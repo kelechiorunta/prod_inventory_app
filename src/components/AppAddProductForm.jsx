@@ -1,13 +1,30 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Modal, Button, Form, Row, Col } from 'react-bootstrap';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
-import { useMutation } from '@apollo/client';
-import { CREATE_NEW_PRODUCT } from '../constants';
+import { useMutation, useQuery } from '@apollo/client';
+import { CREATE_NEW_PRODUCT, FETCH_PAGINATED_PRODUCTS } from '../constants';
 
 const AppAddProductForm = ({ show, handleClose }) => {
-  const [createProduct] = useMutation(CREATE_NEW_PRODUCT);
-
+    const [total, setTotal] = useState('');
+    const { data, loading, error } = useQuery(FETCH_PAGINATED_PRODUCTS);
+    
+    useEffect(() => {
+        if (data?.totalProducts) {
+            setTotal(data.totalProducts)
+        }
+    },[data?.totalProducts])
+    
+    const totalPages = Math.ceil(total/ 5)
+    const [createProduct] = useMutation(CREATE_NEW_PRODUCT, {
+        refetchQueries: [
+          {
+            query: FETCH_PAGINATED_PRODUCTS,
+            variables: { page: totalPages }, // Always refresh page 1
+          },
+        ],
+        awaitRefetchQueries: true,
+    });
   const initialValues = {
     title: '',
     price: '',
@@ -58,7 +75,10 @@ const AppAddProductForm = ({ show, handleClose }) => {
             rate: parseFloat(rating.rate),
             count: parseInt(rating.count, 10),
           },
-        },
+          },
+          refetchQueries: [{ query: FETCH_PAGINATED_PRODUCTS, variables: { page: totalPages }, // Always refresh page 1
+           }],
+          awaitRefetchQueries: true,
       });
 
       actions.resetForm();
@@ -71,7 +91,7 @@ const AppAddProductForm = ({ show, handleClose }) => {
   };
 
   return (
-    <Modal show={show} onHide={handleClose} centered>
+    <Modal style={{fontFamily: 'Cinzel'}} show={show} onHide={handleClose} centered>
       <Modal.Header closeButton>
         <Modal.Title>Add New Product</Modal.Title>
       </Modal.Header>

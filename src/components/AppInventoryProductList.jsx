@@ -75,7 +75,7 @@
 // export default AppInventoryProductList;
 
 import React, { useEffect, useRef, useState } from 'react';
-import { useLazyQuery } from '@apollo/client';
+import { useLazyQuery, useQuery } from '@apollo/client';
 import { Table, Image, Form } from 'react-bootstrap';
 import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
@@ -102,11 +102,14 @@ const AppInventoryProductList = () => {
 
   const totalRef = useRef(0); // 👈 cache totalProducts
 
-  const [fetchProducts, { data, loading, error }] = useLazyQuery(FETCH_PAGINATED_PRODUCTS);
+//   const [fetchProducts, { data, loading, error }] = useLazyQuery(FETCH_PAGINATED_PRODUCTS);
 
-  useEffect(() => {
-    fetchProducts({ variables: { page } });
-  }, [page, fetchProducts]);
+//   useEffect(() => {
+//     fetchProducts({ variables: { page } });
+    //   }, [page, fetchProducts]);
+    const { data, loading, error } = useQuery(FETCH_PAGINATED_PRODUCTS, {
+        variables: { page }
+    });
 
   // Cache totalProducts if it changes
   useEffect(() => {
