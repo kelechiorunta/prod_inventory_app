@@ -8,18 +8,21 @@ import { ApolloProvider } from '@apollo/client';
 import MainHeader from './components/MainHeader';
 import client from './apollo';
 import { ViewProvider } from './components/ViewContext';
+import { ThemeProvider } from './components/ThemeContext';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
+    <ThemeProvider>
     <BrowserRouter>
       <ApolloProvider client={client}>
-        <ViewProvider>
-        <MainHeader />
-        <App />
-        </ViewProvider>
+          <ViewProvider>
+            <MainHeader />
+            <App />
+          </ViewProvider>
       </ApolloProvider>
-    </BrowserRouter>
+      </BrowserRouter>
+    </ThemeProvider>
   </React.StrictMode>
 );
 

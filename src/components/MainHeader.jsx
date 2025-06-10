@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { useQuery } from '@apollo/client';
 import { FETCH_PRODUCTS } from '../constants';
 import { ViewContext } from './ViewContext';
+import ThemeToggleButton from './ThemeToggleButton';
 
 const MainHeader = ({ auth }) => {
 
@@ -46,6 +47,7 @@ const MainHeader = ({ auth }) => {
                 <Link className="nav-link" to={`/dashboard`}>DashBoard</Link>
                 {/* <a className="nav-link" href="/checkout">Checkout</a> */}
                 <a onClick={handleLogout} className="nav-link" href="/logout">Logout</a>
+                <ThemeToggleButton/>
             </Nav>
                     
         </Navbar.Collapse>
