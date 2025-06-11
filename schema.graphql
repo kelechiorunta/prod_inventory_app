@@ -155,7 +155,7 @@ type Mutation {
   sendGroupMessage(groupId: ID!, sender: ID!, content: String!): Message!
   sendGroupTypingStatus(groupId: ID!, sender: ID!, isTyping: Boolean!): Boolean!
   createGroup(name: String!, memberIds: [ID!]!): Group!
-  recordSale(weekRange: String!, day: String!, hour: String!, amount: Int!): WeeklySalesReport
+  recordSale(weekRange: String!, year: Int!, day: String!, hour: String!, amount: Int!): WeeklySalesReport
   addSupplier(input: SupplierInput!): Supplier!
 }
 

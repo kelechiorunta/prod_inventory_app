@@ -415,6 +415,7 @@ export const GET_WEEKLY_SALES = gql`
   query GetWeeklySalesReport($weekRange: String!) {
     getWeeklySalesReport(weekRange: $weekRange) {
       weekRange
+      year
       slots {
         day
         hour
@@ -425,8 +426,20 @@ export const GET_WEEKLY_SALES = gql`
 `;
 
 export const RECORD_SALE = gql`
-  mutation RecordSale($weekRange: String!, $day: String!, $hour: String!, $amount: Int!) {
-    recordSale(weekRange: $weekRange, day: $day, hour: $hour, amount: $amount) {
+  mutation RecordSale(
+    $weekRange: String!
+    $year: Int!
+    $day: String!
+    $hour: String!
+    $amount: Int!
+  ) {
+    recordSale(
+      weekRange: $weekRange
+      year: $year
+      day: $day
+      hour: $hour
+      amount: $amount
+    ) {
       weekRange
       slots {
         day

@@ -284,7 +284,7 @@ const resolvers = {
       ];
     },
     getWeeklySalesReport: async (_, { weekRange }) => {
-      return await WeeklySalesReport.findOne({ weekRange });
+      return WeeklySalesReport.findOne({ weekRange });
     },
     getUserStocks: async (parent, args, context) => {
       if (context.user) {
@@ -368,17 +368,31 @@ const resolvers = {
       await supplier.save();
       return supplier;
     },
-    recordSale: async (_, { weekRange, day, hour, amount }) => {
-      const report = await WeeklySalesReport.findOneAndUpdate(
-        { weekRange },
-        { $inc: { 'slots.$[elem].value': amount } },
-        {
-          new: true,
-          arrayFilters: [{ 'elem.day': day, 'elem.hour': hour }],
-          upsert: true,
-        }
+    recordSale: async (_, { weekRange, year, day, hour, amount }) => {
+      let report = await WeeklySalesReport.findOne({ weekRange });
+
+      if (!report) {
+        report = new WeeklySalesReport({
+          weekRange,
+          year,
+          slots: [{ day, hour, value: amount }],
+        });
+        await report.save();
+        return report;
+      }
+
+      // Find if a slot with same day/hour exists
+      const existingSlot = report.slots.find(
+        (slot) => slot.day === day && slot.hour === hour
       );
 
+      if (existingSlot) {
+        existingSlot.value += amount;
+      } else {
+        report.slots.push({ day, hour, value: amount });
+      }
+
+      await report.save();
       return report;
     },
     createGroup: async (_, { name, memberIds }, { user }) => {
