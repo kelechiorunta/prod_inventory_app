@@ -135,6 +135,7 @@ const hours = ['09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '1
 
 const AppWeeklySalesReport = () => {
   const [weekRange] = useState('Aug 19-25');
+  const [year] = useState(2025); // Update as needed
   const { data, loading, refetch } = useQuery(GET_WEEKLY_SALES, {
     variables: { weekRange },
     pollInterval: 10000,
@@ -152,8 +153,13 @@ const AppWeeklySalesReport = () => {
     const day = days[Math.floor(Math.random() * days.length)];
     const hour = hours[Math.floor(Math.random() * hours.length)];
     const amount = Math.floor(Math.random() * 2000) + 100;
-    await recordSale({ variables: { weekRange, day, hour, amount } });
-    refetch();
+
+    try {
+      await recordSale({ variables: { weekRange, year, day, hour, amount } });
+      refetch();
+    } catch (error) {
+      console.error("Failed to record dummy sale:", error.message);
+    }
   };
 
   const handleShowModal = () => setShowModal(true);
@@ -169,21 +175,30 @@ const AppWeeklySalesReport = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await recordSale({ variables: { ...formData, weekRange } });
-    refetch();
-    handleCloseModal();
+    try {
+      await recordSale({
+        variables: {
+          ...formData,
+          weekRange,
+          year,
+        },
+      });
+      refetch();
+      handleCloseModal();
+    } catch (error) {
+      console.error("Failed to submit sale:", error.message);
+    }
   };
 
   const matrixData = useMemo(() => {
     if (!data?.getWeeklySalesReport?.slots) return [];
-
-    return data.getWeeklySalesReport.slots.map((slot) => {
-      const x = days.indexOf(slot.day);
-      const y = hours.indexOf(slot.hour);
-      if (x === -1 || y === -1) return null;
-      return { x, y, v: slot.value };
-    }).filter(Boolean);
-  }, [data]);
+  
+    return data.getWeeklySalesReport.slots.map((slot) => ({
+      x: slot.day,
+      y: slot.hour,
+      v: slot.value,
+    }));
+  }, [data]);  
 
   const chartData = {
     datasets: [
@@ -199,8 +214,8 @@ const AppWeeklySalesReport = () => {
           return '#A8E9FF';
         },
         borderWidth: 1,
-        width: () => 40,
-        height: () => 35,
+        width: () => 45,
+        height: () => 40,
       },
     ],
   };
@@ -213,24 +228,25 @@ const AppWeeklySalesReport = () => {
           label: (ctx) => `Sales: ${ctx?.raw?.v}`,
         },
       },
+      legend: { display: false },
     },
     scales: {
-      x: {
-        type: 'category',
-        labels: days,
-        offset: true,
-        grid: { display: false },
-        title: { display: true, text: 'Day' },
-      },
-      y: {
-        type: 'category',
-        labels: hours,
-        offset: true,
-        reverse: true,
-        grid: { display: false },
-        title: { display: true, text: 'Hour' },
-      },
-    },
+        x: {
+          type: 'category',
+          labels: days,
+          offset: true,
+          grid: { display: false },
+          title: { display: true, text: 'Day' },
+        },
+        y: {
+          type: 'category',
+          labels: hours,
+          offset: true,
+          reverse: true,
+          grid: { display: false },
+          title: { display: true, text: 'Hour' },
+        },
+      }      
   };
 
   return (
@@ -267,7 +283,7 @@ const AppWeeklySalesReport = () => {
             <span style={{ background: '#1DA8D4', padding: '0 10px' }}></span> 501–1,000
           </span>
           <span>
-            <span style={{ background: '#03588C', padding: '0 10px' }}></span> 1,001–5,000
+            <span style={{ background: '#03588C', padding: '0 10px' }}></span> 1,001+
           </span>
         </div>
       </Card>
@@ -320,3 +336,4 @@ const AppWeeklySalesReport = () => {
 };
 
 export default AppWeeklySalesReport;
+
