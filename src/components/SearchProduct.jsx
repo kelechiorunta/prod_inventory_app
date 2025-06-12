@@ -49,7 +49,7 @@ const SearchProduct = () => {
   };
 
   return (
-    <Container className="mt-5" style={{paddingTop: '100px'}}>
+    <Container className="mt-5" style={{paddingTop: '100px', fontFamily: 'Cinzel'}}>
       <Card className="p-4 shadow">
         <h3 className="mb-4">Search Products</h3>
         <Form onSubmit={handleSubmit}>

@@ -33,7 +33,7 @@ const summaryData = [
 
 const AppSalesSummary = () => {
   return (
-    <div style={{ backgroundColor: '#f5f7ff', padding: '1rem', borderRadius: '10px', width: '80%', marginLeft: 240, fontFamily: 'Cinzel' }}>
+    <div style={{ backgroundColor: '#f5f7ff', padding: '0.2rem', borderRadius: '10px', width: '100%', marginLeft: 0, fontFamily: 'Cinzel' }}>
       <h5 className="mb-4">Sales Summary</h5>
       <Row>
         {summaryData.map((item, index) => (
@@ -42,8 +42,9 @@ const AppSalesSummary = () => {
               className="shadow-sm"
               style={{
                 border: item.border ? '2px solid #2196f3' : 'none',
-                padding: '10px 15px',
-                borderRadius: '12px',
+                padding: '10px 5px',
+                  borderRadius: '12px',
+                  height: 150
               }}
             >
               <Card.Body className="d-flex align-items-center">

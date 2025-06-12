@@ -5,7 +5,7 @@ import { BsSearch } from 'react-icons/bs'
 
 export default function AppSearchBar() {
     return (
-      <Navbar style={{position: 'absolute', top: 0, left: 0, zIndex: 10, width: '100%', padding: 'auto 71px', fontFamily:'Cinzel'}} className='absolute top-0 left-0' bg="light" variant="dark" expand="lg" collapseOnSelect>
+      <Navbar style={{ marginTop: 50, left: 0, zIndex: 10, width: '100%', padding: 'auto 71px', fontFamily:'Cinzel'}} className='absolute top-0 left-0' bg="light" variant="dark" expand="lg" collapseOnSelect>
       <Container xlg className='col-sm-12 col-md-12 col-lg-12 flex'>
         
           <Link style={{color: 'black'}} className="navbar-brand" to="/">WAREHOUSE</Link>
