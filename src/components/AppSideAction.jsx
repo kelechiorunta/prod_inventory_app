@@ -9,7 +9,7 @@ import AppRecentActivity from './AppRecentActivity';
 const AppSideAction = () => {
     const location = useLocation();
   return (
-    <Container fluid className="p-3" style={{ maxWidth: 320 }}>
+    <Container fluid  style={{ maxWidth: 320 }}>
       {/* Admin Section */}
       <Card className="mb-3 border-0 shadow-sm">
         <Card.Header className="bg-white border-0 fw-bold text-uppercase">
