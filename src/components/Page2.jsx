@@ -22,7 +22,7 @@ export default function Page2() {
         fontFamily: 'Cinzel',
         // alignItems: 'center'
       }}>
-      <div style={{ marginLeft: 250, marginTop: 50, display: 'flex', flexDirection: 'column', height: '100%', width: '80%' }}
+      <div style={{ display: 'flex', flexDirection: 'column', height: '100%', width: '80%' }}
         className="container">
         <AppInventorySearchBar
           onSearchChange={handleSearchChange}

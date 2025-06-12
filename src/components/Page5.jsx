@@ -24,7 +24,7 @@ export default function Page4() {
         fontFamily: 'Cinzel',
         // alignItems: 'center'
       }}>
-      <div style={{ marginLeft: 250, marginTop: 50, display: 'flex', flexDirection: 'column', height: '100%', width: '80%' }}
+      <div style={{ display: 'flex', flexDirection: 'column', height: '100%', width: '100%' }}
         className="container">
         <AppInventorySearchBar
           onSearchChange={handleSearchChange}

@@ -43,7 +43,7 @@ export default function Page4() {
           fontFamily: 'Cinzel',
           // alignItems: 'center'
           }}>
-          <div style={{ marginLeft: 250, marginTop: 100, display: 'flex', flexDirection: 'column', height: '100%', width: '80%' }}>
+          <div style={{display: 'flex', flexDirection: 'column', height: '100%', width: '100%' }}>
             <div className="d-flex justify-content-between align-items-center mb-3">
                 <h4 style={{fontFamily: 'Cinzel'}}>Suppliers</h4>
                 <Button variant="info">+ Edit Suppliers</Button>

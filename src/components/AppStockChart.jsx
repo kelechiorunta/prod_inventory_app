@@ -178,10 +178,10 @@ const AppStockChart = () => {
   return (
     <Card
       style={{
-        width: '60%',
-        height: 400,
-        marginTop: 0,
-        marginLeft: 240,
+        width: '100%',
+        height: 450,
+        // marginTop: 0,
+        // marginLeft: 240,
         display: 'block',
         borderRadius: 10,
         fontFamily: 'Cinzel'
